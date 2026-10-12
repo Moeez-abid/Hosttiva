@@ -1,0 +1,58 @@
+---
+import Base from '../layouts/Base.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import PlanTable from '../components/PlanTable.astro';
+import BillingToggle from '../components/BillingToggle.astro';
+import Faq from '../components/Faq.astro';
+import { PLAN_GROUPS, PRICES_ARE_PLACEHOLDERS, CURRENCY } from '../data/plans';
+import { breadcrumbs, faqPage } from '../lib/schema';
+
+const crumbs = [{ name: 'Home', path: '/' }, { name: 'Pricing', path: '/pricing' }];
+const faqs = [
+  { q: 'Why are there two prices?', a: 'The first-term price applies to your first billing period. The renewal price applies after that. We show both so there are no surprises at renewal.' },
+  { q: 'Is migration free?', a: 'Free migration is available on eligible plans. Contact us with your current setup and we will confirm before you order.' },
+  { q: 'Can I switch plans later?', a: 'Yes. You can upgrade within a product line, or move from shared hosting to managed applications, VPS or dedicated infrastructure.' },
+  { q: 'Do prices include tax?', a: `Prices are shown in ${CURRENCY.code} and exclude any applicable taxes, which are calculated at checkout in the client area.` },
+];
+---
+<Base
+  title="Pricing"
+  description="Compare Hosttiva web hosting, managed WordPress, managed application, agency reseller and game-server plans. First-term and renewal prices shown side by side."
+  schema={[breadcrumbs(crumbs), faqPage(faqs)]}
+>
+  <section class="border-b border-border">
+    <div class="container-x py-14 sm:py-20">
+      <Breadcrumbs items={crumbs} />
+      <p class="eyebrow mt-8">Pricing</p>
+      <h1 class="mt-3 text-4xl font-semibold sm:text-5xl">Plans with the renewal price on the label</h1>
+      <p class="mt-4 max-w-2xl text-muted">
+        Every plan lists what it includes, the first-term price and what it renews at. Custom plans are quoted after a
+        short conversation about your workload.
+      </p>
+      {PRICES_ARE_PLACEHOLDERS && (
+        <p class="mt-6 inline-flex items-center gap-2 rounded-md border border-warn/40 px-3 py-2 text-sm text-text" role="note">
+          <span class="badge badge-warn">Placeholder</span> Prices on this page are draft figures and will be confirmed before launch.
+        </p>
+      )}
+    </div>
+  </section>
+
+  <div style="top: var(--header-h)" class="sticky z-30 border-b border-border bg-bg/90 backdrop-blur">
+    <div class="container-x flex flex-wrap items-center justify-between gap-3 py-3">
+      <nav aria-label="Plan groups" class="flex flex-wrap gap-1 text-sm">
+        {PLAN_GROUPS.map((g) => <a href={`#plans-${g.id}`} class="rounded-md px-3 py-1.5 text-muted hover:bg-raised hover:text-text">{g.name}</a>)}
+      </nav>
+      <BillingToggle />
+    </div>
+  </div>
+
+  <div class="container-x space-y-20 py-16">
+    {PLAN_GROUPS.map((g) => (
+      <div>
+        <PlanTable group={g} />
+        <p class="mt-3 text-sm"><a href={`/${g.productSlug}`} class="link">About {g.name.toLowerCase()} →</a></p>
+      </div>
+    ))}
+    <Faq faqs={faqs} title="Pricing questions" />
+  </div>
+</Base>

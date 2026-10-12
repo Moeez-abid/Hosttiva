@@ -1,0 +1,30 @@
+---
+// Monthly / annual switch. Plain radio inputs + CSS; no framework island needed.
+---
+<fieldset class="billing-toggle inline-flex rounded-md border border-border p-1 font-mono text-xs">
+  <legend class="sr-only">Billing term</legend>
+  <label class="cursor-pointer rounded px-3 py-1.5">
+    <input type="radio" name="billing" value="annual" class="sr-only" checked /> Annual
+  </label>
+  <label class="cursor-pointer rounded px-3 py-1.5">
+    <input type="radio" name="billing" value="monthly" class="sr-only" /> Monthly
+  </label>
+</fieldset>
+<style>
+  label:has(input:checked) { background: var(--accent-soft); color: var(--accent); }
+  label:has(input:focus-visible) { outline: 2px solid var(--accent); }
+  :global(html[data-billing='monthly'] [data-term='annual']),
+  :global(html:not([data-billing='monthly']) [data-term='monthly']) { display: none; }
+</style>
+<script>
+  function bindBilling() {
+    document.querySelectorAll<HTMLInputElement>('input[name="billing"]').forEach((i) => {
+      i.checked = (document.documentElement.dataset.billing ?? 'annual') === i.value;
+      i.onchange = () => {
+        document.documentElement.dataset.billing = i.value;
+        document.querySelectorAll<HTMLInputElement>(`input[name="billing"][value="${i.value}"]`).forEach((x) => (x.checked = true));
+      };
+    });
+  }
+  document.addEventListener('astro:page-load', bindBilling);
+</script>

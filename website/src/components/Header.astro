@@ -1,0 +1,208 @@
+---
+import Logo from './Logo.astro';
+import Icon from './Icon.astro';
+import ThemeToggle from './ThemeToggle.astro';
+import { PRODUCTS_MENU, SOLUTIONS_MENU, RESOURCES_MENU } from '../config/nav';
+import { LINKS } from '../config/site';
+
+const path = Astro.url.pathname;
+const active = (prefixes: string[]) => prefixes.some((p) => path.startsWith(p));
+const menus = [
+  { id: 'products', label: 'Products', active: active(['/products', '/hosting', '/domains', '/create', '/sell-online', '/email', '/agencies']) },
+  { id: 'solutions', label: 'Solutions', active: active(['/solutions']) },
+  { id: 'resources', label: 'Resources', active: active(['/blog', '/contact', '/about', '/roadmap']) },
+];
+---
+<header class="site-header sticky top-0 z-50 border-b border-border bg-bg/85 backdrop-blur-md">
+  <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-3 btn btn-primary">Skip to content</a>
+  <div class="container-x flex h-[var(--header-h)] items-center gap-6">
+    <Logo />
+
+    <nav aria-label="Main" class="hidden lg:block">
+      <ul class="flex items-center gap-1">
+        {menus.map((m) => (
+          <li class="nav-item" data-menu={m.id}>
+            <button
+              type="button"
+              class:list={['nav-trigger flex items-center gap-1 rounded-md px-3 py-2 text-sm hover:text-text', m.active ? 'text-text' : 'text-muted']}
+              aria-expanded="false"
+              aria-controls={`menu-${m.id}`}
+            >
+              {m.label}
+              <Icon name="ChevronDown" size={14} class="chev transition-transform" />
+            </button>
+          </li>
+        ))}
+        <li>
+          <a href="/pricing" class:list={['rounded-md px-3 py-2 text-sm hover:text-text', path.startsWith('/pricing') ? 'text-text' : 'text-muted']}>Pricing</a>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="ml-auto flex items-center gap-2">
+      <ThemeToggle />
+      <a href={LINKS.clientArea} class="hidden sm:inline-flex btn btn-secondary !py-1.5 text-sm">Client area</a>
+      <a href="/pricing" class="hidden sm:inline-flex btn btn-primary !py-1.5 text-sm">Get started</a>
+      <button type="button" class="mobile-toggle lg:hidden inline-flex h-9 w-9 items-center justify-center rounded-md border border-border" aria-expanded="false" aria-controls="mobile-nav" aria-label="Open menu">
+        <Icon name="Menu" size={18} />
+      </button>
+    </div>
+  </div>
+
+  <!-- Desktop mega-menu panels -->
+  <div class="mega hidden lg:block">
+    <div id="menu-products" class="mega-panel" hidden>
+      <div class="container-x columns-4 gap-x-8 py-8">
+        {PRODUCTS_MENU.map((cat) => (
+          <div class="mb-6 break-inside-avoid">
+            <p class="eyebrow mb-1">{cat.label}</p>
+            <p class="mb-3 text-xs text-faint">{cat.blurb}</p>
+            <ul class="space-y-1">
+              {cat.items.map((it) => (
+                <li>
+                  <a href={it.href} class="group flex items-center gap-2 text-sm text-muted hover:text-text">
+                    {it.label}
+                    {it.soon && <span class="badge !text-[0.6rem] !py-0">Soon</span>}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+        <div class="break-inside-avoid rounded-lg border border-border bg-raised p-5">
+          <p class="eyebrow mb-2">Not sure where to start?</p>
+          <p class="text-sm text-muted mb-4">Tell us what you are building and we will suggest a plan, or Inventomo can build it for you.</p>
+          <a href="/contact" class="link text-sm inline-flex items-center gap-1">Talk to an expert <Icon name="ArrowRight" size={14} /></a>
+        </div>
+      </div>
+    </div>
+
+    <div id="menu-solutions" class="mega-panel" hidden>
+      <div class="container-x grid grid-cols-3 gap-2 py-8">
+        {SOLUTIONS_MENU.map((it) => (
+          <a href={it.href} class="flex gap-3 rounded-lg p-3 hover:bg-raised">
+            <span class="mt-0.5 text-accent"><Icon name={it.icon!} size={18} /></span>
+            <span>
+              <span class="block text-sm font-medium text-text">{it.label}</span>
+              <span class="block text-xs text-muted leading-snug">{it.desc}</span>
+            </span>
+          </a>
+        ))}
+      </div>
+    </div>
+
+    <div id="menu-resources" class="mega-panel" hidden>
+      <div class="container-x grid grid-cols-4 gap-2 py-8">
+        {RESOURCES_MENU.map((it) => (
+          <a href={it.href} class="flex gap-3 rounded-lg p-3 hover:bg-raised">
+            <span class="mt-0.5 text-accent"><Icon name={it.icon!} size={18} /></span>
+            <span>
+              <span class="flex items-center gap-2 text-sm font-medium text-text">{it.label}{it.soon && <span class="badge !text-[0.6rem] !py-0">Soon</span>}</span>
+              <span class="block text-xs text-muted leading-snug">{it.desc}</span>
+            </span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile drawer -->
+  <div id="mobile-nav" class="lg:hidden border-t border-border bg-bg max-h-[calc(100dvh-var(--header-h))] overflow-y-auto" hidden>
+    <nav aria-label="Mobile" class="container-x py-4 text-sm">
+      <details class="border-b border-border py-2">
+        <summary class="cursor-pointer py-2 font-medium">Products</summary>
+        {PRODUCTS_MENU.map((cat) => (
+          <div class="py-2 pl-2">
+            <p class="eyebrow mb-1">{cat.label}</p>
+            <ul class="grid grid-cols-2 gap-1">
+              {cat.items.map((it) => <li><a href={it.href} class="block py-1 text-muted">{it.label}</a></li>)}
+            </ul>
+          </div>
+        ))}
+      </details>
+      <details class="border-b border-border py-2">
+        <summary class="cursor-pointer py-2 font-medium">Solutions</summary>
+        <ul class="pl-2">{SOLUTIONS_MENU.map((it) => <li><a href={it.href} class="block py-1.5 text-muted">{it.label}</a></li>)}</ul>
+      </details>
+      <details class="border-b border-border py-2">
+        <summary class="cursor-pointer py-2 font-medium">Resources</summary>
+        <ul class="pl-2">{RESOURCES_MENU.map((it) => <li><a href={it.href} class="block py-1.5 text-muted">{it.label}</a></li>)}</ul>
+      </details>
+      <a href="/pricing" class="block border-b border-border py-4 font-medium">Pricing</a>
+      <div class="flex gap-2 pt-4">
+        <a href={LINKS.clientArea} class="btn btn-secondary flex-1 justify-center">Client area</a>
+        <a href="/pricing" class="btn btn-primary flex-1 justify-center">Get started</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .mega { position: absolute; inset-inline: 0; top: 100%; }
+  .mega-panel {
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    box-shadow: 0 24px 48px -24px rgb(0 0 0 / 0.45);
+    animation: drop var(--dur) var(--ease);
+  }
+  @keyframes drop { from { opacity: 0; transform: translateY(-4px); } }
+  .nav-trigger[aria-expanded='true'] { color: var(--text); }
+  .nav-trigger[aria-expanded='true'] :global(.chev) { transform: rotate(180deg); }
+  details > summary { list-style: none; }
+  details > summary::-webkit-details-marker { display: none; }
+</style>
+
+<script>
+  let ctrl: AbortController | undefined;
+  function initHeader() {
+    const header = document.querySelector<HTMLElement>('.site-header');
+    if (!header) return;
+    ctrl?.abort();
+    ctrl = new AbortController();
+    const { signal } = ctrl;
+
+    const triggers = [...header.querySelectorAll<HTMLButtonElement>('.nav-trigger')];
+    const closeAll = () =>
+      triggers.forEach((t) => {
+        t.setAttribute('aria-expanded', 'false');
+        document.getElementById(t.getAttribute('aria-controls')!)!.hidden = true;
+      });
+    const open = (t: HTMLButtonElement) => {
+      closeAll();
+      t.setAttribute('aria-expanded', 'true');
+      document.getElementById(t.getAttribute('aria-controls')!)!.hidden = false;
+    };
+
+    const canHover = matchMedia('(hover: hover) and (pointer: fine)').matches;
+    let openedAt = 0;
+    triggers.forEach((t) => {
+      t.addEventListener('click', () => {
+        const isOpen = t.getAttribute('aria-expanded') === 'true';
+        // Ignore the click that immediately follows a hover-open.
+        if (isOpen && !(canHover && Date.now() - openedAt < 400)) closeAll();
+        else open(t);
+      });
+    });
+
+    // Hover intent on fine pointers
+    if (canHover) {
+      let timer: number | undefined;
+      triggers.forEach((t) => t.parentElement!.addEventListener('mouseenter', () => { clearTimeout(timer); if (t.getAttribute('aria-expanded') !== 'true') { openedAt = Date.now(); open(t); } }));
+      header.addEventListener('mouseleave', () => { timer = window.setTimeout(closeAll, 150); });
+      header.addEventListener('mouseenter', () => clearTimeout(timer));
+    }
+
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeAll(); }, { signal });
+    document.addEventListener('click', (e) => { if (!header.contains(e.target as Node)) closeAll(); }, { signal });
+
+    const mobileBtn = header.querySelector<HTMLButtonElement>('.mobile-toggle')!;
+    const drawer = document.getElementById('mobile-nav')!;
+    mobileBtn.addEventListener('click', () => {
+      const isOpen = mobileBtn.getAttribute('aria-expanded') === 'true';
+      mobileBtn.setAttribute('aria-expanded', String(!isOpen));
+      drawer.hidden = isOpen;
+    });
+
+  }
+  document.addEventListener('astro:page-load', initHeader);
+</script>

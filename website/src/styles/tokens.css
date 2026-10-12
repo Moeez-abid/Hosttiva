@@ -1,0 +1,69 @@
+/*
+ * Hosttiva design tokens — the ONLY place colours, type and radii are defined.
+ * Keep names stable: the Lagom client-area theme will be matched to these.
+ * Dark is the default; light overrides live under [data-theme='light'].
+ */
+:root {
+  /* Brand accent (single accent colour: "signal teal") */
+  --accent: #2fd3a6;
+  --accent-strong: #5fe3bd;
+  --accent-ink: #04211a; /* text on accent fills */
+  --accent-soft: rgb(47 211 166 / 0.12);
+
+  /* Neutrals — dark navy / near-black base */
+  --bg: #0a0f17;
+  --bg-raised: #0f1622;
+  --bg-sunken: #070b11;
+  --surface: #131c2a;
+  --border: #1f2a3a;
+  --border-strong: #2c3a4f;
+  --text: #e6ebf2;
+  --text-muted: #9aa7b8;
+  --text-faint: #6b7a8f;
+
+  /* Status */
+  --ok: #3ccf7e;
+  --warn: #f0b429;
+  --danger: #f2555a;
+
+  /* Type */
+  --font-sans: 'IBM Plex Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-display: 'Space Grotesk', 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+
+  /* Shape & layout */
+  --radius-sm: 4px;
+  --radius: 8px;
+  --radius-lg: 14px;
+  --container: 76rem;
+  --header-h: 4rem;
+
+  /* Motion */
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --dur: 180ms;
+
+  color-scheme: dark;
+}
+
+:root[data-theme='light'] {
+  --accent: #0b8a68;
+  --accent-strong: #076b51;
+  --accent-ink: #ffffff;
+  --accent-soft: rgb(11 138 104 / 0.1);
+
+  --bg: #f7f8fa;
+  --bg-raised: #ffffff;
+  --bg-sunken: #eef1f5;
+  --surface: #ffffff;
+  --border: #dfe4eb;
+  --border-strong: #c5cdd8;
+  --text: #0d1420;
+  --text-muted: #4a5567;
+  --text-faint: #6b7686;
+
+  --ok: #16884a;
+  --warn: #a86b00;
+  --danger: #c62f34;
+
+  color-scheme: light;
+}

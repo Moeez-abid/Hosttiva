@@ -1,0 +1,15 @@
+---
+interface Props { class?: string }
+---
+<a href="/" class:list={['inline-flex items-center gap-2.5 text-text', Astro.props.class]} aria-label="Hosttiva by Inventomo — home">
+  <svg width="26" height="26" viewBox="0 0 32 32" aria-hidden="true">
+    <rect x="1" y="1" width="30" height="30" rx="7" fill="none" stroke="currentColor" stroke-opacity=".35" stroke-width="2" />
+    <rect x="8" y="8" width="5" height="16" rx="1.5" fill="var(--accent)" />
+    <rect x="19" y="8" width="5" height="16" rx="1.5" fill="currentColor" />
+    <rect x="8" y="14" width="16" height="4" rx="1.5" fill="var(--accent)" />
+  </svg>
+  <span class="flex items-baseline gap-1.5">
+    <span class="font-display text-lg font-semibold tracking-tight">hosttiva</span>
+    <span class="font-mono text-[0.68rem] text-faint hidden sm:inline">by Inventomo</span>
+  </span>
+</a>

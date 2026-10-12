@@ -1,0 +1,32 @@
+---
+import Icon from './Icon.astro';
+---
+<button
+  type="button"
+  class="theme-toggle inline-flex h-9 w-9 items-center justify-center rounded-md border border-border text-muted hover:text-text hover:border-border-strong transition-colors"
+  aria-label="Switch colour theme"
+  title="Switch colour theme"
+>
+  <span class="icon-sun"><Icon name="Sun" size={16} /></span>
+  <span class="icon-moon"><Icon name="Moon" size={16} /></span>
+</button>
+
+<style>
+  :global([data-theme='light']) .icon-sun,
+  :global(:root:not([data-theme='light'])) .icon-moon { display: none; }
+</style>
+
+<script>
+  function bind() {
+    document.querySelectorAll<HTMLButtonElement>('.theme-toggle').forEach((btn) => {
+      if (btn.dataset.bound) return;
+      btn.dataset.bound = '1';
+      btn.addEventListener('click', () => {
+        const next = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light';
+        document.documentElement.dataset.theme = next;
+        try { localStorage.setItem('theme', next); } catch {}
+      });
+    });
+  }
+  document.addEventListener('astro:page-load', bind);
+</script>

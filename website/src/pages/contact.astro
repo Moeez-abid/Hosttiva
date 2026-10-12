@@ -1,0 +1,40 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import { LINKS, SITE, CLIENT_AREA } from '../config/site';
+import { breadcrumbs } from '../lib/schema';
+
+const crumbs = [{ name: 'Home', path: '/' }, { name: 'Contact', path: '/contact' }];
+const routes = [
+  { icon: 'MessagesSquare', title: 'Sales and plan advice', text: 'Not sure which plan fits? Tell us what you are running and we will recommend one.', cta: 'Ask sales', href: LINKS.enquiry('Sales enquiry') },
+  { icon: 'ArrowRightLeft', title: 'Website migration', text: 'Moving from another host? Free migration is available on eligible plans.', cta: 'Plan a migration', href: LINKS.enquiry('Migration request') },
+  { icon: 'Hammer', title: 'Build something with Inventomo', text: 'Websites, applications, AI systems and automation, designed and built by Inventomo.', cta: 'Start a project', href: LINKS.enquiry('Inventomo project') },
+  { icon: 'LifeBuoy', title: 'Existing customers', text: 'Open a support ticket from the client area so we can see your services.', cta: 'Open a ticket', href: `${CLIENT_AREA}/submitticket.php` },
+];
+---
+<Base title="Contact" description="Need help choosing a plan or moving your website? Contact the Hosttiva by Inventomo team." schema={[breadcrumbs(crumbs)]}>
+  <section class="container-x py-16 sm:py-20">
+    <Breadcrumbs items={crumbs} />
+    <h1 class="mt-8 text-4xl font-semibold sm:text-5xl">Contact</h1>
+    <p class="mt-4 max-w-2xl text-lg text-muted">Need help choosing a plan or moving your website? We’re here to help.</p>
+
+    <ul class="mt-12 divide-y divide-border border-y border-border">
+      {routes.map((r) => (
+        <li class="grid items-center gap-4 py-6 sm:grid-cols-[2.5rem_1fr_auto]">
+          <span class="text-accent"><Icon name={r.icon} size={22} /></span>
+          <div>
+            <h2 class="text-lg font-medium">{r.title}</h2>
+            <p class="text-sm text-muted">{r.text}</p>
+          </div>
+          <a href={r.href} class="btn btn-secondary !py-1.5 text-sm justify-self-start">{r.cta} <Icon name="ArrowUpRight" size={14} /></a>
+        </li>
+      ))}
+    </ul>
+
+    <p class="mt-8 text-sm text-muted">
+      Prefer email? Write to <span class="font-mono text-text">{SITE.email}</span>
+      <a href={`mailto:${SITE.email}`} class="link ml-1">(open mail app)</a>.
+    </p>
+  </section>
+</Base>

@@ -1,0 +1,58 @@
+---
+import Logo from './Logo.astro';
+import Icon from './Icon.astro';
+import { FOOTER_COLUMNS, FOOTER_BUTTONS } from '../config/nav';
+import { SITE } from '../config/site';
+const year = new Date().getFullYear();
+---
+<footer class="mt-24 border-t border-border bg-sunken">
+  <div class="container-x py-14">
+    <div class="grid gap-10 lg:grid-cols-[1.1fr_3fr]">
+      <div class="max-w-sm">
+        <Logo />
+        <p class="mt-4 text-sm text-muted">{SITE.tagline}</p>
+        <p class="mt-6 text-sm text-text">
+          Need a website, app, AI system, automation workflow, or hosting migration? Inventomo can help you build and run it.
+        </p>
+        <div class="mt-5 flex flex-wrap gap-2">
+          {FOOTER_BUTTONS.map((b, i) => (
+            <a href={b.href} class:list={['btn !py-1.5 text-sm', i === 1 ? 'btn-primary' : 'btn-secondary']}>
+              {b.label}
+            </a>
+          ))}
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-8 sm:grid-cols-3 xl:grid-cols-6">
+        {FOOTER_COLUMNS.map((col) => (
+          <nav aria-label={col.title}>
+            <p class="mb-3 font-mono text-xs uppercase tracking-wider text-faint">{col.title}</p>
+            <ul class="space-y-2 text-sm">
+              {col.links.map((l) => (
+                <li>
+                  <a href={l.href} class="text-muted hover:text-text inline-flex items-center gap-1" {...(l.external ? { rel: 'noopener' } : {})}>
+                    {l.label}
+                    {l.external && <Icon name="ArrowUpRight" size={12} />}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        ))}
+      </div>
+    </div>
+
+    <p class="mt-12 max-w-4xl text-xs leading-relaxed text-faint">
+      Hosttiva by Inventomo provides hosting, domains, email, cloud infrastructure, application deployment, reseller tools,
+      AI automation, and managed digital services. Service availability, resources, backups, support response times,
+      refunds, and usage limits are governed by the applicable plan and policy.
+    </p>
+
+    <div class="mt-8 flex flex-col gap-3 border-t border-border pt-6 text-xs text-faint sm:flex-row sm:items-center sm:justify-between">
+      <p>© {year} {SITE.fullName}. All rights reserved.</p>
+      <p class="font-mono">
+        Powered by <a href={SITE.inventomoUrl} class="text-text hover:text-accent" rel="noopener">Inventomo</a>
+      </p>
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,194 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import { SITE } from '../config/site';
+import { PLAN_GROUPS, formatPrice, PRICES_ARE_PLACEHOLDERS } from '../data/plans';
+
+// Service cards (SRS §3 "Homepage service cards"); href points at the matching product page.
+const services = [
+  { name: 'Web hosting', icon: 'Globe', href: '/hosting/web', group: 'web', text: 'Affordable hosting for websites, blogs, portfolios, landing pages, and small businesses.', spec: 'cPanel · SSL · daily backups' },
+  { name: 'Managed WordPress', icon: 'PanelsTopLeft', href: '/hosting/wordpress', group: 'wordpress', text: 'WordPress hosting with installation, migration, backups, updates, security, and performance support.', spec: 'staging · caching · updates' },
+  { name: 'Cloud and VPS', icon: 'Server', href: '/hosting/vps', group: 'apps', text: 'Deploy APIs, SaaS platforms, dashboards, PWAs, databases, AI systems, and custom applications.', spec: 'NVMe · Docker · root access' },
+  { name: 'Agency reseller', icon: 'Building2', href: '/agencies/hosting', group: 'agency', text: 'Create hosting packages for your clients with white-label tools and recurring billing.', spec: 'WHM · WHMCS · private NS' },
+  { name: 'Business email', icon: 'Mail', href: '/email/business', group: null, text: 'Professional email on your own domain with setup, migration, DNS, and security support.', spec: 'SPF · DKIM · DMARC' },
+  { name: 'Game servers', icon: 'Gamepad2', href: '/hosting/game-servers', group: 'game', text: 'Run supported game servers with configurable resources, backups, game panels, and technical support.', spec: 'game panel · isolated cluster' },
+] as const;
+
+const fromPrice = (groupId: string | null) => {
+  if (!groupId) return null;
+  const g = PLAN_GROUPS.find((x) => x.id === groupId);
+  const prices = g?.plans.flatMap((p) => (p.price ? [p.price.annual.promo] : [])) ?? [];
+  return prices.length ? formatPrice(Math.min(...prices)) : null;
+};
+
+const why = [
+  { t: 'One account', d: 'Hosting, domains, email, cloud, and support managed from a single client area.' },
+  { t: 'Built by Inventomo', d: 'Website and application development through Inventomo when you need more than hosting.' },
+  { t: 'Free migration', d: 'We move your site on eligible plans, and check it before DNS is switched.' },
+  { t: 'Published limits', d: 'Transparent CPU, RAM, storage, backup, and email limits on every plan.' },
+  { t: 'Room to grow', d: 'Upgrade path from shared hosting to VPS and dedicated infrastructure.' },
+  { t: 'For every kind of team', d: 'Support for businesses, agencies, developers, startups, and gaming communities.' },
+];
+
+// Hero spec sheet: the featured web plan, straight from plans.ts.
+const heroGroup = PLAN_GROUPS.find((g) => g.id === 'web')!;
+const heroPlan = heroGroup.plans.find((p) => p.featured)!;
+---
+<Base title="Home" description={SITE.description}>
+  <!-- Hero -->
+  <section class="hero relative overflow-hidden border-b border-border">
+    <div class="grid-bg" aria-hidden="true"></div>
+    <div class="container-x relative grid items-center gap-12 py-20 lg:grid-cols-[1.15fr_1fr] lg:py-28">
+      <div class="hero-copy">
+        <p class="eyebrow">Hosting, cloud &amp; digital infrastructure</p>
+        <h1 class="mt-5 text-5xl font-semibold sm:text-6xl lg:text-7xl">Host what you build.</h1>
+        <p class="mt-6 max-w-xl text-lg text-muted">
+          Launch websites, online stores, applications, AI tools, business email, automation systems, and game servers
+          with reliable infrastructure and human support from Hosttiva by Inventomo.
+        </p>
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a href="/pricing" class="btn btn-primary">Explore hosting plans <Icon name="ArrowRight" size={16} /></a>
+          <a href="/contact" class="btn btn-secondary">Talk to an expert</a>
+        </div>
+        <p class="mt-8 font-mono text-xs text-faint">
+          Easy to start. Ready to scale. Supported by people who build technology.
+        </p>
+      </div>
+
+      <figure class="terminal rounded-lg border border-border bg-raised shadow-2xl shadow-black/30" aria-labelledby="hero-plan">
+        <div class="flex items-center justify-between border-b border-border px-5 py-3">
+          <span class="font-mono text-xs text-faint">plan / web / {heroPlan.id}</span>
+          {PRICES_ARE_PLACEHOLDERS && <span class="badge badge-warn">Placeholder</span>}
+        </div>
+        <div class="p-5">
+          <p id="hero-plan" class="font-display text-xl font-medium">{heroPlan.name}</p>
+          <p class="text-sm text-muted">{heroPlan.fit}</p>
+          <dl class="mt-5 divide-y divide-border border-y border-border font-mono text-[0.82rem]">
+            {heroPlan.features.map((f, i) => (
+              <div class="line flex justify-between py-2" style={`--i:${i}`}>
+                <dt class="text-faint">{String(i + 1).padStart(2, '0')}</dt>
+                <dd class="text-text">{f}</dd>
+              </div>
+            ))}
+          </dl>
+          {heroPlan.price && (
+            <div class="mt-5 flex items-end justify-between">
+              <p><span class="font-mono text-2xl text-text">{formatPrice(heroPlan.price.annual.promo)}</span><span class="text-sm text-faint">/mo first term</span></p>
+              <p class="spec">renews {formatPrice(heroPlan.price.annual.renewal)}/mo</p>
+            </div>
+          )}
+        </div>
+        <figcaption class="border-t border-border px-5 py-3 text-xs text-faint">Billed annually. Free migration on eligible plans.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- Services -->
+  <section class="container-x py-20" aria-labelledby="services-h">
+    <div class="flex flex-wrap items-end justify-between gap-4">
+      <div>
+        <p class="eyebrow">Services</p>
+        <h2 id="services-h" class="mt-3 text-3xl font-semibold sm:text-4xl">Everything you need to go live</h2>
+      </div>
+      <a href="/pricing" class="link inline-flex items-center gap-1 text-sm">Compare all plans <Icon name="ArrowRight" size={14} /></a>
+    </div>
+
+    <ul class="mt-10 divide-y divide-border border-y border-border">
+      {services.map((s) => {
+        const from = fromPrice(s.group);
+        return (
+          <li>
+            <a href={s.href} class="service-row group grid items-center gap-x-6 gap-y-2 py-6 sm:grid-cols-[2.5rem_14rem_1fr_auto]">
+              <span class="text-accent"><Icon name={s.icon} size={22} /></span>
+              <span class="font-display text-lg font-medium text-text">{s.name}</span>
+              <span class="text-sm text-muted">
+                {s.text}
+                <span class="spec mt-1 block !text-xs">{s.spec}</span>
+              </span>
+              <span class="flex items-center gap-3 sm:justify-end">
+                {from ? (
+                  <span class="text-right">
+                    <span class="spec block !text-[0.7rem]">from</span>
+                    <span class="font-mono text-text">{from}<span class="text-faint">/mo</span></span>
+                  </span>
+                ) : (
+                  <span class="spec">quote</span>
+                )}
+                <Icon name="ArrowRight" size={16} class="text-faint transition-transform group-hover:translate-x-1 group-hover:text-accent" />
+              </span>
+            </a>
+          </li>
+        );
+      })}
+    </ul>
+    {PRICES_ARE_PLACEHOLDERS && (
+      <p class="mt-4 flex items-center gap-2 text-xs text-faint"><span class="badge badge-warn">Placeholder</span> Prices are not final and will be confirmed before launch.</p>
+    )}
+  </section>
+
+  <!-- Why Hosttiva -->
+  <section class="border-y border-border bg-raised" aria-labelledby="why-h">
+    <div class="container-x grid gap-12 py-20 lg:grid-cols-[1fr_2fr]">
+      <div>
+        <p class="eyebrow">Why Hosttiva</p>
+        <h2 id="why-h" class="mt-3 text-3xl font-semibold sm:text-4xl">Infrastructure, plus the people who build on it</h2>
+        <p class="mt-4 text-muted">Hosttiva hosts your technology. Inventomo helps you create it.</p>
+      </div>
+      <dl class="grid gap-px overflow-hidden rounded-lg border border-border bg-border sm:grid-cols-2">
+        {why.map((w, i) => (
+          <div class="bg-raised p-6">
+            <dt class="flex items-baseline gap-3 font-medium text-text">
+              <span class="font-mono text-xs text-accent">{String(i + 1).padStart(2, '0')}</span>{w.t}
+            </dt>
+            <dd class="mt-2 pl-8 text-sm text-muted">{w.d}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+  </section>
+
+  <!-- Powered by Inventomo -->
+  <section class="container-x py-20" aria-labelledby="inv-h">
+    <div class="grid items-center gap-10 rounded-lg border border-border p-8 sm:p-12 lg:grid-cols-[1.4fr_1fr]">
+      <div>
+        <p class="eyebrow">Inventomo</p>
+        <h2 id="inv-h" class="mt-3 text-3xl font-semibold sm:text-4xl">Powered by Inventomo</h2>
+        <p class="mt-4 max-w-2xl text-muted">
+          Hosttiva is the hosting and cloud division of Inventomo. Alongside infrastructure, Inventomo can design your
+          website, build your application, connect AI tools, migrate your existing systems, improve performance, and
+          provide continuing technical support.
+        </p>
+        <a href="/solutions/inventomo-web-solutions" class="btn btn-primary mt-8">Explore Inventomo Web Solutions <Icon name="ArrowRight" size={16} /></a>
+      </div>
+      <ul class="grid grid-cols-2 gap-3 font-mono text-sm">
+        {['Design', 'Development', 'AI integration', 'Automation', 'Migration', 'Ongoing support'].map((x) => (
+          <li class="flex items-center gap-2 rounded-md border border-border px-3 py-2.5 text-muted">
+            <Icon name="Check" size={14} class="text-accent" />{x}
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .grid-bg {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: radial-gradient(ellipse 70% 60% at 70% 40%, #000 20%, transparent 75%);
+    opacity: 0.5;
+  }
+  .hero-copy > * { animation: rise 600ms var(--ease) both; }
+  .hero-copy > *:nth-child(2) { animation-delay: 60ms; }
+  .hero-copy > *:nth-child(3) { animation-delay: 120ms; }
+  .hero-copy > *:nth-child(4) { animation-delay: 180ms; }
+  .hero-copy > *:nth-child(5) { animation-delay: 240ms; }
+  .terminal .line { animation: type 400ms var(--ease) both; animation-delay: calc(400ms + var(--i) * 260ms); }
+  @keyframes rise { from { opacity: 0; transform: translateY(10px); } }
+  @keyframes type { from { opacity: 0; transform: translateX(-6px); } }
+  .service-row:hover { background: linear-gradient(90deg, var(--accent-soft), transparent 40%); }
+</style>

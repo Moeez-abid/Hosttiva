@@ -1,0 +1,22 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+const shortcuts = [
+  { label: 'Pricing', href: '/pricing' },
+  { label: 'Web hosting', href: '/hosting/web' },
+  { label: 'VPS hosting', href: '/hosting/vps' },
+  { label: 'Search domains', href: '/domains/search' },
+  { label: 'Contact', href: '/contact' },
+];
+---
+<Base title="Page not found" description="The page you were looking for does not exist on Hosttiva." noindex>
+  <section class="container-x py-24 sm:py-32">
+    <p class="font-mono text-sm text-accent">HTTP 404</p>
+    <h1 class="mt-3 text-4xl font-semibold sm:text-5xl">This page isn’t hosted here.</h1>
+    <p class="mt-4 max-w-xl text-muted">The link may be old or mistyped. Try one of these, or go back to the homepage.</p>
+    <ul class="mt-8 flex flex-wrap gap-2">
+      {shortcuts.map((s) => <li><a href={s.href} class="btn btn-secondary !py-1.5 text-sm">{s.label}</a></li>)}
+    </ul>
+    <a href="/" class="link mt-10 inline-flex items-center gap-1 text-sm"><Icon name="ArrowLeft" size={14} /> Back to home</a>
+  </section>
+</Base>

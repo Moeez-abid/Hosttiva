@@ -1,0 +1,163 @@
+---
+// Generates every product/solution page from data/products.ts and a noindex
+// placeholder for each planned page in data/pages.ts. No hand-written product pages.
+import type { GetStaticPaths } from 'astro';
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import Faq from '../components/Faq.astro';
+import EnquiryCta from '../components/EnquiryCta.astro';
+import PlanTable from '../components/PlanTable.astro';
+import BillingToggle from '../components/BillingToggle.astro';
+import { PRODUCTS, CATEGORIES, CATEGORY_FAQS, getProduct, type Product } from '../data/products';
+import { PLANNED_PAGES, type PlannedPage } from '../data/pages';
+import { getPlanGroup } from '../data/plans';
+import { LINKS } from '../config/site';
+import { breadcrumbs, service, faqPage } from '../lib/schema';
+
+export const getStaticPaths = (() => [
+  ...PRODUCTS.map((product) => ({ params: { slug: product.slug }, props: { product } })),
+  ...PLANNED_PAGES.map((planned) => ({ params: { slug: planned.slug }, props: { planned } })),
+]) satisfies GetStaticPaths;
+
+interface Props { product?: Product; planned?: PlannedPage }
+const { product, planned } = Astro.props;
+
+const clip = (s: string, n = 158) => (s.length <= n ? s : s.slice(0, s.lastIndexOf(' ', n - 1)) + '…');
+---
+{product ? (() => {
+  const p = product;
+  const path = `/${p.slug}`;
+  const cat = CATEGORIES[p.category];
+  const soon = p.status === 'coming-soon';
+  const group = p.status === 'available' && p.planGroup ? getPlanGroup(p.planGroup) : null;
+  const faqs = soon ? [] : [...(p.faqs ?? []), ...(CATEGORY_FAQS[p.category] ?? [])];
+  const related = (p.related ?? []).map(getProduct).filter((r): r is Product => !!r);
+  const crumbs = [{ name: 'Home', path: '/' }, { name: p.name, path }];
+  const description = clip(`${p.headline} ${p.summary}`);
+  const domainForm = p.slug === 'domains/search' || p.slug === 'domains/register' ? 'register' : p.slug === 'domains/transfer' ? 'transfer' : null;
+  const schema = [
+    breadcrumbs(crumbs),
+    ...(soon ? [] : [service({ name: p.name, description, path, category: cat.label })]),
+    ...(faqs.length ? [faqPage(faqs)] : []),
+  ];
+
+  return (
+    <Base title={p.name} description={description} schema={schema}>
+      <section class="border-b border-border">
+        <div class="container-x py-14 sm:py-20">
+          <Breadcrumbs items={crumbs} />
+          <div class="mt-8 grid gap-10 lg:grid-cols-[1.4fr_1fr] lg:items-end">
+            <div>
+              <p class="eyebrow flex items-center gap-2"><Icon name={p.icon} size={14} /> {cat.label}</p>
+              <h1 class="mt-4 text-4xl font-semibold sm:text-5xl">{p.name}</h1>
+              <p class="mt-4 font-display text-xl text-text sm:text-2xl">{p.headline}</p>
+              <p class="mt-4 max-w-2xl text-muted">{p.summary}</p>
+              <div class="mt-8 flex flex-wrap items-center gap-3">
+                {soon && <span class="badge badge-warn">Coming soon</span>}
+                {group && <a href={`#plans-${group.id}`} class="btn btn-primary">See plans <Icon name="ArrowDown" size={16} /></a>}
+                {p.status === 'enquiry' && <a href={LINKS.enquiry(p.name)} class="btn btn-primary">Request a quote <Icon name="ArrowRight" size={16} /></a>}
+                {soon && <a href={LINKS.enquiry(`Notify me: ${p.name}`)} class="btn btn-primary">Notify me</a>}
+                <a href="/contact" class="btn btn-secondary">Talk to an expert</a>
+              </div>
+            </div>
+
+            {domainForm && (
+              <form action={domainForm === 'register' ? LINKS.domainSearch.split('?')[0] : LINKS.domainTransfer.split('?')[0]} method="get" class="rounded-lg border border-border bg-raised p-5" role="search">
+                <input type="hidden" name="a" value="add" />
+                <input type="hidden" name="domain" value={domainForm} />
+                <label for="domain-q" class="eyebrow">{domainForm === 'register' ? 'Check availability' : 'Domain to transfer'}</label>
+                <div class="mt-3 flex gap-2">
+                  <input id="domain-q" name="query" type="text" required inputmode="url" autocomplete="off" spellcheck="false"
+                    placeholder={domainForm === 'register' ? 'yourbrand.com' : 'example.com'}
+                    class="min-w-0 flex-1 rounded-md border border-border-strong bg-bg px-3 py-2 font-mono text-sm text-text placeholder:text-faint focus:border-accent focus:outline-none" />
+                  <button type="submit" class="btn btn-primary">{domainForm === 'register' ? 'Search' : 'Transfer'}</button>
+                </div>
+                <p class="mt-3 text-xs text-faint">Opens the Hosttiva client area to check the domain and continue.</p>
+              </form>
+            )}
+          </div>
+        </div>
+      </section>
+
+      <div class="container-x space-y-16 py-16">
+        {p.note && (
+          <div class:list={['flex gap-3 rounded-lg border p-5 text-sm', soon ? 'border-warn/40 text-text' : 'border-border text-muted']} role="note">
+            <Icon name="Info" size={18} class={soon ? 'shrink-0 text-warn' : 'shrink-0 text-accent'} />
+            <p>{p.note}</p>
+          </div>
+        )}
+
+        {(p.features?.length || p.useCases?.length) && (
+          <div class="grid gap-10 md:grid-cols-2">
+            {p.features?.length && (
+              <section aria-labelledby="feat-h">
+                <h2 id="feat-h" class="text-2xl font-semibold">{soon ? 'Planned features' : 'What you get'}</h2>
+                <ul class="mt-6 grid gap-2 sm:grid-cols-2">
+                  {p.features.map((f) => (
+                    <li class="flex items-start gap-2 rounded-md border border-border px-3 py-2.5 text-sm"><Icon name="Check" size={15} class="mt-0.5 shrink-0 text-accent" />{f}</li>
+                  ))}
+                </ul>
+              </section>
+            )}
+            {p.useCases?.length && (
+              <section aria-labelledby="use-h">
+                <h2 id="use-h" class="text-2xl font-semibold">Good for</h2>
+                <ul class="mt-6 flex flex-wrap gap-2">
+                  {p.useCases.map((u) => <li class="rounded-full border border-border px-3 py-1 font-mono text-xs text-muted">{u}</li>)}
+                </ul>
+              </section>
+            )}
+          </div>
+        )}
+
+        {group && (
+          <div>
+            <div class="mb-4 flex justify-end"><BillingToggle /></div>
+            <PlanTable group={group} />
+            <p class="mt-4 text-sm"><a href="/pricing" class="link">Compare every Hosttiva plan →</a></p>
+          </div>
+        )}
+
+        {p.status !== 'available' && <EnquiryCta subject={p.name} comingSoon={soon} />}
+
+        {faqs.length > 0 && <Faq faqs={faqs} />}
+
+        {related.length > 0 && (
+          <section aria-labelledby="rel-h">
+            <h2 id="rel-h" class="text-2xl font-semibold">Related</h2>
+            <ul class="mt-6 divide-y divide-border border-y border-border">
+              {related.map((r) => (
+                <li>
+                  <a href={`/${r.slug}`} class="group flex items-center gap-4 py-4">
+                    <span class="text-accent"><Icon name={r.icon} size={18} /></span>
+                    <span class="flex-1">
+                      <span class="font-medium text-text">{r.name}</span>
+                      <span class="block text-sm text-muted">{r.headline}</span>
+                    </span>
+                    {r.status === 'coming-soon' && <span class="badge">Soon</span>}
+                    <Icon name="ArrowRight" size={16} class="text-faint transition-transform group-hover:translate-x-1" />
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+      </div>
+    </Base>
+  );
+})() : planned && (
+  <Base title={planned.title} description={planned.blurb} noindex>
+    <section class="container-x py-24">
+      <Breadcrumbs items={[{ name: 'Home', path: '/' }, { name: planned.title, path: `/${planned.slug}` }]} />
+      <p class="eyebrow mt-10">Coming soon</p>
+      <h1 class="mt-3 text-4xl font-semibold sm:text-5xl">{planned.title}</h1>
+      <p class="mt-4 max-w-2xl text-lg text-muted">{planned.blurb}</p>
+      <p class="mt-6 max-w-2xl text-sm text-faint">This page is being prepared and is not published yet. If you need something now, contact the team and a person will reply.</p>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a href="/contact" class="btn btn-primary">Contact us</a>
+        <a href="/" class="btn btn-secondary">Back to home</a>
+      </div>
+    </section>
+  </Base>
+)}

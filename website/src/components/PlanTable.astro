@@ -1,0 +1,81 @@
+---
+import Icon from './Icon.astro';
+import { LINKS } from '../config/site';
+import { formatPrice, PRICES_ARE_PLACEHOLDERS, type PlanGroup, type Term } from '../data/plans';
+interface Props { group: PlanGroup; headingLevel?: 'h2' | 'h3' }
+const { group, headingLevel: H = 'h2' } = Astro.props;
+const terms: Term[] = ['annual', 'monthly'];
+---
+<section class="plan-group scroll-mt-32" id={`plans-${group.id}`} aria-labelledby={`plans-${group.id}-h`}>
+  <div class="flex flex-wrap items-end justify-between gap-3">
+    <div>
+      <H id={`plans-${group.id}-h`} class="text-2xl font-semibold">{group.name}</H>
+      <p class="mt-1 text-sm text-muted">{group.intro}</p>
+    </div>
+    {PRICES_ARE_PLACEHOLDERS && <span class="badge badge-warn" title="Prices are placeholders and will change before launch">Placeholder prices</span>}
+  </div>
+
+  <div class="mt-6 overflow-x-auto rounded-lg border border-border">
+    <table class="w-full min-w-[46rem] border-collapse text-left text-sm">
+      <thead class="bg-raised font-mono text-xs uppercase tracking-wider text-faint">
+        <tr>
+          <th scope="col" class="px-5 py-3 font-medium">Plan</th>
+          <th scope="col" class="px-5 py-3 font-medium">Includes</th>
+          <th scope="col" class="px-5 py-3 font-medium">First term</th>
+          <th scope="col" class="px-5 py-3 font-medium">Renews at</th>
+          <th scope="col" class="px-5 py-3"><span class="sr-only">Order</span></th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-border">
+        {group.plans.map((plan) => (
+          <tr class:list={['align-top', plan.featured && 'bg-accent-soft/40']}>
+            <th scope="row" class="px-5 py-5 font-normal">
+              <span class="flex items-center gap-2 font-display text-base font-medium text-text">
+                {plan.name}
+                {plan.featured && <span class="badge badge-accent">Popular</span>}
+              </span>
+              {plan.fit && <span class="mt-1 block text-xs text-muted">{group.fitLabel ? `${group.fitLabel}: ` : ''}{plan.fit}</span>}
+            </th>
+            <td class="px-5 py-5">
+              <ul class="grid gap-x-4 gap-y-1 sm:grid-cols-2">
+                {plan.features.map((f) => (
+                  <li class="flex items-start gap-1.5 text-muted"><Icon name="Check" size={14} class="mt-1 shrink-0 text-accent" />{f}</li>
+                ))}
+              </ul>
+            </td>
+            {plan.price ? (
+              <>
+                <td class="px-5 py-5 whitespace-nowrap">
+                  {terms.map((t) => (
+                    <span data-term={t}>
+                      <span class="font-mono text-lg text-text">{formatPrice(plan.price![t].promo)}</span><span class="text-xs text-faint">/mo</span>
+                      <span class="block text-xs text-faint">{t === 'annual' ? 'billed annually' : 'billed monthly'}</span>
+                    </span>
+                  ))}
+                </td>
+                <td class="px-5 py-5 whitespace-nowrap">
+                  {terms.map((t) => (
+                    <span data-term={t} class="font-mono text-muted">{formatPrice(plan.price![t].renewal)}<span class="text-xs text-faint">/mo</span></span>
+                  ))}
+                </td>
+                <td class="px-5 py-5 text-right">
+                  <a href={LINKS.order(plan.pid, group.whmcsGroup)} class:list={['btn !py-1.5 text-sm whitespace-nowrap', plan.featured ? 'btn-primary' : 'btn-secondary']} aria-label={`Choose ${plan.name}`}>
+                    Choose plan
+                  </a>
+                </td>
+              </>
+            ) : (
+              <>
+                <td class="px-5 py-5 font-mono text-muted" colspan="2">Custom quote</td>
+                <td class="px-5 py-5 text-right">
+                  <a href={LINKS.enquiry(`${group.name}: ${plan.name}`)} class="btn btn-secondary !py-1.5 text-sm whitespace-nowrap">Request quote</a>
+                </td>
+              </>
+            )}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+  {group.note && <p class="mt-3 text-xs text-faint">{group.note}</p>}
+</section>

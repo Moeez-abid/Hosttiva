@@ -1,0 +1,9 @@
+---
+// Single icon entry point (Lucide only). Usage: <Icon name="Server" size={18} />
+import * as lucide from '@lucide/astro';
+interface Props { name: string; size?: number; class?: string; strokeWidth?: number }
+const { name, size = 18, class: cls, strokeWidth = 1.75 } = Astro.props;
+const Cmp = (lucide as Record<string, any>)[name];
+if (!Cmp) throw new Error(`Unknown Lucide icon: ${name}`);
+---
+<Cmp size={size} stroke-width={strokeWidth} class={cls} aria-hidden="true" />
