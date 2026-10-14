@@ -1,0 +1,20 @@
+---
+// Shared frame for client-side free tools.
+interface Props { id: string; label: string; placeholder: string; button: string; privacy: string }
+const { id, label, placeholder, button, privacy } = Astro.props;
+---
+<div class="tool rounded-lg border border-border bg-raised" data-tool={id}>
+  <form class="tool-form flex flex-col gap-3 border-b border-border p-5 sm:flex-row sm:items-end" novalidate>
+    <label class="flex-1">
+      <span class="eyebrow">{label}</span>
+      <input name="q" type="text" required autocomplete="off" spellcheck="false" inputmode="url" placeholder={placeholder}
+        class="mt-2 w-full rounded-md border border-border-strong bg-bg px-3 py-2 font-mono text-sm text-text placeholder:text-faint focus:border-accent focus:outline-none" />
+    </label>
+    <slot name="controls" />
+    <button type="submit" class="btn btn-primary justify-center">{button}</button>
+  </form>
+  <div class="tool-out min-h-24 p-5 text-sm" aria-live="polite">
+    <p class="text-faint">Results appear here.</p>
+  </div>
+  <p class="border-t border-border px-5 py-3 text-xs text-faint">{privacy}</p>
+</div>

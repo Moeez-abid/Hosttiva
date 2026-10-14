@@ -13,6 +13,9 @@ import { PRODUCTS, CATEGORIES, CATEGORY_FAQS, getProduct, type Product } from '.
 import { PLANNED_PAGES, type PlannedPage } from '../data/pages';
 import { getPlanGroup } from '../data/plans';
 import { LINKS } from '../config/site';
+import DnsTool from '../components/tools/DnsTool.astro';
+import WhoisTool from '../components/tools/WhoisTool.astro';
+import DomainGenerator from '../components/tools/DomainGenerator.astro';
 import { breadcrumbs, service, faqPage } from '../lib/schema';
 
 export const getStaticPaths = (() => [
@@ -58,7 +61,7 @@ const clip = (s: string, n = 158) => (s.length <= n ? s : s.slice(0, s.lastIndex
                 {group && <a href={`#plans-${group.id}`} class="btn btn-primary">See plans <Icon name="ArrowDown" size={16} /></a>}
                 {p.status === 'enquiry' && <a href={LINKS.enquiry(p.name)} class="btn btn-primary">Request a quote <Icon name="ArrowRight" size={16} /></a>}
                 {soon && <a href={LINKS.enquiry(`Notify me: ${p.name}`)} class="btn btn-primary">Notify me</a>}
-                <a href="/contact" class="btn btn-secondary">Talk to an expert</a>
+                {!p.tool && <a href="/contact" class="btn btn-secondary">Talk to an expert</a>}
               </div>
             </div>
 
@@ -77,6 +80,13 @@ const clip = (s: string, n = 158) => (s.length <= n ? s : s.slice(0, s.lastIndex
               </form>
             )}
           </div>
+          {p.tool && (
+            <div class="mt-10">
+              {p.tool === 'dns' && <DnsTool />}
+              {p.tool === 'whois' && <WhoisTool />}
+              {p.tool === 'generator' && <DomainGenerator />}
+            </div>
+          )}
         </div>
       </section>
 

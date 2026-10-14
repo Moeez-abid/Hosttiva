@@ -1,0 +1,50 @@
+---
+import ToolShell from './ToolShell.astro';
+const TYPES = ['ALL', 'A', 'AAAA', 'CNAME', 'MX', 'TXT', 'NS', 'CAA'];
+---
+<ToolShell id="dns" label="Domain" placeholder="example.com" button="Check DNS"
+  privacy="Lookups run in your browser using Cloudflare’s public DNS-over-HTTPS resolver (1.1.1.1). Hosttiva does not store your queries.">
+  <label slot="controls">
+    <span class="eyebrow">Record</span>
+    <select name="type" class="mt-2 block rounded-md border border-border-strong bg-bg px-3 py-2 font-mono text-sm text-text focus:border-accent focus:outline-none">
+      {TYPES.map((t) => <option value={t}>{t === 'ALL' ? 'All types' : t}</option>)}
+    </select>
+  </label>
+</ToolShell>
+
+<script>
+  import { bindTool, cleanDomain, DOMAIN_RE, message, table, el } from '../../lib/tools';
+  const ALL = ['A', 'AAAA', 'CNAME', 'MX', 'TXT', 'NS', 'CAA'];
+  const RCODE: Record<number, string> = { 2: 'Server failure', 3: 'Domain does not exist (NXDOMAIN)', 5: 'Query refused' };
+
+  async function query(name: string, type: string) {
+    const r = await fetch(`https://cloudflare-dns.com/dns-query?name=${encodeURIComponent(name)}&type=${type}`, {
+      headers: { accept: 'application/dns-json' },
+    });
+    if (!r.ok) throw new Error(String(r.status));
+    return r.json() as Promise<{ Status: number; Answer?: { name: string; type: number; TTL: number; data: string }[] }>;
+  }
+
+  const TYPE_NAMES: Record<number, string> = { 1: 'A', 28: 'AAAA', 5: 'CNAME', 15: 'MX', 16: 'TXT', 2: 'NS', 257: 'CAA' };
+
+  function init() {
+    bindTool('dns', async (raw, form, out) => {
+      const d = cleanDomain(raw);
+      if (!DOMAIN_RE.test(d)) return message(out, 'Enter a valid domain, for example example.com.', 'error');
+      const sel = (form.elements.namedItem('type') as HTMLSelectElement).value;
+      const types = sel === 'ALL' ? ALL : [sel];
+      message(out, `Looking up ${d}…`);
+      const results = await Promise.all(types.map((t) => query(d, t).then((j) => ({ t, j }))));
+      const status = results[0].j.Status;
+      if (status !== 0 && RCODE[status]) return message(out, `${d}: ${RCODE[status]}.`, 'error');
+      const rows: string[][] = [];
+      results.forEach(({ t, j }) => {
+        const answers = (j.Answer ?? []).filter((a) => TYPE_NAMES[a.type] === t);
+        if (!answers.length) rows.push([t, '—', 'No record']);
+        answers.forEach((a) => rows.push([t, String(a.TTL), a.data]));
+      });
+      out.replaceChildren(el('p', 'mb-3 text-muted', `Records for ${d}`), table(['Type', 'TTL', 'Value'], rows));
+    });
+  }
+  document.addEventListener('astro:page-load', init);
+</script>

@@ -40,6 +40,8 @@ export interface Product {
   features?: string[];
   useCases?: string[];
   planGroup?: PlanGroupId;
+  /** Client-side free tool rendered on the page. */
+  tool?: 'dns' | 'whois' | 'generator';
   /** Compliance/availability note shown on the page. */
   note?: string;
   faqs?: Faq[];
@@ -353,10 +355,10 @@ export const PRODUCTS: Product[] = [
     name: 'Domain Name Generator',
     category: 'domains',
     icon: 'Lightbulb',
-    status: 'coming-soon',
+    status: 'available',
+    tool: 'generator',
     headline: 'Get creative domain ideas for your next project.',
     summary: 'Enter your business name, industry, location, or keywords and receive naming suggestions.',
-    note: 'This free tool is planned and not live yet. Use domain search in the meantime.',
     related: ['domains/search'],
   },
   {
@@ -364,21 +366,22 @@ export const PRODUCTS: Product[] = [
     name: 'WHOIS Lookup',
     category: 'domains',
     icon: 'FileSearch',
-    status: 'coming-soon',
+    status: 'available',
+    tool: 'whois',
     headline: 'Check publicly available domain information.',
     summary:
       'Review domain status, registrar information, registration dates, expiry information, and available ownership details.',
-    note: 'This free tool is planned and not live yet. Some domain details may be hidden or limited because of privacy regulations and registrar policies.',
+    note: 'Some domain details may be hidden or limited because of privacy regulations and registrar policies.',
   },
   {
     slug: 'domains/dns-checker',
     name: 'DNS Checker',
     category: 'domains',
     icon: 'Network',
-    status: 'coming-soon',
+    status: 'available',
+    tool: 'dns',
     headline: 'Verify your domain’s DNS records and nameservers.',
     summary: 'Check A, AAAA, CNAME, MX, TXT, NS, and CAA records.',
-    note: 'This free tool is planned and not live yet.',
   },
   {
     slug: 'domains/ssl-checker',

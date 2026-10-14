@@ -1,0 +1,54 @@
+---
+import ToolShell from './ToolShell.astro';
+---
+<ToolShell id="generator" label="Business name or keywords" placeholder="green bakery lahore" button="Suggest names"
+  privacy="Suggestions are generated in your browser. Availability is confirmed when you search in the client area." />
+
+<script>
+  import { bindTool, message, el } from '../../lib/tools';
+  import { LINKS } from '../../config/site';
+
+  const TLDS = ['com', 'net', 'io', 'co', 'app', 'dev', 'store', 'online', 'pk'];
+  const PREFIXES = ['get', 'try', 'go', 'my', 'the'];
+  const SUFFIXES = ['hq', 'hub', 'lab', 'studio', 'online', 'app', 'co'];
+
+  const slug = (s: string) => s.toLowerCase().normalize('NFKD').replace(/[^a-z0-9\s-]/g, '').trim();
+
+  function suggest(input: string): string[] {
+    const words = slug(input).split(/\s+/).filter(Boolean).slice(0, 4);
+    if (!words.length) return [];
+    const joined = words.join('');
+    const bases = new Set<string>([joined, words.join('-'), words[0]]);
+    if (words.length > 1) {
+      bases.add(words.slice(0, 2).join(''));
+      bases.add(words.map((w) => w[0]).join('') + words[words.length - 1]);
+    }
+    PREFIXES.forEach((p) => bases.add(p + joined));
+    SUFFIXES.forEach((s) => bases.add(joined + s));
+    const out: string[] = [];
+    [...bases].filter((b) => b.length >= 3 && b.length <= 63 && !/^-|-$/.test(b)).forEach((b, i) => {
+      // Primary bases get several extensions; variants get .com only to keep the list short.
+      (i < 3 ? TLDS : ['com']).forEach((t) => out.push(`${b}.${t}`));
+    });
+    return [...new Set(out)].slice(0, 36);
+  }
+
+  function init() {
+    bindTool('generator', (raw, _form, out) => {
+      const list = suggest(raw);
+      if (!list.length) return message(out, 'Enter a name or a few keywords.', 'error');
+      const ul = el('ul', 'grid gap-px overflow-hidden rounded-md border border-border bg-border sm:grid-cols-2 lg:grid-cols-3');
+      list.forEach((d) => {
+        const li = el('li', 'flex items-center justify-between gap-2 bg-bg px-3 py-2');
+        li.append(el('span', 'font-mono text-sm text-text break-all', d));
+        const a = el('a', 'link shrink-0 text-xs', 'Check');
+        a.setAttribute('href', `${LINKS.domainSearch}&query=${encodeURIComponent(d)}`);
+        a.setAttribute('aria-label', `Check availability of ${d}`);
+        li.append(a);
+        ul.append(li);
+      });
+      out.replaceChildren(el('p', 'mb-3 text-muted', `${list.length} ideas. Availability is not checked until you click.`), ul);
+    });
+  }
+  document.addEventListener('astro:page-load', init);
+</script>

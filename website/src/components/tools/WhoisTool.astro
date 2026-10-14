@@ -1,0 +1,55 @@
+---
+import ToolShell from './ToolShell.astro';
+---
+<ToolShell id="whois" label="Domain" placeholder="example.com" button="Look up"
+  privacy="Uses RDAP, the modern replacement for WHOIS, via rdap.org and the registry for the domain. Some details may be hidden or limited because of privacy regulations and registrar policies." />
+
+<script>
+  import { bindTool, cleanDomain, DOMAIN_RE, message, table, el } from '../../lib/tools';
+  import { LINKS } from '../../config/site';
+
+  type Rdap = {
+    ldhName?: string;
+    status?: string[];
+    events?: { eventAction: string; eventDate: string }[];
+    nameservers?: { ldhName: string }[];
+    secureDNS?: { delegationSigned?: boolean };
+    entities?: { roles?: string[]; vcardArray?: [string, [string, object, string, string][]]; publicIds?: { identifier: string }[] }[];
+  };
+
+  const date = (s?: string) => (s ? new Date(s).toISOString().slice(0, 10) : '—');
+  const vcardName = (e?: NonNullable<Rdap['entities']>[number]) =>
+    e?.vcardArray?.[1].find((f) => f[0] === 'fn')?.[3] ?? '—';
+
+  function init() {
+    bindTool('whois', async (raw, _form, out) => {
+      const d = cleanDomain(raw);
+      if (!DOMAIN_RE.test(d)) return message(out, 'Enter a valid domain, for example example.com.', 'error');
+      message(out, `Looking up ${d}…`);
+      const r = await fetch(`https://rdap.org/domain/${encodeURIComponent(d)}`, { headers: { accept: 'application/rdap+json' } });
+      if (r.status === 404) {
+        const p = el('p', 'text-text', `No registration record found for ${d}. It may be available.`);
+        const a = el('a', 'btn btn-primary mt-4 !py-1.5 text-sm', 'Check availability');
+        a.setAttribute('href', `${LINKS.domainSearch}&query=${encodeURIComponent(d)}`);
+        return out.replaceChildren(p, a);
+      }
+      if (!r.ok) return message(out, `The registry for this extension did not return data (HTTP ${r.status}). Some extensions do not offer public RDAP yet.`, 'error');
+      const j: Rdap = await r.json();
+      const ev = (a: string) => j.events?.find((e) => e.eventAction === a)?.eventDate;
+      const registrar = j.entities?.find((e) => e.roles?.includes('registrar'));
+      const rows = [
+        ['Domain', (j.ldhName ?? d).toLowerCase()],
+        ['Registrar', vcardName(registrar)],
+        ['IANA ID', registrar?.publicIds?.[0]?.identifier ?? '—'],
+        ['Registered', date(ev('registration'))],
+        ['Expires', date(ev('expiration'))],
+        ['Last changed', date(ev('last changed'))],
+        ['Status', (j.status ?? []).join(', ') || '—'],
+        ['Nameservers', (j.nameservers ?? []).map((n) => n.ldhName.toLowerCase()).join(', ') || '—'],
+        ['DNSSEC', j.secureDNS?.delegationSigned ? 'Signed' : 'Unsigned'],
+      ];
+      out.replaceChildren(table(['Field', 'Value'], rows));
+    });
+  }
+  document.addEventListener('astro:page-load', init);
+</script>
