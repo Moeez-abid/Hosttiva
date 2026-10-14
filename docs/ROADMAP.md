@@ -30,7 +30,7 @@ Placeholder pages for Phase 2+ already exist in `website/src/data/pages.ts` (noi
 - [x] Blog via content collection (`src/content/blog`), Article/BlogPosting schema, categories:
       web hosting, WordPress, domains and email, cloud and VPS, PWA/app deployment, AI/LLM/RAG/automation,
       agency and reseller, game servers, security and backups, Hosttiva and Inventomo updates
-- [ ] First 12 posts from SRS "Initial blog titles" (3 done: #1, #4, #11)
+- [x] First 12 posts from SRS "Initial blog titles"
 - [x] Our Story (/about)
 - [ ] Careers, Product Updates (/roadmap) pages
 - [ ] Tutorials collection with HowTo schema
