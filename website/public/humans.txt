@@ -1,0 +1,9 @@
+/* TEAM */
+Hosting & infrastructure: Hosttiva
+Design & development: Inventomo
+Site: https://hosttiva.com
+
+/* SITE */
+Standards: HTML, CSS, TypeScript
+Components: Astro, Tailwind CSS, Pagefind, Lucide
+Fonts: Space Grotesk, IBM Plex Sans, IBM Plex Mono
