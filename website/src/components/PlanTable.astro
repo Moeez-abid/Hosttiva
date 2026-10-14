@@ -6,7 +6,7 @@ interface Props { group: PlanGroup; headingLevel?: 'h2' | 'h3' }
 const { group, headingLevel: H = 'h2' } = Astro.props;
 const terms: Term[] = ['annual', 'monthly'];
 ---
-<section class="plan-group scroll-mt-32" id={`plans-${group.id}`} aria-labelledby={`plans-${group.id}-h`}>
+<section data-pagefind-ignore class="plan-group scroll-mt-32" id={`plans-${group.id}`} aria-labelledby={`plans-${group.id}-h`}>
   <div class="flex flex-wrap items-end justify-between gap-3">
     <div>
       <H id={`plans-${group.id}-h`} class="text-2xl font-semibold">{group.name}</H>
