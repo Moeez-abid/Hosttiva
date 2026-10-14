@@ -1,0 +1,14 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { getCollection } from 'astro:content';
+import BlogIndex from '../../../components/BlogIndex.astro';
+import { BLOG_CATEGORIES } from '../../../content.config';
+
+export const getStaticPaths = (async () => {
+  const used = new Set((await getCollection('blog', (p) => !p.data.draft)).map((p) => p.data.category));
+  return [...used].map((category) => ({ params: { category } }));
+}) satisfies GetStaticPaths;
+
+const category = Astro.params.category as keyof typeof BLOG_CATEGORIES;
+---
+<BlogIndex category={category} />

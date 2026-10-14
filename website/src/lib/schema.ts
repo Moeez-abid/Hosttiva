@@ -54,3 +54,18 @@ export const faqPage = (faqs: Faq[]) => ({
     acceptedAnswer: { '@type': 'Answer', text: f.a },
   })),
 });
+
+export const blogPosting = (o: { title: string; description: string; path: string; published: Date; updated?: Date; author: string; section: string }) => ({
+  '@type': 'BlogPosting',
+  headline: o.title,
+  description: o.description,
+  url: abs(o.path),
+  mainEntityOfPage: abs(o.path),
+  datePublished: o.published.toISOString(),
+  dateModified: (o.updated ?? o.published).toISOString(),
+  articleSection: o.section,
+  image: abs(SITE.ogImage),
+  author: { '@type': 'Organization', name: o.author, url: SITE.url },
+  publisher: { '@id': `${SITE.url}/#organization` },
+  inLanguage: SITE.locale,
+});
