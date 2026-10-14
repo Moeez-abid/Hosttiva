@@ -1,3 +1,5 @@
 # infra
 
-Infrastructure-as-code and server provisioning notes for Hosttiva (not started).
+Infrastructure and server-side helpers for Hosttiva.
+
+- `ssl-check-api/`: live SSL certificate check service for the website's SSL Checker (see its README).

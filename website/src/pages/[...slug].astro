@@ -16,6 +16,7 @@ import { LINKS } from '../config/site';
 import DnsTool from '../components/tools/DnsTool.astro';
 import WhoisTool from '../components/tools/WhoisTool.astro';
 import DomainGenerator from '../components/tools/DomainGenerator.astro';
+import SslTool from '../components/tools/SslTool.astro';
 import { breadcrumbs, service, faqPage } from '../lib/schema';
 
 export const getStaticPaths = (() => [
@@ -85,6 +86,7 @@ const clip = (s: string, n = 158) => (s.length <= n ? s : s.slice(0, s.lastIndex
               {p.tool === 'dns' && <DnsTool />}
               {p.tool === 'whois' && <WhoisTool />}
               {p.tool === 'generator' && <DomainGenerator />}
+              {p.tool === 'ssl' && <SslTool />}
             </div>
           )}
         </div>

@@ -1,0 +1,90 @@
+---
+import ToolShell from './ToolShell.astro';
+import { SSL_CHECK_API } from '../../config/site';
+const live = !!SSL_CHECK_API;
+---
+<ToolShell id="ssl" label="Domain" placeholder="example.com" button="Check SSL"
+  privacy={live
+    ? 'Checks the certificate your server presents right now, using the Hosttiva SSL check service. Queries are not stored.'
+    : 'Searches public Certificate Transparency logs via crt.sh. This shows certificates issued for the domain, not necessarily the one your server is serving right now.'} />
+
+<script define:vars={{ api: SSL_CHECK_API }}>
+  window.__SSL_API__ = api;
+</script>
+
+<script>
+  import { bindTool, cleanDomain, DOMAIN_RE, message, table, el } from '../../lib/tools';
+
+  type Live = {
+    host: string; authorized: boolean; authorizationError?: string; subject: string; issuer: string;
+    validFrom: string; validTo: string; daysRemaining: number; san: string[]; protocol: string;
+    chain: { subject: string; issuer: string; validTo: string }[];
+  };
+  type CtEntry = { issuer_name: string; common_name: string; name_value: string; not_before: string; not_after: string; serial_number: string };
+
+  const day = (s: string) => new Date(s.endsWith('Z') || s.includes('+') ? s : s + 'Z');
+  const iso = (s: string) => day(s).toISOString().slice(0, 10);
+  const daysLeft = (s: string) => Math.floor((+day(s) - Date.now()) / 864e5);
+  const cn = (dn: string) => /CN=([^,]+)/.exec(dn)?.[1] ?? /O=([^,]+)/.exec(dn)?.[1] ?? dn;
+
+  function verdict(days: number, ok = true) {
+    const tone = !ok || days < 0 ? 'text-danger' : days < 14 ? 'text-warn' : 'text-ok';
+    const text = !ok ? 'Not trusted' : days < 0 ? 'Expired' : days < 14 ? `Expires in ${days} days` : `Valid · ${days} days left`;
+    return el('p', `mb-4 font-mono text-base ${tone}`, text);
+  }
+
+  async function liveCheck(d: string, api: string, out: HTMLElement) {
+    const r = await fetch(`${api}?host=${encodeURIComponent(d)}`);
+    const j = await r.json() as Live & { error?: string };
+    if (!r.ok || j.error) return message(out, j.error ?? `Check failed (HTTP ${r.status}).`, 'error');
+    out.replaceChildren(
+      verdict(j.daysRemaining, j.authorized),
+      table(['Field', 'Value'], [
+        ['Host', j.host],
+        ['Trusted', j.authorized ? 'Yes' : `No (${j.authorizationError ?? 'unknown'})`],
+        ['Subject', j.subject],
+        ['Issuer', j.issuer],
+        ['Valid from', iso(j.validFrom)],
+        ['Valid to', iso(j.validTo)],
+        ['Names (SAN)', j.san.join(', ')],
+        ['Protocol', j.protocol],
+        ['Chain', j.chain.map((c) => `${c.subject} ← ${c.issuer}`).join('\n')],
+      ]),
+    );
+  }
+
+  async function ctCheck(d: string, out: HTMLElement) {
+    let r: Response;
+    try {
+      r = await fetch(`https://crt.sh/?q=${encodeURIComponent(d)}&output=json&exclude=expired`, { signal: AbortSignal.timeout(30000) });
+    } catch {
+      return message(out, 'The public certificate log (crt.sh) took too long to answer. Very large sites can time out; please try again later.', 'error');
+    }
+    if (!r.ok) return message(out, 'The certificate log service is busy. Please try again in a minute.', 'error');
+    const all = (await r.json()) as CtEntry[];
+    const names = (e: CtEntry) => e.name_value.toLowerCase().split('\n');
+    const matching = all.filter((e) => names(e).some((n) => n === d || n === `*.${d.split('.').slice(1).join('.')}` || n === `*.${d}`));
+    const seen = new Set<string>();
+    const certs = matching
+      .filter((e) => !seen.has(e.serial_number) && seen.add(e.serial_number))
+      .sort((a, b) => +day(b.not_before) - +day(a.not_before))
+      .slice(0, 8);
+    if (!certs.length) return message(out, `No unexpired certificates found in public logs for ${d}.`, 'error');
+    out.replaceChildren(
+      verdict(daysLeft(certs[0].not_after)),
+      el('p', 'mb-3 text-muted', `Most recent unexpired certificates issued for ${d}:`),
+      table(['Issued', 'Expires', 'Issuer', 'Names'], certs.map((c) => [iso(c.not_before), iso(c.not_after), cn(c.issuer_name), names(c).join(', ')])),
+    );
+  }
+
+  function init() {
+    bindTool('ssl', async (raw, _form, out) => {
+      const d = cleanDomain(raw);
+      if (!DOMAIN_RE.test(d)) return message(out, 'Enter a valid domain, for example example.com.', 'error');
+      message(out, `Checking ${d}…`);
+      const api = (window as unknown as { __SSL_API__: string | null }).__SSL_API__;
+      return api ? liveCheck(d, api, out) : ctCheck(d, out);
+    });
+  }
+  document.addEventListener('astro:page-load', init);
+</script>

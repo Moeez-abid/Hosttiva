@@ -18,6 +18,12 @@ export const SITE = {
   sameAs: [] as string[],
 } as const;
 
+/**
+ * Live SSL check API (infra/ssl-check-api). null → the SSL checker falls back to
+ * certificate-transparency logs (crt.sh). Set to e.g. 'https://tools.hosttiva.com/ssl' once deployed.
+ */
+export const SSL_CHECK_API: string | null = null;
+
 /** Base URL of the WHMCS + Lagom client area (out of scope for this repo). */
 export const CLIENT_AREA = 'https://client.hosttiva.com';
 

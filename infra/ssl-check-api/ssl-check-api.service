@@ -1,0 +1,26 @@
+[Unit]
+Description=Hosttiva SSL check API
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=sslcheck
+WorkingDirectory=/opt/ssl-check-api
+ExecStart=/usr/bin/node /opt/ssl-check-api/server.mjs
+Environment=PORT=8787
+Environment=ALLOWED_ORIGINS=https://hosttiva.com,https://www.hosttiva.com,https://hosttiva.pages.dev
+Environment=RATE_LIMIT_PER_MIN=20
+Restart=always
+RestartSec=3
+# Hardening
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+PrivateDevices=true
+CapabilityBoundingSet=
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+MemoryMax=256M
+
+[Install]
+WantedBy=multi-user.target

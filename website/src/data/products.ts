@@ -41,7 +41,7 @@ export interface Product {
   useCases?: string[];
   planGroup?: PlanGroupId;
   /** Client-side free tool rendered on the page. */
-  tool?: 'dns' | 'whois' | 'generator';
+  tool?: 'dns' | 'whois' | 'generator' | 'ssl';
   /** Compliance/availability note shown on the page. */
   note?: string;
   faqs?: Faq[];
@@ -388,11 +388,11 @@ export const PRODUCTS: Product[] = [
     name: 'SSL Checker',
     category: 'domains',
     icon: 'ShieldCheck',
-    status: 'coming-soon',
+    status: 'available',
+    tool: 'ssl',
     headline: 'Check your website’s SSL certificate and expiry status.',
     summary:
       'Verify whether the certificate is correctly installed, trusted by browsers, and approaching expiration.',
-    note: 'This free tool is planned and not live yet.',
   },
 
   // ── Create a website ───────────────────────────────────────────────
