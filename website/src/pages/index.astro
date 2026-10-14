@@ -3,6 +3,7 @@ import Base from '../layouts/Base.astro';
 import Icon from '../components/Icon.astro';
 import { SITE } from '../config/site';
 import { PLAN_GROUPS, formatPrice, PRICES_ARE_PLACEHOLDERS } from '../data/plans';
+import { AUDIENCES } from '../data/brand';
 
 // Service cards (SRS §3 "Homepage service cards"); href points at the matching product page.
 const services = [
@@ -145,6 +146,24 @@ const heroPlan = heroGroup.plans.find((p) => p.featured)!;
         ))}
       </dl>
     </div>
+  </section>
+
+  <!-- Who we serve -->
+  <section class="container-x pt-20" aria-labelledby="who-h">
+    <div class="flex flex-wrap items-end justify-between gap-4">
+      <div>
+        <p class="eyebrow">Who we serve</p>
+        <h2 id="who-h" class="mt-3 text-3xl font-semibold sm:text-4xl">Made for people who ship things online</h2>
+      </div>
+      <a href="/about" class="link inline-flex items-center gap-1 text-sm">Our story <Icon name="ArrowRight" size={14} /></a>
+    </div>
+    <ul class="mt-8 flex flex-wrap gap-2">
+      {AUDIENCES.map((a) => (
+        <li class="flex items-center gap-2 rounded-full border border-border px-3.5 py-1.5 text-sm text-muted">
+          <Icon name={a.icon} size={14} class="text-accent" />{a.name}
+        </li>
+      ))}
+    </ul>
   </section>
 
   <!-- Powered by Inventomo -->

@@ -1,0 +1,66 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import PlanTable from '../components/PlanTable.astro';
+import BillingToggle from '../components/BillingToggle.astro';
+import Faq from '../components/Faq.astro';
+import { productsIn, getProduct, CATEGORY_FAQS } from '../data/products';
+import { getPlanGroup } from '../data/plans';
+import { LINKS } from '../config/site';
+import { breadcrumbs, faqPage } from '../lib/schema';
+
+const crumbs = [{ name: 'Home', path: '/' }, { name: 'For Agencies', path: '/agencies' }];
+const items = [...productsIn('agencies'), getProduct('solutions/reseller')!];
+const faqs = CATEGORY_FAQS.agencies ?? [];
+---
+<Base
+  title="For Agencies"
+  description="Manage client websites, sell hosting, earn referral rewards, join the partner network, or ask Inventomo to build a custom digital solution."
+  schema={[breadcrumbs(crumbs), faqPage(faqs)]}
+>
+  <section class="border-b border-border">
+    <div class="container-x py-14 sm:py-20">
+      <Breadcrumbs items={crumbs} />
+      <p class="eyebrow mt-8">For agencies</p>
+      <h1 class="mt-3 max-w-3xl text-4xl font-semibold sm:text-6xl">Grow your agency with Hosttiva</h1>
+      <p class="mt-5 max-w-2xl text-lg text-muted">
+        Manage client websites, sell hosting, earn referral rewards, join our partner network, or ask Inventomo to build
+        a custom digital solution for your business.
+      </p>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a href="/agencies/hosting" class="btn btn-primary">Explore agency hosting <Icon name="ArrowRight" size={16} /></a>
+        <a href="/agencies/affiliate" class="btn btn-secondary">Join the affiliate program</a>
+        <a href={LINKS.enquiry('Agency custom build')} class="btn btn-secondary">Ask Inventomo to build it</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="container-x space-y-20 py-16">
+    <section aria-labelledby="tools-h">
+      <h2 id="tools-h" class="text-2xl font-semibold">Everything in the agency toolkit</h2>
+      <ul class="mt-6 divide-y divide-border border-y border-border">
+        {items.map((p) => (
+          <li>
+            <a href={`/${p.slug}`} class="group grid items-center gap-4 py-5 sm:grid-cols-[2rem_14rem_1fr_auto]">
+              <span class="text-accent"><Icon name={p.icon} size={20} /></span>
+              <span class="font-medium">{p.name}</span>
+              <span class="text-sm text-muted">{p.headline}</span>
+              <span class="flex items-center gap-2">
+                {p.status === 'coming-soon' && <span class="badge">Soon</span>}
+                <Icon name="ArrowRight" size={16} class="text-faint transition-transform group-hover:translate-x-1" />
+              </span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <div>
+      <div class="mb-4 flex justify-end"><BillingToggle /></div>
+      <PlanTable group={getPlanGroup('agency')} />
+    </div>
+
+    <Faq faqs={faqs} title="Agency questions" />
+  </div>
+</Base>

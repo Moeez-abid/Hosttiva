@@ -1,0 +1,118 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import { BRAND, VALUES, AUDIENCES, ECOSYSTEM, WHY_CHOOSE } from '../data/brand';
+import { SITE } from '../config/site';
+import { breadcrumbs } from '../lib/schema';
+
+const crumbs = [{ name: 'Home', path: '/' }, { name: 'Our Story', path: '/about' }];
+const schema = [
+  breadcrumbs(crumbs),
+  { '@type': 'AboutPage', name: 'About Hosttiva by Inventomo', url: `${SITE.url}/about`, about: { '@id': `${SITE.url}/#organization` } },
+];
+---
+<Base title="Our Story" description="Meet the people, technology, and vision behind Hosttiva by Inventomo: the hosting and cloud division of Inventomo." schema={schema}>
+  <section class="border-b border-border">
+    <div class="container-x py-14 sm:py-20">
+      <Breadcrumbs items={crumbs} />
+      <p class="eyebrow mt-8">Our story</p>
+      <h1 class="mt-3 max-w-4xl text-4xl font-semibold sm:text-6xl">{BRAND.mainMessage}</h1>
+      <p class="mt-6 max-w-3xl text-lg text-muted">{BRAND.positioning}</p>
+    </div>
+  </section>
+
+  <section class="container-x grid gap-px py-16 md:grid-cols-2" aria-label="Mission and vision">
+    <div class="border-border py-6 md:border-r md:pr-10">
+      <p class="eyebrow">Mission</p>
+      <p class="mt-4 font-display text-2xl leading-snug">{BRAND.mission}</p>
+    </div>
+    <div class="py-6 md:pl-10">
+      <p class="eyebrow">Vision</p>
+      <p class="mt-4 font-display text-2xl leading-snug">{BRAND.vision}</p>
+    </div>
+  </section>
+
+  <section class="border-y border-border bg-raised" aria-labelledby="promise-h">
+    <div class="container-x grid gap-10 py-16 lg:grid-cols-[1fr_1.4fr]">
+      <div>
+        <p class="eyebrow">Brand promise</p>
+        <h2 id="promise-h" class="mt-3 text-3xl font-semibold">{BRAND.promise}</h2>
+      </div>
+      <ol class="grid gap-3 sm:grid-cols-2">
+        {BRAND.promiseLines.map((l, i) => (
+          <li class="flex items-baseline gap-3 rounded-md border border-border bg-bg px-4 py-3">
+            <span class="font-mono text-xs text-accent">{String(i + 1).padStart(2, '0')}</span>{l}
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="container-x py-16" aria-labelledby="values-h">
+    <p class="eyebrow">Core values</p>
+    <h2 id="values-h" class="mt-3 text-3xl font-semibold">What we hold ourselves to</h2>
+    <dl class="mt-10 divide-y divide-border border-y border-border">
+      {VALUES.map((v) => (
+        <div class="grid gap-2 py-5 sm:grid-cols-[14rem_1fr]">
+          <dt class="font-display text-lg font-medium">{v.name}</dt>
+          <dd class="text-muted">{v.text}</dd>
+        </div>
+      ))}
+    </dl>
+  </section>
+
+  <section class="container-x py-16" aria-labelledby="eco-h">
+    <div class="grid gap-10 lg:grid-cols-[1fr_1.4fr]">
+      <div>
+        <p class="eyebrow">Ecosystem</p>
+        <h2 id="eco-h" class="mt-3 text-3xl font-semibold">One partner, from first domain to custom platform</h2>
+        <p class="mt-4 text-muted">{BRAND.usp}</p>
+      </div>
+      <figure class="rounded-lg border border-border p-6 font-mono text-sm" aria-label="Inventomo and Hosttiva product ecosystem">
+        <p class="text-faint">Inventomo</p>
+        <p class="ml-2 border-l border-border-strong pl-4 pt-2 text-text">│<br />Hosttiva</p>
+        <ul class="ml-2 border-l border-border-strong">
+          {ECOSYSTEM.map((e, i) => (
+            <li class="flex items-center gap-2 pl-4 pt-2">
+              <span class="text-faint" aria-hidden="true">{i === ECOSYSTEM.length - 1 ? '└──' : '├──'}</span>
+              <a href={e.href} class="text-muted hover:text-accent">{e.name}</a>
+            </li>
+          ))}
+        </ul>
+      </figure>
+    </div>
+  </section>
+
+  <section class="border-y border-border bg-raised" aria-labelledby="who-h">
+    <div class="container-x py-16">
+      <p class="eyebrow">Who we serve</p>
+      <h2 id="who-h" class="mt-3 text-3xl font-semibold">Built for people who ship things online</h2>
+      <ul class="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+        {AUDIENCES.map((a) => (
+          <li class="flex items-center gap-3 rounded-md border border-border bg-bg px-4 py-3 text-sm">
+            <Icon name={a.icon} size={16} class="text-accent" />{a.name}
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="container-x py-16" aria-labelledby="whyc-h">
+    <div class="grid gap-10 lg:grid-cols-[1fr_1.4fr]">
+      <div>
+        <p class="eyebrow">Why choose Hosttiva</p>
+        <h2 id="whyc-h" class="mt-3 text-3xl font-semibold">{BRAND.finalStatement}</h2>
+      </div>
+      <ul class="grid gap-2 sm:grid-cols-2">
+        {WHY_CHOOSE.map((w) => (
+          <li class="flex items-start gap-2 text-muted"><Icon name="Check" size={16} class="mt-1 shrink-0 text-accent" />{w}</li>
+        ))}
+      </ul>
+    </div>
+    <div class="mt-12 flex flex-wrap gap-3">
+      <a href="/pricing" class="btn btn-primary">See plans <Icon name="ArrowRight" size={16} /></a>
+      <a href="/contact" class="btn btn-secondary">Talk to the team</a>
+    </div>
+  </section>
+</Base>

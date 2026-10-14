@@ -1,0 +1,113 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import { MARKET_ITEMS, MARKET_GROUPS, ONE_CLICK_APPS, MARKETPLACE_DETAILS_ARE_PLACEHOLDERS, type MarketGroup } from '../data/marketplace';
+import { formatPrice } from '../data/plans';
+import { LINKS } from '../config/site';
+import { breadcrumbs } from '../lib/schema';
+
+const crumbs = [{ name: 'Home', path: '/' }, { name: 'Marketplace', path: '/marketplace' }];
+const groups = Object.keys(MARKET_GROUPS) as MarketGroup[];
+const priceLabel = (n: number | null) => (n === null ? 'Quote' : n === 0 ? 'Free*' : `from ${formatPrice(n)}`);
+const schema = [
+  breadcrumbs(crumbs),
+  {
+    '@type': 'OfferCatalog',
+    name: 'Hosttiva solutions marketplace',
+    itemListElement: MARKET_ITEMS.map((m) => ({ '@type': 'Service', name: m.name, description: m.description })),
+  },
+];
+---
+<Base title="Solutions Marketplace" description="Ready-made services from Hosttiva and Inventomo: website launch, online stores, AI chatbots, n8n and Mautic setup, migration, speed and security care." schema={schema}>
+  <section class="border-b border-border">
+    <div class="container-x py-14 sm:py-20">
+      <Breadcrumbs items={crumbs} />
+      <p class="eyebrow mt-8">Marketplace</p>
+      <h1 class="mt-3 text-4xl font-semibold sm:text-5xl">Services with a defined scope</h1>
+      <p class="mt-4 max-w-2xl text-muted">
+        Fixed-scope work from the Hosttiva and Inventomo team. Each item lists what is included, what we need from you,
+        and how long support lasts after delivery.
+      </p>
+      {MARKETPLACE_DETAILS_ARE_PLACEHOLDERS && (
+        <p class="mt-6 inline-flex items-center gap-2 rounded-md border border-warn/40 px-3 py-2 text-sm" role="note">
+          <span class="badge badge-warn">Placeholder</span> Starting prices, delivery times and support periods are drafts.
+        </p>
+      )}
+      <nav aria-label="Marketplace groups" class="mt-8 flex flex-wrap gap-2 text-sm">
+        {groups.map((g) => <a href={`#${g}`} class="rounded-full border border-border px-3 py-1 text-muted hover:border-accent hover:text-text">{MARKET_GROUPS[g]}</a>)}
+        <a href="#one-click" class="rounded-full border border-border px-3 py-1 text-muted hover:border-accent hover:text-text">One-click apps</a>
+      </nav>
+    </div>
+  </section>
+
+  <div class="container-x space-y-16 py-16">
+    {groups.map((g) => (
+      <section id={g} class="scroll-mt-24" aria-labelledby={`${g}-h`}>
+        <h2 id={`${g}-h`} class="text-2xl font-semibold">{MARKET_GROUPS[g]}</h2>
+        <ul class="mt-6 divide-y divide-border border-y border-border">
+          {MARKET_ITEMS.filter((m) => m.group === g).map((m) => (
+            <li>
+              <details class="group">
+                <summary class="grid cursor-pointer list-none items-center gap-x-6 gap-y-1 py-5 sm:grid-cols-[1fr_9rem_10rem_1.5rem]">
+                  <span>
+                    <span class="font-display text-lg font-medium">{m.name}</span>
+                    <span class="block text-sm text-muted">{m.description}</span>
+                  </span>
+                  <span class="font-mono text-sm text-text">{priceLabel(m.priceFrom)}</span>
+                  <span class="spec flex items-center gap-1.5"><Icon name="Clock" size={13} />{m.delivery}</span>
+                  <span class="hidden font-mono text-accent transition-transform group-open:rotate-45 sm:block" aria-hidden="true">+</span>
+                </summary>
+                <div class="grid gap-6 pb-6 text-sm sm:grid-cols-3">
+                  <div>
+                    <p class="spec mb-2 uppercase">Included</p>
+                    <ul class="space-y-1">{m.included.map((x) => <li class="flex gap-1.5 text-muted"><Icon name="Check" size={14} class="mt-1 shrink-0 text-accent" />{x}</li>)}</ul>
+                  </div>
+                  <div>
+                    <p class="spec mb-2 uppercase">We need from you</p>
+                    <ul class="space-y-1 text-muted">{m.requirements.map((x) => <li>· {x}</li>)}</ul>
+                    <p class="spec mb-1 mt-4 uppercase">Support</p>
+                    <p class="text-muted">{m.support}</p>
+                  </div>
+                  <div>
+                    <p class="spec mb-2 uppercase">Upgrade options</p>
+                    <ul class="space-y-1 text-muted">{m.upgrades.map((x) => <li>· {x}</li>)}</ul>
+                    <div class="mt-5 flex flex-wrap gap-2">
+                      {m.pid
+                        ? <a href={LINKS.order(m.pid)} class="btn btn-primary !py-1.5 text-sm">Order</a>
+                        : <a href={LINKS.enquiry(`Marketplace: ${m.name}`)} class="btn btn-primary !py-1.5 text-sm">Request consultation</a>}
+                      {m.related && <a href={`/${m.related}`} class="btn btn-secondary !py-1.5 text-sm">Related service</a>}
+                    </div>
+                  </div>
+                </div>
+              </details>
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))}
+    <p class="text-xs text-faint">* Free migration applies to eligible hosting plans. Prices exclude applicable taxes.</p>
+
+    <section id="one-click" class="scroll-mt-24 rounded-lg border border-border p-6 sm:p-8" aria-labelledby="oc-h">
+      <div class="flex flex-wrap items-center gap-3">
+        <h2 id="oc-h" class="text-2xl font-semibold">One-click apps</h2>
+        <span class="badge badge-warn">Coming soon</span>
+      </div>
+      <p class="mt-3 max-w-2xl text-sm text-muted">
+        Pick an app, choose a VPS, and Hosttiva provisions the stack. One-click deployment is planned; until then, the
+        apps marked “available as managed setup” can be ordered with installation by our team.
+      </p>
+      <ul class="mt-6 grid gap-px overflow-hidden rounded-md border border-border bg-border sm:grid-cols-2 lg:grid-cols-3">
+        {ONE_CLICK_APPS.map((a) => (
+          <li class="bg-bg px-4 py-3">
+            <span class="font-mono text-sm text-text">{a.name}</span>
+            <span class="block text-xs text-muted">{a.what}</span>
+            {a.availableAs && <a href={`/${a.availableAs}`} class="link mt-1 inline-block text-xs">Available as managed setup →</a>}
+          </li>
+        ))}
+      </ul>
+      <a href={LINKS.enquiry('One-click apps: notify me')} class="btn btn-secondary mt-6 !py-1.5 text-sm">Notify me when one-click deploy launches</a>
+    </section>
+  </div>
+</Base>
+<style>details > summary::-webkit-details-marker { display: none; }</style>

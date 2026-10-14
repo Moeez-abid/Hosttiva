@@ -32,4 +32,4 @@ Lucide icons only (`src/components/Icon.astro`) · Fontsource: Space Grotesk / I
 - Read `docs/SRS.md` by section (offset/limit; `grep -n '^#' docs/SRS.md` for the map). Never cat it whole.
 - Generate pages from data + shared components. No new deps without asking.
 - `npm run build` once per milestone; pipe long output through `tail -n 30`.
-- After each milestone, give the user a commit message (they commit themselves).
+- After each milestone: `git add` its files, give a commit message, and ask the user to commit + push. Wait for them.

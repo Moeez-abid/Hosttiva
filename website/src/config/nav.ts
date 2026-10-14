@@ -27,12 +27,16 @@ export const PRODUCTS_MENU = PRODUCT_CATEGORIES.map((c) => ({
   items: productsIn(c).map(link),
 }));
 
-export const SOLUTIONS_MENU: NavLink[] = SOLUTIONS_NAV.map(bySlug);
+export const SOLUTIONS_MENU: NavLink[] = [
+  ...SOLUTIONS_NAV.map(bySlug),
+  { label: 'Solutions Marketplace', href: '/marketplace', desc: 'Fixed-scope setup, migration, AI and care services.', icon: 'Package' },
+  { label: 'For Agencies', href: '/agencies', desc: 'Hosting, white-label tools and partner programs for agencies.', icon: 'Building2' },
+];
 
 export const RESOURCES_MENU: NavLink[] = [
-  { label: 'Blog', href: '/blog', desc: 'Expert tips, product updates, and customer stories.', icon: 'Newspaper', soon: true },
+  { label: 'Blog', href: '/blog', desc: 'Expert tips, product updates, and customer stories.', icon: 'Newspaper' },
   { label: 'Product Updates', href: '/roadmap', desc: 'Releases, improvements and maintenance notices.', icon: 'GitCommitHorizontal', soon: true },
-  { label: 'Our Story', href: '/about', desc: 'The people and vision behind Hosttiva.', icon: 'BookOpen', soon: true },
+  { label: 'Our Story', href: '/about', desc: 'The people and vision behind Hosttiva.', icon: 'BookOpen' },
   { label: 'Contact', href: '/contact', desc: 'Help choosing a plan or moving your website.', icon: 'MessagesSquare' },
   { label: 'Knowledge Base', href: '/knowledgebase', desc: 'Help articles for every Hosttiva service.', icon: 'LifeBuoy', soon: true },
   { label: 'Tutorials', href: '/tutorials', desc: 'Step-by-step guides to launch and grow.', icon: 'ListChecks', soon: true },
@@ -73,12 +77,13 @@ export const FOOTER_COLUMNS: { title: string; links: NavLink[] }[] = [
       bySlug('solutions/ecommerce'),
       bySlug('solutions/crm'),
       { ...bySlug('agencies/custom-build'), label: 'Custom Inventomo Builds' },
+      { label: 'Marketplace', href: '/marketplace' },
     ],
   },
   {
     title: 'Resources',
     links: [
-      { label: 'Blog', href: '/blog', soon: true },
+      { label: 'Blog', href: '/blog' },
       { label: 'Knowledge Base', href: '/knowledgebase', soon: true },
       { label: 'Tutorials', href: '/tutorials', soon: true },
       { label: 'Academy', href: '/academy', soon: true },
@@ -90,11 +95,17 @@ export const FOOTER_COLUMNS: { title: string; links: NavLink[] }[] = [
   {
     title: 'Company',
     links: [
-      { label: 'About Hosttiva', href: '/about', soon: true },
+      { label: 'About Hosttiva', href: '/about' },
       { label: 'About Inventomo', href: SITE.inventomoUrl, external: true },
       bySlug('agencies/partner-program'),
       bySlug('agencies/affiliate'),
+      { label: 'Trust Center', href: '/trust' },
+      { label: 'Security', href: '/trust#security' },
+      { label: 'Compliance', href: '/trust#compliance' },
       { label: 'Status', href: '/status', soon: true },
+      { label: 'Roadmap', href: '/roadmap', soon: true },
+      { label: 'Developers', href: '/developers', soon: true },
+      { label: 'Community', href: '/community', soon: true },
       { label: 'Careers', href: '/careers', soon: true },
     ],
   },
