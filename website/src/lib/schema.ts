@@ -24,6 +24,11 @@ export const website = () => ({
   url: SITE.url,
   publisher: { '@id': `${SITE.url}/#organization` },
   inLanguage: SITE.locale,
+  potentialAction: {
+    '@type': 'SearchAction',
+    target: { '@type': 'EntryPoint', urlTemplate: `${SITE.url}/search?q={search_term_string}` },
+    'query-input': 'required name=search_term_string',
+  },
 });
 
 export const breadcrumbs = (items: { name: string; path: string }[]) => ({

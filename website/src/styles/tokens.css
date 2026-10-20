@@ -19,7 +19,7 @@
   --border-strong: #2c3a4f;
   --text: #e6ebf2;
   --text-muted: #9aa7b8;
-  --text-faint: #6b7a8f;
+  --text-faint: #7f8da2; /* ≥5:1 on all dark surfaces (WCAG AA) */
 
   /* Status */
   --ok: #3ccf7e;
@@ -46,10 +46,10 @@
 }
 
 :root[data-theme='light'] {
-  --accent: #0b8a68;
-  --accent-strong: #076b51;
+  --accent: #08765a; /* ≥4.9:1 on light surfaces and with white text */
+  --accent-strong: #065c46;
   --accent-ink: #ffffff;
-  --accent-soft: rgb(11 138 104 / 0.1);
+  --accent-soft: rgb(8 118 90 / 0.1);
 
   --bg: #f7f8fa;
   --bg-raised: #ffffff;
@@ -59,10 +59,10 @@
   --border-strong: #c5cdd8;
   --text: #0d1420;
   --text-muted: #4a5567;
-  --text-faint: #6b7686;
+  --text-faint: #5d6878;
 
   --ok: #16884a;
-  --warn: #a86b00;
+  --warn: #8a5700;
   --danger: #c62f34;
 
   color-scheme: light;

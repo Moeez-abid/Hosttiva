@@ -1,0 +1,21 @@
+# Short and legacy paths → canonical pages (Cloudflare Pages)
+/hosting          /hosting/web             301
+/wordpress        /hosting/wordpress       301
+/vps              /hosting/vps             301
+/cloud            /hosting/cloud           301
+/dedicated        /hosting/dedicated       301
+/game-servers     /hosting/game-servers    301
+/domains          /domains/search          301
+/domain           /domains/search          301
+/whois            /domains/whois           301
+/dns              /domains/dns-checker     301
+/ssl              /domains/ssl-checker     301
+/email            /email/business          301
+/reseller         /solutions/reseller      301
+/n8n              /solutions/n8n           301
+/plans            /pricing                 301
+/about-us         /about                   301
+/contact-us       /contact                 301
+/kb               /knowledgebase           301
+/security         /trust#security          301
+/client           https://client.hosttiva.com/clientarea.php 302

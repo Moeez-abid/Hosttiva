@@ -48,7 +48,8 @@ Placeholder pages for Phase 2+ already exist in `website/src/data/pages.ts` (noi
 - [x] Trust Center (/trust) with published + "before launch" topics
 - [ ] Fill pending Trust topics (privacy, compliance, infrastructure, encryption, DDoS, monitoring, incidents, continuity); Security features page, Infrastructure and Performance pages
 - [x] security.txt, humans.txt, HTML sitemap, split sitemaps (products, blog, KB, docs, tutorials, academy, pages)
-- [ ] 301 redirect map (`public/_redirects`), 410 handling, hreflang if more locales are added
+- [x] 301 redirect map (`public/_redirects`)
+- [ ] 410 handling, hreflang if more locales are added
 - [ ] Per-page OG images; WebP/AVIF image pipeline
 - [ ] Performance budget: Lighthouse 95+, LCP < 2.5s, CLS < 0.1, INP < 200ms; WCAG 2.2 AA audit
 - [ ] Monitoring: Search Console, Bing Webmaster, privacy-friendly analytics, uptime checks
