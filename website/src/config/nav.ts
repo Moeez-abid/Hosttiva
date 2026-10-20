@@ -35,7 +35,7 @@ export const SOLUTIONS_MENU: NavLink[] = [
 
 export const RESOURCES_MENU: NavLink[] = [
   { label: 'Blog', href: '/blog', desc: 'Expert tips, product updates, and customer stories.', icon: 'Newspaper' },
-  { label: 'Product Updates', href: '/roadmap', desc: 'Releases, improvements and maintenance notices.', icon: 'GitCommitHorizontal', soon: true },
+  { label: 'Product Updates', href: '/roadmap', desc: 'Releases, improvements and maintenance notices.', icon: 'GitCommitHorizontal' },
   { label: 'Our Story', href: '/about', desc: 'The people and vision behind Hosttiva.', icon: 'BookOpen' },
   { label: 'Contact', href: '/contact', desc: 'Help choosing a plan or moving your website.', icon: 'MessagesSquare' },
   { label: 'Knowledge Base', href: '/knowledgebase', desc: 'Help articles for every Hosttiva service.', icon: 'LifeBuoy', soon: true },
@@ -88,7 +88,7 @@ export const FOOTER_COLUMNS: { title: string; links: NavLink[] }[] = [
       { label: 'Tutorials', href: '/tutorials', soon: true },
       { label: 'Academy', href: '/academy', soon: true },
       { label: 'Learning Lab', href: '/learning-lab', soon: true },
-      { label: 'Product Updates', href: '/roadmap', soon: true },
+      { label: 'Product Updates', href: '/roadmap' },
       { label: 'Contact', href: '/contact' },
     ],
   },
@@ -103,7 +103,7 @@ export const FOOTER_COLUMNS: { title: string; links: NavLink[] }[] = [
       { label: 'Security', href: '/trust#security' },
       { label: 'Compliance', href: '/trust#compliance' },
       { label: 'Status', href: '/status', soon: true },
-      { label: 'Roadmap', href: '/roadmap', soon: true },
+      { label: 'Roadmap', href: '/roadmap' },
       { label: 'Developers', href: '/developers', soon: true },
       { label: 'Community', href: '/community', soon: true },
       { label: 'Careers', href: '/careers', soon: true },

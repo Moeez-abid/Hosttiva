@@ -32,7 +32,8 @@ Placeholder pages for Phase 2+ already exist in `website/src/data/pages.ts` (noi
       agency and reseller, game servers, security and backups, Hosttiva and Inventomo updates
 - [x] First 12 posts from SRS "Initial blog titles"
 - [x] Our Story (/about)
-- [ ] Careers, Product Updates (/roadmap) pages
+- [x] Product Updates / public roadmap (/roadmap)
+- [ ] Careers page
 - [ ] Tutorials collection with HowTo schema
 - [x] Agency landing page using the SRS "Agency hero" copy
 - [x] Pagefind search UI in the header
