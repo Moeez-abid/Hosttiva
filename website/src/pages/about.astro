@@ -13,106 +13,82 @@ const schema = [
 ];
 ---
 <Base title="Our Story" description="Meet the people, technology, and vision behind Hosttiva by Inventomo: the hosting and cloud division of Inventomo." schema={schema}>
-  <section class="border-b border-border">
-    <div class="container-x py-14 sm:py-20">
-      <Breadcrumbs items={crumbs} />
-      <p class="eyebrow mt-8">Our story</p>
-      <h1 class="mt-3 max-w-4xl text-4xl font-semibold sm:text-6xl">{BRAND.mainMessage}</h1>
-      <p class="mt-6 max-w-3xl text-lg text-muted">{BRAND.positioning}</p>
+  <section class="pt-10 sm:pt-14">
+    <div class="container-x"><Breadcrumbs items={crumbs} /></div>
+    <div class="container-narrow py-20 text-center sm:py-28">
+      <h1 class="display-xl">Hosttiva hosts your technology.<br /><span class="text-muted">Inventomo helps you create it.</span></h1>
+      <p class="lead mx-auto mt-8 max-w-3xl">{BRAND.positioning}</p>
     </div>
   </section>
 
-  <section class="container-x grid gap-px py-16 md:grid-cols-2" aria-label="Mission and vision">
-    <div class="border-border py-6 md:border-r md:pr-10">
-      <p class="eyebrow">Mission</p>
-      <p class="mt-4 font-display text-2xl leading-snug">{BRAND.mission}</p>
-    </div>
-    <div class="py-6 md:pl-10">
-      <p class="eyebrow">Vision</p>
-      <p class="mt-4 font-display text-2xl leading-snug">{BRAND.vision}</p>
-    </div>
-  </section>
-
-  <section class="border-y border-border bg-raised" aria-labelledby="promise-h">
-    <div class="container-x grid gap-10 py-16 lg:grid-cols-[1fr_1.4fr]">
-      <div>
-        <p class="eyebrow">Brand promise</p>
-        <h2 id="promise-h" class="mt-3 text-3xl font-semibold">{BRAND.promise}</h2>
+  <section class="section-alt" aria-labelledby="mission-h">
+    <div class="container-narrow space-y-20 py-24 sm:py-32">
+      <div class="reveal">
+        <h2 id="mission-h" class="text-[1.3125rem] font-semibold text-muted">Our mission</h2>
+        <p class="display-md mt-4 !font-semibold">{BRAND.mission}</p>
       </div>
-      <ol class="grid gap-3 sm:grid-cols-2">
-        {BRAND.promiseLines.map((l, i) => (
-          <li class="flex items-baseline gap-3 rounded-md border border-border bg-bg px-4 py-3">
-            <span class="font-mono text-xs text-accent">{String(i + 1).padStart(2, '0')}</span>{l}
-          </li>
-        ))}
-      </ol>
+      <div class="reveal">
+        <h2 class="text-[1.3125rem] font-semibold text-muted">Our vision</h2>
+        <p class="display-md mt-4 !font-semibold">{BRAND.vision}</p>
+      </div>
     </div>
   </section>
 
-  <section class="container-x py-16" aria-labelledby="values-h">
-    <p class="eyebrow">Core values</p>
-    <h2 id="values-h" class="mt-3 text-3xl font-semibold">What we hold ourselves to</h2>
-    <dl class="mt-10 divide-y divide-border border-y border-border">
+  <section class="section-inverse" aria-labelledby="promise-h">
+    <div class="container-x py-24 sm:py-32">
+      <h2 id="promise-h" class="display-lg reveal max-w-4xl">{BRAND.promise}</h2>
+      <ul class="mt-14 grid gap-x-10 gap-y-8 sm:grid-cols-2 lg:grid-cols-4">
+        {BRAND.promiseLines.map((l) => (
+          <li class="reveal border-t border-white/15 pt-6 text-[1.5rem] font-semibold leading-tight tracking-[-0.025em]">{l}</li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="container-x py-24 sm:py-32" aria-labelledby="values-h">
+    <h2 id="values-h" class="display-lg reveal max-w-3xl">What we hold ourselves to.</h2>
+    <dl class="mt-14 grid gap-x-12 sm:grid-cols-2 lg:grid-cols-3">
       {VALUES.map((v) => (
-        <div class="grid gap-2 py-5 sm:grid-cols-[14rem_1fr]">
-          <dt class="font-display text-lg font-medium">{v.name}</dt>
-          <dd class="text-muted">{v.text}</dd>
+        <div class="reveal border-t border-border py-7">
+          <dt class="title">{v.name}</dt>
+          <dd class="mt-2 text-muted">{v.text}</dd>
         </div>
       ))}
     </dl>
   </section>
 
-  <section class="container-x py-16" aria-labelledby="eco-h">
-    <div class="grid gap-10 lg:grid-cols-[1fr_1.4fr]">
+  <section class="section-alt" aria-labelledby="eco-h">
+    <div class="container-x grid gap-14 py-24 sm:py-32 lg:grid-cols-[1.1fr_1fr] lg:items-end">
       <div>
-        <p class="eyebrow">Ecosystem</p>
-        <h2 id="eco-h" class="mt-3 text-3xl font-semibold">One partner, from first domain to custom platform</h2>
-        <p class="mt-4 text-muted">{BRAND.usp}</p>
+        <h2 id="eco-h" class="display-lg reveal">One partner, from first domain to custom platform.</h2>
+        <p class="lead reveal mt-6 max-w-xl">{BRAND.usp}</p>
       </div>
-      <figure class="rounded-lg border border-border p-6 font-mono text-sm" aria-label="Inventomo and Hosttiva product ecosystem">
-        <p class="text-faint">Inventomo</p>
-        <p class="ml-2 border-l border-border-strong pl-4 pt-2 text-text">│<br />Hosttiva</p>
-        <ul class="ml-2 border-l border-border-strong">
-          {ECOSYSTEM.map((e, i) => (
-            <li class="flex items-center gap-2 pl-4 pt-2">
-              <span class="text-faint" aria-hidden="true">{i === ECOSYSTEM.length - 1 ? '└──' : '├──'}</span>
-              <a href={e.href} class="text-muted hover:text-accent">{e.name}</a>
-            </li>
+      <nav aria-label="Hosttiva ecosystem" class="reveal">
+        <ul class="divide-y divide-border border-y border-border">
+          {ECOSYSTEM.map((e) => (
+            <li><a href={e.href} class="flex items-center justify-between py-3.5 text-[1.3125rem] font-semibold tracking-tight hover:text-link">{e.name}<Icon name="ChevronRight" size={18} class="text-muted" /></a></li>
           ))}
         </ul>
-      </figure>
+      </nav>
     </div>
   </section>
 
-  <section class="border-y border-border bg-raised" aria-labelledby="who-h">
-    <div class="container-x py-16">
-      <p class="eyebrow">Who we serve</p>
-      <h2 id="who-h" class="mt-3 text-3xl font-semibold">Built for people who ship things online</h2>
-      <ul class="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
-        {AUDIENCES.map((a) => (
-          <li class="flex items-center gap-3 rounded-md border border-border bg-bg px-4 py-3 text-sm">
-            <Icon name={a.icon} size={16} class="text-accent" />{a.name}
-          </li>
-        ))}
-      </ul>
-    </div>
-  </section>
-
-  <section class="container-x py-16" aria-labelledby="whyc-h">
-    <div class="grid gap-10 lg:grid-cols-[1fr_1.4fr]">
-      <div>
-        <p class="eyebrow">Why choose Hosttiva</p>
-        <h2 id="whyc-h" class="mt-3 text-3xl font-semibold">{BRAND.finalStatement}</h2>
-      </div>
-      <ul class="grid gap-2 sm:grid-cols-2">
-        {WHY_CHOOSE.map((w) => (
-          <li class="flex items-start gap-2 text-muted"><Icon name="Check" size={16} class="mt-1 shrink-0 text-accent" />{w}</li>
-        ))}
-      </ul>
-    </div>
-    <div class="mt-12 flex flex-wrap gap-3">
-      <a href="/pricing" class="btn btn-primary">See plans <Icon name="ArrowRight" size={16} /></a>
-      <a href="/contact" class="btn btn-secondary">Talk to the team</a>
+  <section class="container-narrow py-24 sm:py-32" aria-labelledby="why-h">
+    <p class="reveal text-[clamp(1.5rem,3.2vw,2.5rem)] font-semibold leading-[1.2] tracking-[-0.03em] text-muted">
+      Made for
+      {AUDIENCES.map((a, i) => (
+        <><span class="text-text">{a.name.toLowerCase()}</span>{i < AUDIENCES.length - 2 ? ', ' : i === AUDIENCES.length - 2 ? ' and ' : '.'}</>
+      ))}
+    </p>
+    <h2 id="why-h" class="display-md reveal mt-20">{BRAND.finalStatement}</h2>
+    <ul class="mt-10 grid gap-x-10 gap-y-4 sm:grid-cols-2">
+      {WHY_CHOOSE.map((w) => (
+        <li class="reveal flex items-start gap-3 text-[1.0625rem]"><Icon name="CircleCheck" size={20} class="mt-0.5 shrink-0 text-link" />{w}</li>
+      ))}
+    </ul>
+    <div class="mt-14 flex flex-wrap items-center gap-x-6 gap-y-3">
+      <a href="/pricing" class="btn btn-primary">See plans</a>
+      <a href="/contact" class="link-more">Talk to the team</a>
     </div>
   </section>
 </Base>

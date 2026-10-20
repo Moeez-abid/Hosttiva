@@ -2,14 +2,14 @@
 interface Props { items: { name: string; path: string }[] }
 const { items } = Astro.props;
 ---
-<nav data-pagefind-ignore aria-label="Breadcrumb" class="font-mono text-xs text-faint">
+<nav data-pagefind-ignore aria-label="Breadcrumb" class="text-[0.8125rem] text-muted">
   <ol class="flex flex-wrap items-center gap-1.5">
     {items.map((it, i) => (
       <li class="flex items-center gap-1.5">
-        {i > 0 && <span aria-hidden="true">/</span>}
+        {i > 0 && <svg width="7" height="12" viewBox="0 0 7 12" aria-hidden="true" class="opacity-60"><path d="M1 1l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" /></svg>}
         {i === items.length - 1
-          ? <span aria-current="page" class="text-muted">{it.name}</span>
-          : <a href={it.path} class="hover:text-text">{it.name}</a>}
+          ? <span aria-current="page" class="text-text">{it.name}</span>
+          : <a href={it.path} class="hover:text-text hover:underline">{it.name}</a>}
       </li>
     ))}
   </ol>

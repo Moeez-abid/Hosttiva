@@ -48,86 +48,82 @@ const clip = (s: string, n = 158) => (s.length <= n ? s : s.slice(0, s.lastIndex
 
   return (
     <Base title={p.name} description={description} schema={schema}>
-      <section class="border-b border-border">
-        <div class="container-x py-14 sm:py-20">
-          <Breadcrumbs items={crumbs} />
-          <div class="mt-8 grid gap-10 lg:grid-cols-[1.4fr_1fr] lg:items-end">
-            <div>
-              <p class="eyebrow flex items-center gap-2"><Icon name={p.icon} size={14} /> {cat.label}</p>
-              <h1 class="mt-4 text-4xl font-semibold sm:text-5xl">{p.name}</h1>
-              <p class="mt-4 font-display text-xl text-text sm:text-2xl">{p.headline}</p>
-              <p class="mt-4 max-w-2xl text-muted">{p.summary}</p>
-              <div class="mt-8 flex flex-wrap items-center gap-3">
-                {soon && <span class="badge badge-warn">Coming soon</span>}
-                {group && <a href={`#plans-${group.id}`} class="btn btn-primary">See plans <Icon name="ArrowDown" size={16} /></a>}
-                {p.status === 'enquiry' && <a href={LINKS.enquiry(p.name)} class="btn btn-primary">Request a quote <Icon name="ArrowRight" size={16} /></a>}
-                {soon && <a href={LINKS.enquiry(`Notify me: ${p.name}`)} class="btn btn-primary">Notify me</a>}
-                {!p.tool && <a href="/contact" class="btn btn-secondary">Talk to an expert</a>}
-              </div>
-            </div>
-
-            {domainForm && (
-              <form action={domainForm === 'register' ? LINKS.domainSearch.split('?')[0] : LINKS.domainTransfer.split('?')[0]} method="get" class="rounded-lg border border-border bg-raised p-5" role="search">
-                <input type="hidden" name="a" value="add" />
-                <input type="hidden" name="domain" value={domainForm} />
-                <label for="domain-q" class="eyebrow">{domainForm === 'register' ? 'Check availability' : 'Domain to transfer'}</label>
-                <div class="mt-3 flex gap-2">
-                  <input id="domain-q" name="query" type="text" required inputmode="url" autocomplete="off" spellcheck="false"
-                    placeholder={domainForm === 'register' ? 'yourbrand.com' : 'example.com'}
-                    class="min-w-0 flex-1 rounded-md border border-border-strong bg-bg px-3 py-2 font-mono text-sm text-text placeholder:text-faint focus:border-accent focus:outline-none" />
-                  <button type="submit" class="btn btn-primary">{domainForm === 'register' ? 'Search' : 'Transfer'}</button>
-                </div>
-                <p class="mt-3 text-xs text-faint">Opens the Hosttiva client area to check the domain and continue.</p>
-              </form>
-            )}
+      <section class="pt-10 sm:pt-14">
+        <div class="container-x"><Breadcrumbs items={crumbs} /></div>
+        <div class="container-narrow pb-16 pt-10 text-center sm:pb-20 sm:pt-16">
+          <span class="mx-auto mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-raised text-link"><Icon name={p.icon} size={26} /></span>
+          <h1 class="display-lg">{p.name}</h1>
+          <p class="title mx-auto mt-4 max-w-2xl !font-medium">{p.headline}</p>
+          <p class="lead mx-auto mt-4 max-w-2xl">{p.summary}</p>
+          <div class="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-3">
+            {soon && <span class="badge badge-warn">Coming soon</span>}
+            {group && <a href={`#plans-${group.id}`} class="btn btn-primary">See plans</a>}
+            {p.status === 'enquiry' && <a href={LINKS.enquiry(p.name)} class="btn btn-primary">Request a quote</a>}
+            {soon && <a href={LINKS.enquiry(`Notify me: ${p.name}`)} class="btn btn-primary">Notify me</a>}
+            {!p.tool && <a href="/contact" class="link-more">Talk to an expert</a>}
           </div>
-          {p.tool && (
-            <div class="mt-10">
-              {p.tool === 'dns' && <DnsTool />}
-              {p.tool === 'whois' && <WhoisTool />}
-              {p.tool === 'generator' && <DomainGenerator />}
-              {p.tool === 'ssl' && <SslTool />}
-            </div>
+
+          {domainForm && (
+            <form action={domainForm === 'register' ? LINKS.domainSearch.split('?')[0] : LINKS.domainTransfer.split('?')[0]} method="get" class="tile-surface mx-auto mt-12 max-w-xl p-3 text-left" role="search">
+              <input type="hidden" name="a" value="add" />
+              <input type="hidden" name="domain" value={domainForm} />
+              <label for="domain-q" class="sr-only">{domainForm === 'register' ? 'Domain to check' : 'Domain to transfer'}</label>
+              <div class="flex gap-2">
+                <input id="domain-q" name="query" type="text" required inputmode="url" autocomplete="off" spellcheck="false"
+                  placeholder={domainForm === 'register' ? 'yourbrand.com' : 'example.com'} class="field" />
+                <button type="submit" class="btn btn-primary shrink-0">{domainForm === 'register' ? 'Search' : 'Transfer'}</button>
+              </div>
+              <p class="mt-2.5 px-1 text-[0.8125rem] text-muted">Continues in the Hosttiva client area.</p>
+            </form>
           )}
         </div>
+        {p.tool && (
+          <div class="container-x pb-16">
+            {p.tool === 'dns' && <DnsTool />}
+            {p.tool === 'whois' && <WhoisTool />}
+            {p.tool === 'generator' && <DomainGenerator />}
+            {p.tool === 'ssl' && <SslTool />}
+          </div>
+        )}
       </section>
 
-      <div class="container-x space-y-16 py-16">
-        {p.note && (
-          <div class:list={['flex gap-3 rounded-lg border p-5 text-sm', soon ? 'border-warn/40 text-text' : 'border-border text-muted']} role="note">
-            <Icon name="Info" size={18} class={soon ? 'shrink-0 text-warn' : 'shrink-0 text-accent'} />
+      {p.note && (
+        <div class="container-narrow pb-12">
+          <div class="tile flex gap-3 p-5 text-[0.9375rem]" role="note">
+            <Icon name="Info" size={20} class={soon ? 'mt-0.5 shrink-0 text-warn' : 'mt-0.5 shrink-0 text-link'} />
             <p>{p.note}</p>
           </div>
-        )}
+        </div>
+      )}
 
-        {(p.features?.length || p.useCases?.length) && (
-          <div class="grid gap-10 md:grid-cols-2">
+      {(p.features?.length || p.useCases?.length) && (
+        <section class="section-alt">
+          <div class="container-x py-20 sm:py-28">
             {p.features?.length && (
-              <section aria-labelledby="feat-h">
-                <h2 id="feat-h" class="text-2xl font-semibold">{soon ? 'Planned features' : 'What you get'}</h2>
-                <ul class="mt-6 grid gap-2 sm:grid-cols-2">
+              <>
+                <h2 class="display-md reveal">{soon ? 'Planned features' : 'What you get'}</h2>
+                <ul class="mt-10 grid gap-x-10 gap-y-5 sm:grid-cols-2 lg:grid-cols-3">
                   {p.features.map((f) => (
-                    <li class="flex items-start gap-2 rounded-md border border-border px-3 py-2.5 text-sm"><Icon name="Check" size={15} class="mt-0.5 shrink-0 text-accent" />{f}</li>
+                    <li class="reveal flex items-start gap-3 text-[1.0625rem]"><Icon name="CircleCheck" size={20} class="mt-0.5 shrink-0 text-link" />{f}</li>
                   ))}
                 </ul>
-              </section>
+              </>
             )}
             {p.useCases?.length && (
-              <section aria-labelledby="use-h">
-                <h2 id="use-h" class="text-2xl font-semibold">Good for</h2>
-                <ul class="mt-6 flex flex-wrap gap-2">
-                  {p.useCases.map((u) => <li class="rounded-full border border-border px-3 py-1 font-mono text-xs text-muted">{u}</li>)}
-                </ul>
-              </section>
+              <p class:list={['reveal max-w-4xl text-[clamp(1.375rem,2.6vw,2rem)] font-semibold leading-[1.25] tracking-[-0.025em] text-muted', p.features?.length ? 'mt-16 border-t border-border pt-12' : '']}>
+                Good for {p.useCases.map((u, i) => <><span class="text-text">{u.toLowerCase()}</span>{i < p.useCases!.length - 2 ? ', ' : i === p.useCases!.length - 2 ? ' and ' : '.'}</>)}
+              </p>
             )}
           </div>
-        )}
+        </section>
+      )}
 
+      <div class="container-x space-y-24 py-20 sm:py-28">
         {group && (
           <div>
-            <div class="mb-4 flex justify-end"><BillingToggle /></div>
+            <div class="mb-6 flex justify-end"><BillingToggle /></div>
             <PlanTable group={group} />
-            <p class="mt-4 text-sm"><a href="/pricing" class="link">Compare every Hosttiva plan →</a></p>
+            <p class="mt-5"><a href="/pricing" class="link-more">Compare every Hosttiva plan</a></p>
           </div>
         )}
 
@@ -137,18 +133,15 @@ const clip = (s: string, n = 158) => (s.length <= n ? s : s.slice(0, s.lastIndex
 
         {related.length > 0 && (
           <section aria-labelledby="rel-h">
-            <h2 id="rel-h" class="text-2xl font-semibold">Related</h2>
-            <ul class="mt-6 divide-y divide-border border-y border-border">
+            <h2 id="rel-h" class="display-md">Related</h2>
+            <ul class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {related.map((r) => (
                 <li>
-                  <a href={`/${r.slug}`} class="group flex items-center gap-4 py-4">
-                    <span class="text-accent"><Icon name={r.icon} size={18} /></span>
-                    <span class="flex-1">
-                      <span class="font-medium text-text">{r.name}</span>
-                      <span class="block text-sm text-muted">{r.headline}</span>
-                    </span>
-                    {r.status === 'coming-soon' && <span class="badge">Soon</span>}
-                    <Icon name="ArrowRight" size={16} class="text-faint transition-transform group-hover:translate-x-1" />
+                  <a href={`/${r.slug}`} class="tile group flex h-full flex-col p-7 transition-transform duration-300 hover:-translate-y-0.5">
+                    <span class="text-link"><Icon name={r.icon} size={22} /></span>
+                    <span class="title mt-4 flex items-center gap-2 !text-[1.3125rem]">{r.name}{r.status === 'coming-soon' && <span class="badge">Soon</span>}</span>
+                    <span class="mt-1.5 flex-1 text-[0.9375rem] text-muted">{r.headline}</span>
+                    <span class="link-more mt-5 text-[0.9375rem]">Learn more</span>
                   </a>
                 </li>
               ))}
@@ -160,15 +153,17 @@ const clip = (s: string, n = 158) => (s.length <= n ? s : s.slice(0, s.lastIndex
   );
 })() : planned && (
   <Base title={planned.title} description={planned.blurb} noindex>
-    <section class="container-x py-24">
-      <Breadcrumbs items={[{ name: 'Home', path: '/' }, { name: planned.title, path: `/${planned.slug}` }]} />
-      <p class="eyebrow mt-10">Coming soon</p>
-      <h1 class="mt-3 text-4xl font-semibold sm:text-5xl">{planned.title}</h1>
-      <p class="mt-4 max-w-2xl text-lg text-muted">{planned.blurb}</p>
-      <p class="mt-6 max-w-2xl text-sm text-faint">This page is being prepared and is not published yet. If you need something now, contact the team and a person will reply.</p>
-      <div class="mt-8 flex flex-wrap gap-3">
-        <a href="/contact" class="btn btn-primary">Contact us</a>
-        <a href="/" class="btn btn-secondary">Back to home</a>
+    <section class="pt-10 sm:pt-14">
+      <div class="container-x"><Breadcrumbs items={[{ name: 'Home', path: '/' }, { name: planned.title, path: `/${planned.slug}` }]} /></div>
+      <div class="container-narrow py-24 text-center sm:py-32">
+        <span class="badge">Coming soon</span>
+        <h1 class="display-lg mt-5">{planned.title}</h1>
+        <p class="lead mx-auto mt-5 max-w-2xl">{planned.blurb}</p>
+        <p class="mx-auto mt-5 max-w-xl text-[0.9375rem] text-muted">This page is being prepared and is not published yet. If you need something now, contact the team and a person will reply.</p>
+        <div class="mt-9 flex flex-wrap items-center justify-center gap-x-6 gap-y-3">
+          <a href="/contact" class="btn btn-primary">Contact us</a>
+          <a href="/roadmap" class="link-more">See the roadmap</a>
+        </div>
       </div>
     </section>
   </Base>

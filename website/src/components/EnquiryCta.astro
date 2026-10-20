@@ -1,22 +1,18 @@
 ---
 // Enquiry block for quote-only and coming-soon offers. Links to the WHMCS contact form (no fake forms).
-import Icon from './Icon.astro';
 import { LINKS } from '../config/site';
 interface Props { subject: string; comingSoon?: boolean }
 const { subject, comingSoon = false } = Astro.props;
 ---
-<div class="rounded-lg border border-border bg-raised p-6 sm:p-8">
-  <p class="eyebrow">{comingSoon ? 'Register interest' : 'Talk to us'}</p>
-  <h2 class="mt-2 text-2xl font-semibold">
-    {comingSoon ? 'Want to know when this launches?' : 'Get a quote for your setup'}
-  </h2>
-  <p class="mt-3 max-w-xl text-sm text-muted">
+<div class="tile mx-auto max-w-[61.25rem] px-8 py-14 text-center sm:px-14 sm:py-16">
+  <h2 class="display-md">{comingSoon ? 'Want to know when this launches?' : 'Get a quote for your setup.'}</h2>
+  <p class="lead mx-auto mt-4 max-w-xl !text-[1.1875rem]">
     {comingSoon
-      ? 'Send us a short note about what you need. We will reply when the service is available, with confirmed pricing and limits.'
-      : 'Tell us what you are running, your expected traffic and any deadlines. A person from the Hosttiva and Inventomo team will reply with a recommendation and price.'}
+      ? 'Send a short note about what you need. We will reply when it is available, with confirmed pricing and limits.'
+      : 'Tell us what you run, your expected traffic and any deadlines. A person from Hosttiva and Inventomo replies with a recommendation and a price.'}
   </p>
-  <div class="mt-6 flex flex-wrap gap-3">
-    <a href={LINKS.enquiry(subject)} class="btn btn-primary">{comingSoon ? 'Notify me' : 'Request a quote'} <Icon name="ArrowRight" size={16} /></a>
-    <a href="/contact" class="btn btn-secondary">Other ways to contact us</a>
+  <div class="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-3">
+    <a href={LINKS.enquiry(subject)} class="btn btn-primary">{comingSoon ? 'Notify me' : 'Request a quote'}</a>
+    <a href="/contact" class="link-more">Other ways to reach us</a>
   </div>
 </div>

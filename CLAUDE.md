@@ -4,7 +4,7 @@ Tagline: "Host what you build." Client area (WHMCS + Lagom, client.hosttiva.com)
 
 ## Stack (fixed)
 Astro (static) + TypeScript + Tailwind v4 (`@tailwindcss/vite`) · MDX content collections · Pagefind ·
-Lucide icons only (`src/components/Icon.astro`) · Fontsource: Space Grotesk / IBM Plex Sans / IBM Plex Mono ·
+Lucide icons only (`src/components/Icon.astro`) · SF Pro system stack + self-hosted Inter Variable (opsz) fallback ·
 @astrojs/sitemap · Cloudflare Pages via GitHub Actions. Islands only if unavoidable (Svelte OR React, not both).
 
 ## Layout
@@ -15,13 +15,14 @@ Lucide icons only (`src/components/Icon.astro`) · Fontsource: Space Grotesk / I
 - `website/src/data/plans.ts` — plan groups + PLACEHOLDER prices (`PRICES_ARE_PLACEHOLDERS`)
 - `website/src/data/pages.ts` — planned (Phase 2+) pages rendered as noindex placeholders
 - `website/src/styles/tokens.css` — the only place colours/type/radii are defined (match Lagom to it)
+- `DESIGN.md` — visual system (Apple language); `PRODUCT.md` — product truth for design work
 
 ## Commands (run in `website/`)
 `npm run dev` · `npm run build` (astro build + pagefind) · `npm run preview` · `npm run check`
 
 ## Brand rules
-- Calm, technical, honest. Dark navy base + light mode, ONE accent (teal), mono for specs.
-- No purple/blue gradients, glow blobs, emoji icons, vague hype copy, or identical card grids everywhere.
+- Apple design language (see DESIGN.md): neutral grounds, ONE accent (system blue #0071e3), SF Pro/Inter, pills, glass only on floating chrome.
+- Banned: eyebrows/kickers above headings, mono as decoration, gradient text, glow blobs, emoji icons, hype copy, identical card grids.
 - "Powered by Inventomo" in footer. Promo and renewal prices shown separately.
 - Never publish SRS-conditional items (GPU, Windows, AI website builder, Envato names, affiliate %):
   set `status: 'coming-soon'` → enquiry CTA, no prices, noindex.

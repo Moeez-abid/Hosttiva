@@ -20,12 +20,11 @@ const schema = [
 ];
 ---
 <Base title="Solutions Marketplace" description="Ready-made services from Hosttiva and Inventomo: website launch, online stores, AI chatbots, n8n and Mautic setup, migration, speed and security care." schema={schema}>
-  <section class="border-b border-border">
-    <div class="container-x py-14 sm:py-20">
+  <section>
+    <div class="container-x pb-16 pt-10 sm:pb-20 sm:pt-14">
       <Breadcrumbs items={crumbs} />
-      <p class="eyebrow mt-8">Marketplace</p>
-      <h1 class="mt-3 text-4xl font-semibold sm:text-5xl">Services with a defined scope</h1>
-      <p class="mt-4 max-w-2xl text-muted">
+      <h1 class="display-lg mt-8 max-w-4xl">Services with a defined scope</h1>
+      <p class="lead mt-5 max-w-2xl">
         Fixed-scope work from the Hosttiva and Inventomo team. Each item lists what is included, what we need from you,
         and how long support lasts after delivery.
       </p>
@@ -51,26 +50,26 @@ const schema = [
               <details class="group">
                 <summary class="grid cursor-pointer list-none items-center gap-x-6 gap-y-1 py-5 sm:grid-cols-[1fr_9rem_10rem_1.5rem]">
                   <span>
-                    <span class="font-display text-lg font-medium">{m.name}</span>
+                    <span class="text-[1.1875rem] font-semibold tracking-tight">{m.name}</span>
                     <span class="block text-sm text-muted">{m.description}</span>
                   </span>
-                  <span class="font-mono text-sm text-text">{priceLabel(m.priceFrom)}</span>
+                  <span class="text-sm text-text">{priceLabel(m.priceFrom)}</span>
                   <span class="spec flex items-center gap-1.5"><Icon name="Clock" size={13} />{m.delivery}</span>
-                  <span class="hidden font-mono text-accent transition-transform group-open:rotate-45 sm:block" aria-hidden="true">+</span>
+                  <span class="hidden text-link transition-transform group-open:rotate-45 sm:block" aria-hidden="true">+</span>
                 </summary>
                 <div class="grid gap-6 pb-6 text-sm sm:grid-cols-3">
                   <div>
-                    <p class="spec mb-2 uppercase">Included</p>
-                    <ul class="space-y-1">{m.included.map((x) => <li class="flex gap-1.5 text-muted"><Icon name="Check" size={14} class="mt-1 shrink-0 text-accent" />{x}</li>)}</ul>
+                    <p class="label mb-2">Included</p>
+                    <ul class="space-y-1">{m.included.map((x) => <li class="flex gap-1.5 text-muted"><Icon name="Check" size={14} class="mt-1 shrink-0 text-link" />{x}</li>)}</ul>
                   </div>
                   <div>
-                    <p class="spec mb-2 uppercase">We need from you</p>
+                    <p class="label mb-2">We need from you</p>
                     <ul class="space-y-1 text-muted">{m.requirements.map((x) => <li>· {x}</li>)}</ul>
-                    <p class="spec mb-1 mt-4 uppercase">Support</p>
+                    <p class="label mb-1 mt-4">Support</p>
                     <p class="text-muted">{m.support}</p>
                   </div>
                   <div>
-                    <p class="spec mb-2 uppercase">Upgrade options</p>
+                    <p class="label mb-2">Upgrade options</p>
                     <ul class="space-y-1 text-muted">{m.upgrades.map((x) => <li>· {x}</li>)}</ul>
                     <div class="mt-5 flex flex-wrap gap-2">
                       {m.pid
@@ -86,21 +85,21 @@ const schema = [
         </ul>
       </section>
     ))}
-    <p class="text-xs text-faint">* Free migration applies to eligible hosting plans. Prices exclude applicable taxes.</p>
+    <p class="text-xs text-muted">* Free migration applies to eligible hosting plans. Prices exclude applicable taxes.</p>
 
-    <section id="one-click" class="scroll-mt-24 rounded-lg border border-border p-6 sm:p-8" aria-labelledby="oc-h">
+    <section id="one-click" class="scroll-mt-24 tile p-6 sm:p-8" aria-labelledby="oc-h">
       <div class="flex flex-wrap items-center gap-3">
-        <h2 id="oc-h" class="text-2xl font-semibold">One-click apps</h2>
+        <h2 id="oc-h" class="display-md">One-click apps</h2>
         <span class="badge badge-warn">Coming soon</span>
       </div>
       <p class="mt-3 max-w-2xl text-sm text-muted">
         Pick an app, choose a VPS, and Hosttiva provisions the stack. One-click deployment is planned; until then, the
         apps marked “available as managed setup” can be ordered with installation by our team.
       </p>
-      <ul class="mt-6 grid gap-px overflow-hidden rounded-md border border-border bg-border sm:grid-cols-2 lg:grid-cols-3">
+      <ul class="mt-6 grid gap-px overflow-hidden rounded-2xl bg-raised bg-border sm:grid-cols-2 lg:grid-cols-3">
         {ONE_CLICK_APPS.map((a) => (
           <li class="bg-bg px-4 py-3">
-            <span class="font-mono text-sm text-text">{a.name}</span>
+            <span class="text-sm text-text">{a.name}</span>
             <span class="block text-xs text-muted">{a.what}</span>
             {a.availableAs && <a href={`/${a.availableAs}`} class="link mt-1 inline-block text-xs">Available as managed setup →</a>}
           </li>

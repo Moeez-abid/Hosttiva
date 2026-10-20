@@ -9,148 +9,203 @@ const path = Astro.url.pathname;
 const active = (prefixes: string[]) => prefixes.some((p) => path.startsWith(p));
 const menus = [
   { id: 'products', label: 'Products', active: active(['/products', '/hosting', '/domains', '/create', '/sell-online', '/email', '/agencies']) },
-  { id: 'solutions', label: 'Solutions', active: active(['/solutions']) },
-  { id: 'resources', label: 'Resources', active: active(['/blog', '/contact', '/about', '/roadmap']) },
+  { id: 'solutions', label: 'Solutions', active: active(['/solutions', '/marketplace']) },
+  { id: 'resources', label: 'Resources', active: active(['/blog', '/tutorials', '/contact', '/about', '/roadmap', '/customer-success']) },
 ];
+// Large "explore" links lead each flyout, Apple-style.
+const explore = {
+  products: [
+    { label: 'Hosting', href: '/hosting/web' },
+    { label: 'Cloud & VPS', href: '/hosting/vps' },
+    { label: 'Domains', href: '/domains/search' },
+    { label: 'Email', href: '/email/business' },
+    { label: 'Compare plans', href: '/pricing' },
+  ],
+  solutions: [
+    { label: 'Marketplace', href: '/marketplace' },
+    { label: 'For agencies', href: '/agencies' },
+    { label: 'Custom builds', href: '/agencies/custom-build' },
+  ],
+  resources: [
+    { label: 'Blog', href: '/blog' },
+    { label: 'Tutorials', href: '/tutorials' },
+    { label: 'Contact', href: '/contact' },
+  ],
+};
 ---
-<header class="site-header sticky top-0 z-50 border-b border-border bg-bg/85 backdrop-blur-md">
-  <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-3 btn btn-primary">Skip to content</a>
-  <div class="container-x flex h-[var(--header-h)] items-center gap-6">
-    <Logo />
+<header class="site-header sticky top-0 z-50">
+  <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-2 btn btn-primary btn-sm z-10">Skip to content</a>
+  <div class="bar glass !border-x-0 !border-t-0">
+    <div class="container-x flex h-[var(--header-h)] items-center gap-2">
+      <Logo />
 
-    <nav aria-label="Main" class="hidden lg:block">
-      <ul class="flex items-center gap-1">
-        {menus.map((m) => (
-          <li class="nav-item" data-menu={m.id}>
-            <button
-              type="button"
-              class:list={['nav-trigger flex items-center gap-1 rounded-md px-3 py-2 text-sm hover:text-text', m.active ? 'text-text' : 'text-muted']}
-              aria-expanded="false"
-              aria-controls={`menu-${m.id}`}
-            >
-              {m.label}
-              <Icon name="ChevronDown" size={14} class="chev transition-transform" />
-            </button>
+      <nav aria-label="Main" class="mx-auto hidden lg:block">
+        <ul class="flex items-center">
+          {menus.map((m) => (
+            <li>
+              <button
+                type="button"
+                class:list={['nav-trigger rounded-full px-3.5 py-1.5 text-[0.875rem] leading-normal transition-colors', m.active ? 'text-text' : 'text-text/80 hover:text-text']}
+                aria-expanded="false"
+                aria-controls={`menu-${m.id}`}
+              >{m.label}</button>
+            </li>
+          ))}
+          <li>
+            <a href="/pricing" class:list={['inline-block rounded-full px-3.5 py-1.5 text-[0.875rem] leading-normal transition-colors', path.startsWith('/pricing') ? 'text-text' : 'text-text/80 hover:text-text']}>Pricing</a>
           </li>
-        ))}
-        <li>
-          <a href="/pricing" class:list={['rounded-md px-3 py-2 text-sm hover:text-text', path.startsWith('/pricing') ? 'text-text' : 'text-muted']}>Pricing</a>
-        </li>
-      </ul>
-    </nav>
+          <li>
+            <a href="/trust" class:list={['inline-block rounded-full px-3.5 py-1.5 text-[0.875rem] leading-normal transition-colors', path.startsWith('/trust') ? 'text-text' : 'text-text/80 hover:text-text']}>Trust</a>
+          </li>
+        </ul>
+      </nav>
 
-    <div class="ml-auto flex items-center gap-2">
-      <a href="/search" class="inline-flex h-9 w-9 items-center justify-center rounded-md border border-border text-muted hover:border-border-strong hover:text-text" aria-label="Search" title="Search">
-        <Icon name="Search" size={16} />
-      </a>
-      <ThemeToggle />
-      <a href={LINKS.clientArea} class="hidden sm:inline-flex btn btn-secondary !py-1.5 text-sm">Client area</a>
-      <a href="/pricing" class="hidden sm:inline-flex btn btn-primary !py-1.5 text-sm">Get started</a>
-      <button type="button" class="mobile-toggle lg:hidden inline-flex h-9 w-9 items-center justify-center rounded-md border border-border" aria-expanded="false" aria-controls="mobile-nav" aria-label="Open menu">
-        <Icon name="Menu" size={18} />
-      </button>
+      <div class="ml-auto flex items-center gap-1 lg:ml-0">
+        <a href="/search" class="icon-btn" aria-label="Search" title="Search"><Icon name="Search" size={17} /></a>
+        <ThemeToggle />
+        <a href={LINKS.clientArea} class="hidden px-3 text-[0.875rem] text-text/80 hover:text-text sm:inline">Client area</a>
+        <a href="/pricing" class="btn btn-primary btn-sm ml-1 hidden sm:inline-flex">Get started</a>
+        <button type="button" class="mobile-toggle icon-btn lg:hidden" aria-expanded="false" aria-controls="mobile-nav" aria-label="Open menu">
+          <span class="burger" aria-hidden="true"><span></span><span></span></span>
+        </button>
+      </div>
     </div>
   </div>
 
-  <!-- Desktop mega-menu panels -->
-  <div class="mega hidden lg:block">
-    <div id="menu-products" class="mega-panel" hidden>
-      <div class="container-x columns-4 gap-x-8 py-8">
-        {PRODUCTS_MENU.map((cat) => (
-          <div class="mb-6 break-inside-avoid">
-            <p class="eyebrow mb-1">{cat.label}</p>
-            <p class="mb-3 text-xs text-faint">{cat.blurb}</p>
-            <ul class="space-y-1">
-              {cat.items.map((it) => (
-                <li>
-                  <a href={it.href} class="group flex items-center gap-2 text-sm text-muted hover:text-text">
-                    {it.label}
-                    {it.soon && <span class="badge !text-[0.6rem] !py-0">Soon</span>}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
-        <div class="break-inside-avoid rounded-lg border border-border bg-raised p-5">
-          <p class="eyebrow mb-2">Not sure where to start?</p>
-          <p class="text-sm text-muted mb-4">Tell us what you are building and we will suggest a plan, or Inventomo can build it for you.</p>
-          <a href="/contact" class="link text-sm inline-flex items-center gap-1">Talk to an expert <Icon name="ArrowRight" size={14} /></a>
+  <!-- Desktop flyouts -->
+  <div class="flyouts hidden lg:block">
+    <div id="menu-products" class="flyout glass !border-x-0 !border-t-0" hidden>
+      <div class="container-x grid grid-cols-[13rem_1fr] gap-12 pb-12 pt-9">
+        <div>
+          <p class="label mb-4">Explore</p>
+          <ul class="space-y-2.5">{explore.products.map((l) => <li><a href={l.href} class="text-2xl font-semibold tracking-tight hover:text-link">{l.label}</a></li>)}</ul>
+        </div>
+        <div class="columns-4 gap-8">
+          {PRODUCTS_MENU.map((cat) => (
+            <div class="mb-7 break-inside-avoid">
+              <p class="label mb-2.5">{cat.label}</p>
+              <ul class="space-y-1.5">
+                {cat.items.map((it) => (
+                  <li>
+                    <a href={it.href} class="flex items-center gap-2 text-[0.8125rem] font-semibold text-text/85 hover:text-link">
+                      {it.label}{it.soon && <span class="text-[0.6875rem] font-normal text-muted">Soon</span>}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
       </div>
     </div>
 
-    <div id="menu-solutions" class="mega-panel" hidden>
-      <div class="container-x grid grid-cols-3 gap-2 py-8">
-        {SOLUTIONS_MENU.map((it) => (
-          <a href={it.href} class="flex gap-3 rounded-lg p-3 hover:bg-raised">
-            <span class="mt-0.5 text-accent"><Icon name={it.icon!} size={18} /></span>
-            <span>
-              <span class="block text-sm font-medium text-text">{it.label}</span>
-              <span class="block text-xs text-muted leading-snug">{it.desc}</span>
-            </span>
-          </a>
-        ))}
+    <div id="menu-solutions" class="flyout glass !border-x-0 !border-t-0" hidden>
+      <div class="container-x grid grid-cols-[13rem_1fr] gap-12 pb-12 pt-9">
+        <div>
+          <p class="label mb-4">Explore</p>
+          <ul class="space-y-2.5">{explore.solutions.map((l) => <li><a href={l.href} class="text-2xl font-semibold tracking-tight hover:text-link">{l.label}</a></li>)}</ul>
+        </div>
+        <ul class="grid grid-cols-3 gap-x-8 gap-y-5">
+          {SOLUTIONS_MENU.map((it) => (
+            <li>
+              <a href={it.href} class="group block">
+                <span class="block text-[0.875rem] font-semibold group-hover:text-link">{it.label}</span>
+                <span class="mt-0.5 block text-[0.8125rem] leading-snug text-muted">{it.desc}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
 
-    <div id="menu-resources" class="mega-panel" hidden>
-      <div class="container-x grid grid-cols-4 gap-2 py-8">
-        {RESOURCES_MENU.map((it) => (
-          <a href={it.href} class="flex gap-3 rounded-lg p-3 hover:bg-raised">
-            <span class="mt-0.5 text-accent"><Icon name={it.icon!} size={18} /></span>
-            <span>
-              <span class="flex items-center gap-2 text-sm font-medium text-text">{it.label}{it.soon && <span class="badge !text-[0.6rem] !py-0">Soon</span>}</span>
-              <span class="block text-xs text-muted leading-snug">{it.desc}</span>
-            </span>
-          </a>
-        ))}
+    <div id="menu-resources" class="flyout glass !border-x-0 !border-t-0" hidden>
+      <div class="container-x grid grid-cols-[13rem_1fr] gap-12 pb-12 pt-9">
+        <div>
+          <p class="label mb-4">Explore</p>
+          <ul class="space-y-2.5">{explore.resources.map((l) => <li><a href={l.href} class="text-2xl font-semibold tracking-tight hover:text-link">{l.label}</a></li>)}</ul>
+        </div>
+        <ul class="grid grid-cols-3 gap-x-8 gap-y-5">
+          {RESOURCES_MENU.map((it) => (
+            <li>
+              <a href={it.href} class="group block">
+                <span class="flex items-center gap-2 text-[0.875rem] font-semibold group-hover:text-link">{it.label}{it.soon && <span class="text-[0.6875rem] font-normal text-muted">Soon</span>}</span>
+                <span class="mt-0.5 block text-[0.8125rem] leading-snug text-muted">{it.desc}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   </div>
+  <div class="scrim" aria-hidden="true"></div>
 
-  <!-- Mobile drawer -->
-  <div id="mobile-nav" class="lg:hidden border-t border-border bg-bg max-h-[calc(100dvh-var(--header-h))] overflow-y-auto" hidden>
-    <nav aria-label="Mobile" class="container-x py-4 text-sm">
-      <details class="border-b border-border py-2">
-        <summary class="cursor-pointer py-2 font-medium">Products</summary>
-        {PRODUCTS_MENU.map((cat) => (
-          <div class="py-2 pl-2">
-            <p class="eyebrow mb-1">{cat.label}</p>
-            <ul class="grid grid-cols-2 gap-1">
-              {cat.items.map((it) => <li><a href={it.href} class="block py-1 text-muted">{it.label}</a></li>)}
-            </ul>
-          </div>
-        ))}
-      </details>
-      <details class="border-b border-border py-2">
-        <summary class="cursor-pointer py-2 font-medium">Solutions</summary>
-        <ul class="pl-2">{SOLUTIONS_MENU.map((it) => <li><a href={it.href} class="block py-1.5 text-muted">{it.label}</a></li>)}</ul>
-      </details>
-      <details class="border-b border-border py-2">
-        <summary class="cursor-pointer py-2 font-medium">Resources</summary>
-        <ul class="pl-2">{RESOURCES_MENU.map((it) => <li><a href={it.href} class="block py-1.5 text-muted">{it.label}</a></li>)}</ul>
-      </details>
-      <a href="/pricing" class="block border-b border-border py-4 font-medium">Pricing</a>
-      <div class="flex gap-2 pt-4">
-        <a href={LINKS.clientArea} class="btn btn-secondary flex-1 justify-center">Client area</a>
-        <a href="/pricing" class="btn btn-primary flex-1 justify-center">Get started</a>
+  <!-- Mobile sheet -->
+  <div id="mobile-nav" class="sheet glass lg:hidden" hidden>
+    <nav aria-label="Mobile" class="container-x pb-10 pt-4">
+      {[{ id: 'products', label: 'Products', items: PRODUCTS_MENU.flatMap((c) => c.items) }, { id: 'solutions', label: 'Solutions', items: SOLUTIONS_MENU }, { id: 'resources', label: 'Resources', items: RESOURCES_MENU }].map((g) => (
+        <details class="group border-b border-border">
+          <summary class="flex cursor-pointer items-center justify-between py-4 text-[1.75rem] font-semibold tracking-tight">
+            {g.label}
+            <Icon name="ChevronDown" size={20} class="text-muted transition-transform group-open:rotate-180" />
+          </summary>
+          <ul class="grid grid-cols-2 gap-x-4 gap-y-2.5 pb-5">
+            {g.items.map((it) => <li><a href={it.href} class="text-[0.9375rem] font-medium text-text/85">{it.label}</a></li>)}
+          </ul>
+        </details>
+      ))}
+      <a href="/pricing" class="block border-b border-border py-4 text-[1.75rem] font-semibold tracking-tight">Pricing</a>
+      <a href="/trust" class="block border-b border-border py-4 text-[1.75rem] font-semibold tracking-tight">Trust</a>
+      <div class="mt-6 flex gap-3">
+        <a href={LINKS.clientArea} class="btn btn-quiet flex-1">Client area</a>
+        <a href="/pricing" class="btn btn-primary flex-1">Get started</a>
       </div>
     </nav>
   </div>
 </header>
 
 <style>
-  .mega { position: absolute; inset-inline: 0; top: 100%; }
-  .mega-panel {
-    background: var(--bg);
-    border-bottom: 1px solid var(--border);
-    box-shadow: 0 24px 48px -24px rgb(0 0 0 / 0.45);
-    animation: drop var(--dur) var(--ease);
+  .bar { position: relative; z-index: 2; }
+  .icon-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 2.25rem; height: 2.25rem; border-radius: 999px;
+    color: color-mix(in srgb, var(--text) 80%, transparent);
+    transition: background-color var(--dur) var(--ease), color var(--dur) var(--ease);
   }
-  @keyframes drop { from { opacity: 0; transform: translateY(-4px); } }
-  .nav-trigger[aria-expanded='true'] { color: var(--text); }
-  .nav-trigger[aria-expanded='true'] :global(.chev) { transform: rotate(180deg); }
+  @media (min-width: 1024px) { .mobile-toggle { display: none; } }
+  .icon-btn:hover { color: var(--text); background: color-mix(in srgb, var(--text) 7%, transparent); }
+  .nav-trigger[aria-expanded='true'] { color: var(--text); background: color-mix(in srgb, var(--text) 7%, transparent); }
+
+  .flyouts { position: absolute; inset-inline: 0; top: 100%; z-index: 2; }
+  .flyout {
+    background: var(--glass-strong);
+    animation: flyout 320ms var(--ease-out);
+    transform-origin: top;
+  }
+  @keyframes flyout {
+    from { opacity: 0; clip-path: inset(0 0 100% 0); }
+    to { opacity: 1; clip-path: inset(0 0 0 0); }
+  }
+  /* Blurs the page behind an open flyout */
+  .scrim {
+    position: fixed; inset: var(--header-h) 0 0 0; z-index: 1;
+    background: rgb(0 0 0 / 0.08);
+    -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px);
+    opacity: 0; pointer-events: none;
+    transition: opacity 320ms var(--ease-out);
+  }
+  .site-header.menu-open .scrim { opacity: 1; pointer-events: auto; }
+
+  .sheet {
+    position: fixed; inset: var(--header-h) 0 0 0; z-index: 3;
+    background: var(--glass-strong); overflow-y: auto; border: 0;
+    animation: flyout 320ms var(--ease-out);
+  }
+  .burger { position: relative; width: 17px; height: 10px; display: block; }
+  .burger span { position: absolute; left: 0; right: 0; height: 1.5px; border-radius: 2px; background: currentColor; transition: transform 300ms var(--ease-out), top 300ms var(--ease-out); }
+  .burger span:first-child { top: 1px; }
+  .burger span:last-child { top: 7.5px; }
+  .mobile-toggle[aria-expanded='true'] .burger span:first-child { top: 4.25px; transform: rotate(45deg); }
+  .mobile-toggle[aria-expanded='true'] .burger span:last-child { top: 4.25px; transform: rotate(-45deg); }
   details > summary { list-style: none; }
   details > summary::-webkit-details-marker { display: none; }
 </style>
@@ -165,15 +220,18 @@ const menus = [
     const { signal } = ctrl;
 
     const triggers = [...header.querySelectorAll<HTMLButtonElement>('.nav-trigger')];
-    const closeAll = () =>
+    const closeAll = () => {
       triggers.forEach((t) => {
         t.setAttribute('aria-expanded', 'false');
         document.getElementById(t.getAttribute('aria-controls')!)!.hidden = true;
       });
+      header.classList.remove('menu-open');
+    };
     const open = (t: HTMLButtonElement) => {
-      closeAll();
+      triggers.forEach((o) => { if (o !== t) { o.setAttribute('aria-expanded', 'false'); document.getElementById(o.getAttribute('aria-controls')!)!.hidden = true; } });
       t.setAttribute('aria-expanded', 'true');
       document.getElementById(t.getAttribute('aria-controls')!)!.hidden = false;
+      header.classList.add('menu-open');
     };
 
     const canHover = matchMedia('(hover: hover) and (pointer: fine)').matches;
@@ -187,25 +245,32 @@ const menus = [
       });
     });
 
-    // Hover intent on fine pointers
     if (canHover) {
       let timer: number | undefined;
-      triggers.forEach((t) => t.parentElement!.addEventListener('mouseenter', () => { clearTimeout(timer); if (t.getAttribute('aria-expanded') !== 'true') { openedAt = Date.now(); open(t); } }));
-      header.addEventListener('mouseleave', () => { timer = window.setTimeout(closeAll, 150); });
-      header.addEventListener('mouseenter', () => clearTimeout(timer));
+      triggers.forEach((t) => t.parentElement!.addEventListener('mouseenter', () => {
+        clearTimeout(timer);
+        if (t.getAttribute('aria-expanded') !== 'true') { openedAt = Date.now(); open(t); }
+      }));
+      const zone = [header.querySelector('.bar')!, header.querySelector('.flyouts')!];
+      zone.forEach((z) => {
+        z.addEventListener('mouseleave', () => { timer = window.setTimeout(closeAll, 180); });
+        z.addEventListener('mouseenter', () => clearTimeout(timer));
+      });
     }
 
+    header.querySelector('.scrim')!.addEventListener('click', closeAll);
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeAll(); }, { signal });
-    document.addEventListener('click', (e) => { if (!header.contains(e.target as Node)) closeAll(); }, { signal });
 
     const mobileBtn = header.querySelector<HTMLButtonElement>('.mobile-toggle')!;
-    const drawer = document.getElementById('mobile-nav')!;
+    const sheet = document.getElementById('mobile-nav')!;
     mobileBtn.addEventListener('click', () => {
       const isOpen = mobileBtn.getAttribute('aria-expanded') === 'true';
       mobileBtn.setAttribute('aria-expanded', String(!isOpen));
-      drawer.hidden = isOpen;
+      mobileBtn.setAttribute('aria-label', isOpen ? 'Open menu' : 'Close menu');
+      sheet.hidden = isOpen;
+      document.documentElement.style.overflow = isOpen ? '' : 'hidden';
     });
-
   }
   document.addEventListener('astro:page-load', initHeader);
+  document.addEventListener('astro:before-swap', () => { document.documentElement.style.overflow = ''; });
 </script>

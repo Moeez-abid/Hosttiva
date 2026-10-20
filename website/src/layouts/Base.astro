@@ -1,11 +1,6 @@
 ---
-import '@fontsource/ibm-plex-sans/400.css';
-import '@fontsource/ibm-plex-sans/500.css';
-import '@fontsource/ibm-plex-sans/600.css';
-import '@fontsource/space-grotesk/500.css';
-import '@fontsource/space-grotesk/600.css';
-import '@fontsource/ibm-plex-mono/400.css';
-import '@fontsource/ibm-plex-mono/500.css';
+// SF Pro renders on Apple devices; Inter (optical sizes) is the self-hosted fallback elsewhere.
+import '@fontsource-variable/inter/opsz.css';
 import '../styles/global.css';
 import { ClientRouter } from 'astro:transitions';
 import Header from '../components/Header.astro';
@@ -34,7 +29,7 @@ const fullTitle = path === '/' ? `${SITE.fullName} — ${SITE.tagline}` : `${tit
 const ogImageUrl = new URL(ogImage, SITE.url).toString();
 ---
 <!doctype html>
-<html lang={SITE.locale} data-theme="dark">
+<html lang={SITE.locale}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -42,7 +37,8 @@ const ogImageUrl = new URL(ogImage, SITE.url).toString();
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     <meta name="robots" content={noindex ? 'noindex, follow' : 'index, follow, max-image-preview:large'} />
-    <meta name="theme-color" content="#0a0f17" />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000000" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="sitemap" href="/sitemap-index.xml" />
 
@@ -73,6 +69,14 @@ const ogImageUrl = new URL(ogImage, SITE.url).toString();
     <JsonLd data={[organization(), website(), ...schema]} />
   </head>
   <body class="min-h-dvh flex flex-col">
+    <Fragment set:html={`<!--
+THESIS: Hosting explained the way Apple sells hardware: one product line per moment, huge plain type, the real numbers (first-term and renewal price) shown as the hero object; refuses the dark-dashboard, neon-accent hosting page.
+OWN-WORLD: White and #f5f5f7 grounds (black/#161617 in dark), #1d1d1f ink, Apple system blue #0071e3 as the only accent, SF Pro / Inter optical sizes, 18-28px radii, pill buttons, glass only on nav, flyouts and floating panels.
+STORY: Visitor learns what Hosttiva sells, sees honest renewal pricing, picks a product line, then orders in the client area or enquires.
+FIRST VIEWPORT: Centred display headline and subhead, blue pill + text link, then a glass plan panel and DNS panel floating over an authored server-rack illustration.
+FORM: Pinned brief (Apple canon) over roll; seed key c5c5042b.
+FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md
+-->`} />
     <Header />
     <main id="main" class="flex-1" data-pagefind-body={noindex ? undefined : true}>
       <slot />

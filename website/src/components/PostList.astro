@@ -10,10 +10,10 @@ const fmt = (d: Date) => d.toLocaleDateString('en-GB', { day: 'numeric', month: 
       <a href={`/blog/${p.id}`} class="group grid gap-2 py-6 sm:grid-cols-[9rem_1fr]">
         <span class="spec">
           <time datetime={p.data.pubDate.toISOString()}>{fmt(p.data.pubDate)}</time>
-          <span class="block text-faint">{BLOG_CATEGORIES[p.data.category]}</span>
+          <span class="block text-muted">{BLOG_CATEGORIES[p.data.category]}</span>
         </span>
         <span>
-          <span class="font-display text-xl font-medium group-hover:text-accent">{p.data.title}</span>
+          <span class="title !text-[1.3125rem] group-hover:text-link">{p.data.title}</span>
           <span class="mt-1 block text-sm text-muted">{p.data.description}</span>
         </span>
       </a>

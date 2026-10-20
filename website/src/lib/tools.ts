@@ -19,15 +19,15 @@ export function message(out: HTMLElement, text: string, tone: 'muted' | 'error' 
 /** Small table builder: rows of strings, first column mono-accented. */
 export function table(head: string[], rows: string[][]) {
   const wrap = el('div', 'overflow-x-auto');
-  const t = el('table', 'w-full min-w-[32rem] text-left font-mono text-xs');
-  const thead = el('thead', 'text-faint uppercase');
+  const t = el('table', 'w-full min-w-[32rem] text-left text-[0.875rem]');
+  const thead = el('thead', 'text-muted');
   const hr = el('tr');
-  head.forEach((h) => hr.append(el('th', 'py-2 pr-4 font-medium', h)));
+  head.forEach((h) => hr.append(el('th', 'pb-2.5 pr-5 text-[0.8125rem] font-semibold', h)));
   thead.append(hr);
   const tb = el('tbody', 'divide-y divide-border');
   rows.forEach((r) => {
     const tr = el('tr', 'align-top');
-    r.forEach((c, i) => tr.append(el('td', `py-2 pr-4 break-all ${i === 0 ? 'text-accent' : 'text-text'}`, c)));
+    r.forEach((c, i) => tr.append(el('td', `py-2.5 pr-5 break-all ${i === 0 ? 'font-semibold whitespace-nowrap' : 'font-mono text-[0.8125rem]'}`, c)));
     tb.append(tr);
   });
   t.append(thead, tb);

@@ -19,12 +19,11 @@ const faqs = CATEGORY_FAQS.agencies ?? [];
   description="Manage client websites, sell hosting, earn referral rewards, join the partner network, or ask Inventomo to build a custom digital solution."
   schema={[breadcrumbs(crumbs), faqPage(faqs)]}
 >
-  <section class="border-b border-border">
-    <div class="container-x py-14 sm:py-20">
+  <section>
+    <div class="container-x pb-16 pt-10 sm:pb-20 sm:pt-14">
       <Breadcrumbs items={crumbs} />
-      <p class="eyebrow mt-8">For agencies</p>
-      <h1 class="mt-3 max-w-3xl text-4xl font-semibold sm:text-6xl">Grow your agency with Hosttiva</h1>
-      <p class="mt-5 max-w-2xl text-lg text-muted">
+      <h1 class="display-lg mt-8 max-w-4xl">Grow your agency with Hosttiva</h1>
+      <p class="lead mt-5 max-w-2xl">
         Manage client websites, sell hosting, earn referral rewards, join our partner network, or ask Inventomo to build
         a custom digital solution for your business.
       </p>
@@ -38,17 +37,17 @@ const faqs = CATEGORY_FAQS.agencies ?? [];
 
   <div class="container-x space-y-20 py-16">
     <section aria-labelledby="tools-h">
-      <h2 id="tools-h" class="text-2xl font-semibold">Everything in the agency toolkit</h2>
+      <h2 id="tools-h" class="display-md">Everything in the agency toolkit</h2>
       <ul class="mt-6 divide-y divide-border border-y border-border">
         {items.map((p) => (
           <li>
             <a href={`/${p.slug}`} class="group grid items-center gap-4 py-5 sm:grid-cols-[2rem_14rem_1fr_auto]">
-              <span class="text-accent"><Icon name={p.icon} size={20} /></span>
+              <span class="text-link"><Icon name={p.icon} size={20} /></span>
               <span class="font-medium">{p.name}</span>
               <span class="text-sm text-muted">{p.headline}</span>
               <span class="flex items-center gap-2">
                 {p.status === 'coming-soon' && <span class="badge">Soon</span>}
-                <Icon name="ArrowRight" size={16} class="text-faint transition-transform group-hover:translate-x-1" />
+                <Icon name="ArrowRight" size={16} class="text-muted transition-transform group-hover:translate-x-1" />
               </span>
             </a>
           </li>

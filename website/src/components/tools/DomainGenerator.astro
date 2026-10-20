@@ -37,9 +37,9 @@ import ToolShell from './ToolShell.astro';
     bindTool('generator', (raw, _form, out) => {
       const list = suggest(raw);
       if (!list.length) return message(out, 'Enter a name or a few keywords.', 'error');
-      const ul = el('ul', 'grid gap-px overflow-hidden rounded-md border border-border bg-border sm:grid-cols-2 lg:grid-cols-3');
+      const ul = el('ul', 'grid gap-2 sm:grid-cols-2 lg:grid-cols-3');
       list.forEach((d) => {
-        const li = el('li', 'flex items-center justify-between gap-2 bg-bg px-3 py-2');
+        const li = el('li', 'flex items-center justify-between gap-2 rounded-xl bg-raised px-4 py-2.5');
         li.append(el('span', 'font-mono text-sm text-text break-all', d));
         const a = el('a', 'link shrink-0 text-xs', 'Check');
         a.setAttribute('href', `${LINKS.domainSearch}&query=${encodeURIComponent(d)}`);

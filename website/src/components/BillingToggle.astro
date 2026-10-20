@@ -1,18 +1,19 @@
 ---
-// Monthly / annual switch. Plain radio inputs + CSS; no framework island needed.
+// Monthly / annual switch: an Apple-style segmented control. Plain radio inputs + CSS.
 ---
-<fieldset class="billing-toggle inline-flex rounded-md border border-border p-1 font-mono text-xs">
+<fieldset class="billing-toggle inline-flex rounded-full bg-raised p-1 text-[0.875rem]">
   <legend class="sr-only">Billing term</legend>
-  <label class="cursor-pointer rounded px-3 py-1.5">
+  <label class="cursor-pointer rounded-full px-4 py-1.5 transition-colors">
     <input type="radio" name="billing" value="annual" class="sr-only" checked /> Annual
   </label>
-  <label class="cursor-pointer rounded px-3 py-1.5">
+  <label class="cursor-pointer rounded-full px-4 py-1.5 transition-colors">
     <input type="radio" name="billing" value="monthly" class="sr-only" /> Monthly
   </label>
 </fieldset>
 <style>
-  label:has(input:checked) { background: var(--accent-soft); color: var(--accent); }
-  label:has(input:focus-visible) { outline: 2px solid var(--accent); }
+  label:has(input:checked) { background: var(--surface); color: var(--text); font-weight: 600; box-shadow: 0 1px 4px rgb(0 0 0 / 0.12); }
+  label:not(:has(input:checked)) { color: var(--text-muted); }
+  label:has(input:focus-visible) { outline: 3px solid color-mix(in srgb, var(--accent) 70%, transparent); }
   :global(html[data-billing='monthly'] [data-term='annual']),
   :global(html:not([data-billing='monthly']) [data-term='monthly']) { display: none; }
 </style>

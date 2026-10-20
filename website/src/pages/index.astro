@@ -1,213 +1,357 @@
 ---
 import Base from '../layouts/Base.astro';
 import Icon from '../components/Icon.astro';
-import { SITE } from '../config/site';
-import { PLAN_GROUPS, formatPrice, PRICES_ARE_PLACEHOLDERS } from '../data/plans';
-import { AUDIENCES } from '../data/brand';
+import { SITE, LINKS } from '../config/site';
+import { PLAN_GROUPS, formatPrice, PRICES_ARE_PLACEHOLDERS, getPlanGroup } from '../data/plans';
+import { AUDIENCES, ECOSYSTEM } from '../data/brand';
 
-// Service cards (SRS §3 "Homepage service cards"); href points at the matching product page.
-const services = [
-  { name: 'Web hosting', icon: 'Globe', href: '/hosting/web', group: 'web', text: 'Affordable hosting for websites, blogs, portfolios, landing pages, and small businesses.', spec: 'cPanel · SSL · daily backups' },
-  { name: 'Managed WordPress', icon: 'PanelsTopLeft', href: '/hosting/wordpress', group: 'wordpress', text: 'WordPress hosting with installation, migration, backups, updates, security, and performance support.', spec: 'staging · caching · updates' },
-  { name: 'Cloud and VPS', icon: 'Server', href: '/hosting/vps', group: 'apps', text: 'Deploy APIs, SaaS platforms, dashboards, PWAs, databases, AI systems, and custom applications.', spec: 'NVMe · Docker · root access' },
-  { name: 'Agency reseller', icon: 'Building2', href: '/agencies/hosting', group: 'agency', text: 'Create hosting packages for your clients with white-label tools and recurring billing.', spec: 'WHM · WHMCS · private NS' },
-  { name: 'Business email', icon: 'Mail', href: '/email/business', group: null, text: 'Professional email on your own domain with setup, migration, DNS, and security support.', spec: 'SPF · DKIM · DMARC' },
-  { name: 'Game servers', icon: 'Gamepad2', href: '/hosting/game-servers', group: 'game', text: 'Run supported game servers with configurable resources, backups, game panels, and technical support.', spec: 'game panel · isolated cluster' },
-] as const;
-
-const fromPrice = (groupId: string | null) => {
-  if (!groupId) return null;
+const fromPrice = (groupId: string) => {
   const g = PLAN_GROUPS.find((x) => x.id === groupId);
   const prices = g?.plans.flatMap((p) => (p.price ? [p.price.annual.promo] : [])) ?? [];
   return prices.length ? formatPrice(Math.min(...prices)) : null;
 };
 
-const why = [
-  { t: 'One account', d: 'Hosting, domains, email, cloud, and support managed from a single client area.' },
-  { t: 'Built by Inventomo', d: 'Website and application development through Inventomo when you need more than hosting.' },
-  { t: 'Free migration', d: 'We move your site on eligible plans, and check it before DNS is switched.' },
-  { t: 'Published limits', d: 'Transparent CPU, RAM, storage, backup, and email limits on every plan.' },
-  { t: 'Room to grow', d: 'Upgrade path from shared hosting to VPS and dedicated infrastructure.' },
-  { t: 'For every kind of team', d: 'Support for businesses, agencies, developers, startups, and gaming communities.' },
-];
+// Hero panels use real plan data from plans.ts.
+const web = getPlanGroup('web');
+const heroPlan = web.plans.find((p) => p.featured)!;
+const pricedWeb = web.plans.filter((p) => p.price);
 
-// Hero spec sheet: the featured web plan, straight from plans.ts.
-const heroGroup = PLAN_GROUPS.find((g) => g.id === 'web')!;
-const heroPlan = heroGroup.plans.find((p) => p.featured)!;
+// Server rack illustration geometry (authored SVG, purely decorative).
+const units = Array.from({ length: 7 }, (_, i) => i);
+const bays = Array.from({ length: 12 }, (_, i) => i);
+
+const why = [
+  { t: 'One account for everything', d: 'Hosting, domains, email, cloud and support, managed from a single client area.' },
+  { t: 'Developers behind the servers', d: 'When you need more than hosting, Inventomo designs, builds and migrates it.' },
+  { t: 'Free migration', d: 'On eligible plans we move your site and check it before DNS is switched.' },
+  { t: 'Limits you can read', d: 'CPU, RAM, storage, backup and email limits published on every plan.' },
+  { t: 'Room to grow', d: 'A clear path from shared hosting to VPS, cloud and dedicated infrastructure.' },
+  { t: 'People who answer', d: 'Human support from a team that builds technology, not a script.' },
+];
 ---
 <Base title="Home" description={SITE.description}>
   <!-- Hero -->
-  <section class="hero relative overflow-hidden border-b border-border">
-    <div class="grid-bg" aria-hidden="true"></div>
-    <div class="container-x relative grid items-center gap-12 py-20 lg:grid-cols-[1.15fr_1fr] lg:py-28">
-      <div class="hero-copy">
-        <p class="eyebrow">Hosting, cloud &amp; digital infrastructure</p>
-        <h1 class="mt-5 text-5xl font-semibold sm:text-6xl lg:text-7xl">Host what you build.</h1>
-        <p class="mt-6 max-w-xl text-lg text-muted">
-          Launch websites, online stores, applications, AI tools, business email, automation systems, and game servers
-          with reliable infrastructure and human support from Hosttiva by Inventomo.
-        </p>
-        <div class="mt-8 flex flex-wrap gap-3">
-          <a href="/pricing" class="btn btn-primary">Explore hosting plans <Icon name="ArrowRight" size={16} /></a>
-          <a href="/contact" class="btn btn-secondary">Talk to an expert</a>
-        </div>
-        <p class="mt-8 font-mono text-xs text-faint">
-          Easy to start. Ready to scale. Supported by people who build technology.
-        </p>
+  <section class="overflow-hidden pt-16 sm:pt-24">
+    <div class="container-narrow text-center">
+      <h1 class="display-xl hero-in">Host what you build.</h1>
+      <p class="lead hero-in mx-auto mt-6 max-w-[42rem]" style="--d:80ms">
+        Websites, online stores, applications, AI tools, business email and game servers, on reliable infrastructure
+        with human support.
+      </p>
+      <div class="hero-in mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-3" style="--d:160ms">
+        <a href="/pricing" class="btn btn-primary">Explore hosting plans</a>
+        <a href="/contact" class="link-more text-[1.0625rem]">Talk to an expert</a>
       </div>
-
-      <figure class="terminal rounded-lg border border-border bg-raised shadow-2xl shadow-black/30" aria-labelledby="hero-plan">
-        <div class="flex items-center justify-between border-b border-border px-5 py-3">
-          <span class="font-mono text-xs text-faint">plan / web / {heroPlan.id}</span>
-          {PRICES_ARE_PLACEHOLDERS && <span class="badge badge-warn">Placeholder</span>}
-        </div>
-        <div class="p-5">
-          <p id="hero-plan" class="font-display text-xl font-medium">{heroPlan.name}</p>
-          <p class="text-sm text-muted">{heroPlan.fit}</p>
-          <dl class="mt-5 divide-y divide-border border-y border-border font-mono text-[0.82rem]">
-            {heroPlan.features.map((f, i) => (
-              <div class="line flex justify-between py-2" style={`--i:${i}`}>
-                <dt class="text-faint">{String(i + 1).padStart(2, '0')}</dt>
-                <dd class="text-text">{f}</dd>
-              </div>
-            ))}
-          </dl>
-          {heroPlan.price && (
-            <div class="mt-5 flex items-end justify-between">
-              <p><span class="font-mono text-2xl text-text">{formatPrice(heroPlan.price.annual.promo)}</span><span class="text-sm text-faint">/mo first term</span></p>
-              <p class="spec">renews {formatPrice(heroPlan.price.annual.renewal)}/mo</p>
-            </div>
-          )}
-        </div>
-        <figcaption class="border-t border-border px-5 py-3 text-xs text-faint">Billed annually. Free migration on eligible plans.</figcaption>
-      </figure>
-    </div>
-  </section>
-
-  <!-- Services -->
-  <section class="container-x py-20" aria-labelledby="services-h">
-    <div class="flex flex-wrap items-end justify-between gap-4">
-      <div>
-        <p class="eyebrow">Services</p>
-        <h2 id="services-h" class="mt-3 text-3xl font-semibold sm:text-4xl">Everything you need to go live</h2>
-      </div>
-      <a href="/pricing" class="link inline-flex items-center gap-1 text-sm">Compare all plans <Icon name="ArrowRight" size={14} /></a>
     </div>
 
-    <ul class="mt-10 divide-y divide-border border-y border-border">
-      {services.map((s) => {
-        const from = fromPrice(s.group);
-        return (
-          <li>
-            <a href={s.href} class="service-row group grid items-center gap-x-6 gap-y-2 py-6 sm:grid-cols-[2.5rem_14rem_1fr_auto]">
-              <span class="text-accent"><Icon name={s.icon} size={22} /></span>
-              <span class="font-display text-lg font-medium text-text">{s.name}</span>
-              <span class="text-sm text-muted">
-                {s.text}
-                <span class="spec mt-1 block !text-xs">{s.spec}</span>
-              </span>
-              <span class="flex items-center gap-3 sm:justify-end">
-                {from ? (
-                  <span class="text-right">
-                    <span class="spec block !text-[0.7rem]">from</span>
-                    <span class="font-mono text-text">{from}<span class="text-faint">/mo</span></span>
-                  </span>
-                ) : (
-                  <span class="spec">quote</span>
-                )}
-                <Icon name="ArrowRight" size={16} class="text-faint transition-transform group-hover:translate-x-1 group-hover:text-accent" />
-              </span>
-            </a>
-          </li>
-        );
-      })}
-    </ul>
-    {PRICES_ARE_PLACEHOLDERS && (
-      <p class="mt-4 flex items-center gap-2 text-xs text-faint"><span class="badge badge-warn">Placeholder</span> Prices are not final and will be confirmed before launch.</p>
-    )}
-  </section>
+    <div class="container-x mt-14 sm:mt-20">
+      <div class="stage hero-stage relative mx-auto max-w-[72rem]">
+        <svg class="rack block h-auto w-full" viewBox="0 0 1160 560" role="img" aria-label="Illustration of a server rack">
+          <defs>
+            <linearGradient id="unit" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#2a2a2d" /><stop offset="1" stop-color="#1b1b1d" />
+            </linearGradient>
+          </defs>
+          <rect x="250" y="40" width="660" height="500" rx="18" fill="#111113" stroke="#2c2c2f" />
+          {units.map((u) => (
+            <g transform={`translate(272 ${62 + u * 66})`}>
+              <rect width="616" height="54" rx="7" fill="url(#unit)" stroke="#333336" />
+              {bays.map((b) => <rect x={18 + b * 36} y="11" width="28" height="32" rx="4" fill="#0d0d0f" stroke="#2a2a2d" />)}
+              <rect x="460" y="20" width="96" height="4" rx="2" fill="#2c2c30" />
+              <rect x="460" y="30" width="64" height="4" rx="2" fill="#2c2c30" />
+              <circle class="led" cx="578" cy="20" r="3.4" fill="#30d158" style={`--i:${u}`} />
+              <circle class="led led-b" cx="594" cy="20" r="3.4" fill="#0a84ff" style={`--i:${u + 3}`} />
+              <circle cx="586" cy="35" r="3" fill="#3a3a3e" />
+            </g>
+          ))}
+        </svg>
 
-  <!-- Why Hosttiva -->
-  <section class="border-y border-border bg-raised" aria-labelledby="why-h">
-    <div class="container-x grid gap-12 py-20 lg:grid-cols-[1fr_2fr]">
-      <div>
-        <p class="eyebrow">Why Hosttiva</p>
-        <h2 id="why-h" class="mt-3 text-3xl font-semibold sm:text-4xl">Infrastructure, plus the people who build on it</h2>
-        <p class="mt-4 text-muted">Hosttiva hosts your technology. Inventomo helps you create it.</p>
-      </div>
-      <dl class="grid gap-px overflow-hidden rounded-lg border border-border bg-border sm:grid-cols-2">
-        {why.map((w, i) => (
-          <div class="bg-raised p-6">
-            <dt class="flex items-baseline gap-3 font-medium text-text">
-              <span class="font-mono text-xs text-accent">{String(i + 1).padStart(2, '0')}</span>{w.t}
-            </dt>
-            <dd class="mt-2 pl-8 text-sm text-muted">{w.d}</dd>
+        <!-- Floating glass panels (real plan data; DNS values are documentation examples) -->
+        <div class="panel panel-plan glass-panel p-5 sm:p-6">
+          <div class="flex items-center justify-between gap-3">
+            <p class="text-[0.8125rem] font-semibold text-muted">Web hosting</p>
+            {PRICES_ARE_PLACEHOLDERS && <span class="badge badge-warn">Draft price</span>}
           </div>
-        ))}
-      </dl>
+          <p class="mt-1 text-[1.75rem] font-semibold tracking-tight">{heroPlan.name}</p>
+          <p class="text-[0.875rem] text-muted">{heroPlan.fit}</p>
+          <div class="mt-5 grid grid-cols-2 gap-4 border-t border-border pt-4 tabular">
+            <div>
+              <p class="text-[0.75rem] text-muted">First year</p>
+              <p class="text-[1.5rem] font-semibold tracking-tight">{formatPrice(heroPlan.price!.annual.promo)}<span class="text-[0.875rem] font-normal text-muted">/mo</span></p>
+            </div>
+            <div>
+              <p class="text-[0.75rem] text-muted">Renews at</p>
+              <p class="text-[1.5rem] font-semibold tracking-tight">{formatPrice(heroPlan.price!.annual.renewal)}<span class="text-[0.875rem] font-normal text-muted">/mo</span></p>
+            </div>
+          </div>
+          <ul class="mt-4 flex flex-wrap gap-1.5">{heroPlan.features.slice(0, 4).map((f) => <li class="badge">{f}</li>)}</ul>
+        </div>
+
+        <div class="panel panel-dns glass-panel hidden p-5 md:block">
+          <p class="text-[0.8125rem] font-semibold text-muted">DNS check · example</p>
+          <dl class="mt-3 space-y-2 text-[0.8125rem] tabular">
+            <div class="flex justify-between gap-6"><dt class="text-muted">A</dt><dd class="font-mono">203.0.113.24</dd></div>
+            <div class="flex justify-between gap-6"><dt class="text-muted">MX</dt><dd class="font-mono">mail.yourbrand.com</dd></div>
+            <div class="flex justify-between gap-6"><dt class="text-muted">TXT</dt><dd class="font-mono">v=spf1 …</dd></div>
+          </dl>
+          <p class="mt-3 flex items-center gap-1.5 text-[0.8125rem] text-ok"><Icon name="CircleCheck" size={15} />Ready to switch</p>
+        </div>
+
+        <div class="panel panel-migrate glass-panel hidden p-5 lg:block">
+          <p class="text-[0.8125rem] font-semibold text-muted">Free migration</p>
+          <ul class="mt-3 space-y-2 text-[0.875rem]">
+            {['Files copied', 'Databases imported', 'Mailboxes moved', 'SSL issued'].map((s) => (
+              <li class="flex items-center gap-2"><Icon name="CircleCheck" size={16} class="text-ok" />{s}</li>
+            ))}
+          </ul>
+        </div>
+      </div>
+      <p class="mt-4 text-center text-[0.75rem] text-muted">Illustration. Plan details from current draft pricing; DNS values are examples.</p>
     </div>
   </section>
 
-  <!-- Who we serve -->
-  <section class="container-x pt-20" aria-labelledby="who-h">
-    <div class="flex flex-wrap items-end justify-between gap-4">
-      <div>
-        <p class="eyebrow">Who we serve</p>
-        <h2 id="who-h" class="mt-3 text-3xl font-semibold sm:text-4xl">Made for people who ship things online</h2>
+  <!-- Product lines -->
+  <section class="container-x pt-28 sm:pt-36" aria-labelledby="lines-h">
+    <h2 id="lines-h" class="display-lg reveal max-w-3xl">Pick the hosting that fits.</h2>
+    <p class="lead reveal mt-4 max-w-2xl">Start small, move up when you need to. Every plan lists what it includes and what it renews at.</p>
+
+    <div class="bento mt-12 grid gap-4 md:grid-cols-6">
+      <a href="/hosting/web" class="tile reveal group flex flex-col justify-between p-8 md:col-span-4 md:row-span-2 md:p-10">
+        <div>
+          <h3 class="display-md">Web hosting</h3>
+          <p class="mt-3 max-w-md text-muted">For websites, blogs, portfolios, landing pages and small businesses. cPanel, SSL, email and backups included.</p>
+        </div>
+        <div class="mt-12 flex flex-wrap items-end justify-between gap-6">
+          <ul class="grid w-full max-w-md grid-cols-3 gap-3 tabular">
+            {pricedWeb.map((p) => (
+              <li class="rounded-2xl bg-surface p-4">
+                <p class="text-[0.8125rem] text-muted">{p.name}</p>
+                <p class="mt-1 text-[1.375rem] font-semibold tracking-tight">{formatPrice(p.price!.annual.promo)}</p>
+                <p class="text-[0.75rem] text-muted">renews {formatPrice(p.price!.annual.renewal)}</p>
+              </li>
+            ))}
+          </ul>
+          <span class="link-more">Learn more</span>
+        </div>
+      </a>
+
+      <a href="/hosting/wordpress" class="tile reveal flex flex-col justify-between p-8 md:col-span-2">
+        <div>
+          <h3 class="title">Managed WordPress</h3>
+          <p class="mt-2 text-[0.9375rem] text-muted">Installed, updated, backed up and cached for you.</p>
+        </div>
+        <p class="mt-8 flex items-baseline justify-between"><span class="tabular">From <strong class="font-semibold">{fromPrice('wordpress')}</strong>/mo</span><span class="link-more">Learn more</span></p>
+      </a>
+
+      <a href="/email/business" class="tile reveal flex flex-col justify-between p-8 md:col-span-2">
+        <div>
+          <h3 class="title">Business email</h3>
+          <p class="mt-2 text-[0.9375rem] text-muted"><span class="font-mono text-[0.875rem] text-text">hello@yourcompany.com</span>, set up with SPF, DKIM and DMARC.</p>
+        </div>
+        <p class="mt-8 flex items-baseline justify-between"><span class="text-muted">Quoted per team</span><span class="link-more">Learn more</span></p>
+      </a>
+
+      <a href="/hosting/vps" class="tile section-inverse reveal flex flex-col justify-between p-8 md:col-span-3 md:p-10">
+        <div>
+          <h3 class="display-md">Cloud &amp; VPS</h3>
+          <p class="mt-3 max-w-md text-inverse-muted">APIs, SaaS platforms, dashboards, PWAs, databases and AI systems, with NVMe storage, Docker and root access where available.</p>
+        </div>
+        <p class="mt-10 flex items-baseline justify-between"><span class="tabular text-[#f5f5f7]">From <strong class="font-semibold">{fromPrice('apps')}</strong>/mo managed</span><span class="link-more !text-[#2997ff]">Learn more</span></p>
+      </a>
+
+      <div class="tile reveal flex flex-col justify-between p-8 md:col-span-3 md:p-10">
+        <div>
+          <h3 class="display-md">Domains</h3>
+          <p class="mt-3 text-muted">Find a name, register it, and connect it to everything else in one account.</p>
+        </div>
+        <form action={LINKS.domainSearch.split('?')[0]} method="get" class="mt-8 flex gap-2" role="search">
+          <input type="hidden" name="a" value="add" /><input type="hidden" name="domain" value="register" />
+          <label class="sr-only" for="home-domain">Domain name</label>
+          <input id="home-domain" name="query" class="field !bg-surface" placeholder="yourbrand.com" autocomplete="off" spellcheck="false" required />
+          <button class="btn btn-primary shrink-0" type="submit">Search</button>
+        </form>
       </div>
-      <a href="/about" class="link inline-flex items-center gap-1 text-sm">Our story <Icon name="ArrowRight" size={14} /></a>
+
+      <a href="/agencies" class="tile reveal flex flex-col justify-between p-8 md:col-span-3">
+        <div>
+          <h3 class="title">For agencies</h3>
+          <p class="mt-2 text-[0.9375rem] text-muted">Reseller hosting, a white-label client area and Inventomo builds for your clients.</p>
+        </div>
+        <p class="mt-8 flex items-baseline justify-between"><span class="tabular">From <strong class="font-semibold">{fromPrice('agency')}</strong>/mo</span><span class="link-more">Learn more</span></p>
+      </a>
+
+      <a href="/hosting/game-servers" class="tile reveal flex flex-col justify-between p-8 md:col-span-3">
+        <div>
+          <h3 class="title">Game servers</h3>
+          <p class="mt-2 text-[0.9375rem] text-muted">Configurable resources, a game panel and backups, on a cluster separate from web hosting.</p>
+        </div>
+        <p class="mt-8 flex items-baseline justify-between"><span class="tabular">From <strong class="font-semibold">{fromPrice('game')}</strong>/mo</span><span class="link-more">Learn more</span></p>
+      </a>
     </div>
-    <ul class="mt-8 flex flex-wrap gap-2">
-      {AUDIENCES.map((a) => (
-        <li class="flex items-center gap-2 rounded-full border border-border px-3.5 py-1.5 text-sm text-muted">
-          <Icon name={a.icon} size={14} class="text-accent" />{a.name}
-        </li>
+    <p class="mt-5 text-[0.8125rem] text-muted">Prices billed annually, excluding tax. {PRICES_ARE_PLACEHOLDERS && 'Draft figures, confirmed before launch.'}</p>
+  </section>
+
+  <!-- Honest renewal pricing -->
+  <section class="section-inverse mt-28 sm:mt-36" aria-labelledby="renew-h">
+    <div class="container-x py-24 sm:py-32">
+      <h2 id="renew-h" class="display-lg reveal max-w-4xl">The second year shouldn’t be a surprise.</h2>
+      <p class="lead reveal mt-5 max-w-2xl">Every Hosttiva plan shows the first-term price and the renewal price side by side. No asterisk, no small print.</p>
+
+      <div class="reveal mt-14 overflow-x-auto">
+        <table class="w-full min-w-[36rem] text-left tabular">
+          <caption class="sr-only">Web hosting plans: first-year and renewal prices per month, billed annually</caption>
+          <thead>
+            <tr class="text-[0.875rem] text-inverse-muted">
+              <th scope="col" class="pb-4 font-normal">Plan</th>
+              <th scope="col" class="pb-4 font-normal">First year</th>
+              <th scope="col" class="pb-4 font-normal">Renews at</th>
+              <th scope="col" class="pb-4 font-normal">Includes</th>
+            </tr>
+          </thead>
+          <tbody>
+            {pricedWeb.map((p) => (
+              <tr class="border-t border-white/15 align-baseline">
+                <th scope="row" class="py-6 pr-6 text-[1.5rem] font-semibold tracking-tight">{p.name}</th>
+                <td class="py-6 pr-6 text-[clamp(1.75rem,4vw,3rem)] font-semibold tracking-tight">{formatPrice(p.price!.annual.promo)}</td>
+                <td class="py-6 pr-6 text-[clamp(1.75rem,4vw,3rem)] font-semibold tracking-tight text-[#2997ff]">{formatPrice(p.price!.annual.renewal)}</td>
+                <td class="py-6 text-[0.9375rem] text-inverse-muted">{p.features.slice(0, 3).join(' · ')}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <div class="reveal mt-10 flex flex-wrap items-center gap-x-8 gap-y-3">
+        <a href="/pricing" class="btn btn-primary">Compare every plan</a>
+        {PRICES_ARE_PLACEHOLDERS && <span class="text-[0.8125rem] text-inverse-muted">Per month, billed annually. Draft prices, confirmed before launch.</span>}
+      </div>
+    </div>
+  </section>
+
+  <!-- Why -->
+  <section class="container-x py-28 sm:py-36" aria-labelledby="why-h">
+    <h2 id="why-h" class="display-lg reveal max-w-3xl">Infrastructure, and the people who build on it.</h2>
+    <dl class="mt-14 grid gap-x-12 sm:grid-cols-2 lg:grid-cols-3">
+      {why.map((w) => (
+        <div class="reveal border-t border-border py-7">
+          <dt class="title">{w.t}</dt>
+          <dd class="mt-2 text-muted">{w.d}</dd>
+        </div>
       ))}
-    </ul>
+    </dl>
   </section>
 
-  <!-- Powered by Inventomo -->
-  <section class="container-x py-20" aria-labelledby="inv-h">
-    <div class="grid items-center gap-10 rounded-lg border border-border p-8 sm:p-12 lg:grid-cols-[1.4fr_1fr]">
+  <!-- Free tools -->
+  <section class="section-alt" aria-labelledby="tools-h">
+    <div class="container-narrow py-24 text-center sm:py-32">
+      <h2 id="tools-h" class="display-md reveal">Check any domain. Free.</h2>
+      <p class="lead reveal mx-auto mt-4 max-w-xl">DNS records, registration details and certificates, without signing up.</p>
+      <form id="tool-form" action="/domains/dns-checker" method="get" class="reveal tile-surface mx-auto mt-10 max-w-2xl p-3 text-left">
+        <fieldset class="segmented mb-3 flex gap-1 rounded-full bg-raised p-1 text-[0.875rem]">
+          <legend class="sr-only">Tool</legend>
+          {[['/domains/dns-checker', 'DNS'], ['/domains/whois', 'WHOIS'], ['/domains/ssl-checker', 'SSL']].map(([href, label], i) => (
+            <label class="flex-1 cursor-pointer rounded-full py-1.5 text-center transition-colors">
+              <input type="radio" name="tool" value={href} class="sr-only" checked={i === 0} />{label}
+            </label>
+          ))}
+        </fieldset>
+        <div class="flex gap-2">
+          <label class="sr-only" for="tool-q">Domain</label>
+          <input id="tool-q" name="q" class="field" placeholder="example.com" autocomplete="off" spellcheck="false" inputmode="url" required />
+          <button class="btn btn-primary shrink-0" type="submit">Check</button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- Inventomo -->
+  <section class="container-x py-28 sm:py-36" aria-labelledby="inv-h">
+    <div class="grid gap-14 lg:grid-cols-[1.15fr_1fr] lg:items-end">
       <div>
-        <p class="eyebrow">Inventomo</p>
-        <h2 id="inv-h" class="mt-3 text-3xl font-semibold sm:text-4xl">Powered by Inventomo</h2>
-        <p class="mt-4 max-w-2xl text-muted">
-          Hosttiva is the hosting and cloud division of Inventomo. Alongside infrastructure, Inventomo can design your
-          website, build your application, connect AI tools, migrate your existing systems, improve performance, and
-          provide continuing technical support.
+        <h2 id="inv-h" class="display-lg reveal">Hosttiva hosts it.<br /><span class="text-muted">Inventomo builds it.</span></h2>
+        <p class="lead reveal mt-6 max-w-xl">
+          Hosttiva is the hosting and cloud division of Inventomo. Inventomo can design your website, build your application,
+          connect AI tools, migrate your systems and keep supporting them.
         </p>
-        <a href="/solutions/inventomo-web-solutions" class="btn btn-primary mt-8">Explore Inventomo Web Solutions <Icon name="ArrowRight" size={16} /></a>
+        <a href="/solutions/inventomo-web-solutions" class="btn btn-primary reveal mt-8">Explore Inventomo Web Solutions</a>
       </div>
-      <ul class="grid grid-cols-2 gap-3 font-mono text-sm">
-        {['Design', 'Development', 'AI integration', 'Automation', 'Migration', 'Ongoing support'].map((x) => (
-          <li class="flex items-center gap-2 rounded-md border border-border px-3 py-2.5 text-muted">
-            <Icon name="Check" size={14} class="text-accent" />{x}
-          </li>
+      <nav aria-label="Everything in one account" class="reveal">
+        <ul class="divide-y divide-border border-y border-border">
+          {ECOSYSTEM.map((e) => (
+            <li><a href={e.href} class="flex items-center justify-between py-3.5 text-[1.3125rem] font-semibold tracking-tight hover:text-link">{e.name}<Icon name="ChevronRight" size={18} class="text-muted" /></a></li>
+          ))}
+        </ul>
+      </nav>
+    </div>
+  </section>
+
+  <!-- Who we serve + close -->
+  <section class="section-alt" aria-labelledby="close-h">
+    <div class="container-narrow py-24 sm:py-32">
+      <p class="reveal text-[clamp(1.5rem,3.2vw,2.5rem)] font-semibold leading-[1.2] tracking-[-0.03em] text-muted">
+        Made for
+        {AUDIENCES.map((a, i) => (
+          <><span class="text-text">{a.name.toLowerCase()}</span>{i < AUDIENCES.length - 2 ? ', ' : i === AUDIENCES.length - 2 ? ' and ' : '.'}</>
         ))}
-      </ul>
+      </p>
+      <div class="reveal mt-14 flex flex-col items-start gap-6 border-t border-border pt-10 sm:flex-row sm:items-center sm:justify-between">
+        <h2 id="close-h" class="display-md">Start with a plan.<br class="sm:hidden" /> Talk to a person anytime.</h2>
+        <div class="flex shrink-0 flex-wrap items-center gap-x-6 gap-y-3">
+          <a href="/pricing" class="btn btn-primary">See plans</a>
+          <a href="/contact" class="link-more">Contact us</a>
+        </div>
+      </div>
     </div>
   </section>
 </Base>
 
 <style>
-  .grid-bg {
-    position: absolute;
-    inset: 0;
-    background-image:
-      linear-gradient(var(--border) 1px, transparent 1px),
-      linear-gradient(90deg, var(--border) 1px, transparent 1px);
-    background-size: 48px 48px;
-    mask-image: radial-gradient(ellipse 70% 60% at 70% 40%, #000 20%, transparent 75%);
-    opacity: 0.5;
+  /* Entrance: the hero is the one authored moment */
+  .hero-in { animation: hero-in 900ms var(--ease-out) both; animation-delay: var(--d, 0ms); }
+  .hero-stage { animation: stage-in 1200ms var(--ease-out) 200ms both; }
+  @keyframes hero-in { from { transform: translateY(14px); filter: blur(5px); } }
+  @keyframes stage-in { from { opacity: 0; transform: translateY(40px) scale(0.97); } }
+
+  .stage {
+    border-radius: var(--radius-xl);
+    background: radial-gradient(120% 90% at 50% 0%, #1c1c1f 0%, #0a0a0b 60%, #000 100%);
+    padding: clamp(1rem, 4vw, 3rem) clamp(0.5rem, 3vw, 2rem) 0;
+    overflow: hidden;
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.06);
   }
-  .hero-copy > * { animation: rise 600ms var(--ease) both; }
-  .hero-copy > *:nth-child(2) { animation-delay: 60ms; }
-  .hero-copy > *:nth-child(3) { animation-delay: 120ms; }
-  .hero-copy > *:nth-child(4) { animation-delay: 180ms; }
-  .hero-copy > *:nth-child(5) { animation-delay: 240ms; }
-  .terminal .line { animation: type 400ms var(--ease) both; animation-delay: calc(400ms + var(--i) * 260ms); }
-  @keyframes rise { from { opacity: 0; transform: translateY(10px); } }
-  @keyframes type { from { opacity: 0; transform: translateX(-6px); } }
-  .service-row:hover { background: linear-gradient(90deg, var(--accent-soft), transparent 40%); }
+  .rack { margin-bottom: -2px; }
+  .led { animation: led 3.2s ease-in-out infinite; animation-delay: calc(var(--i) * -0.7s); }
+  .led-b { animation-duration: 4.6s; }
+  @keyframes led { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+
+  .panel { position: absolute; width: min(22rem, 78%); }
+  .panel-plan { left: 50%; bottom: 7%; transform: translateX(-50%); }
+  @media (min-width: 768px) {
+    .panel-plan { left: 4%; bottom: 12%; transform: none; }
+    .panel-dns { right: 4%; top: 12%; width: 17rem; }
+  }
+  @media (min-width: 1024px) {
+    .panel-migrate { right: 7%; bottom: 10%; width: 15rem; }
+  }
+  @media (max-width: 767px) {
+    .stage { padding-bottom: 15rem; }
+  }
+
+  .bento .tile { transition: transform 400ms var(--ease-out), box-shadow 400ms var(--ease-out); }
+  .bento a.tile:hover { transform: translateY(-3px); box-shadow: var(--shadow-float); }
+
+  .segmented label:has(input:checked) { background: var(--surface); box-shadow: 0 1px 4px rgb(0 0 0 / 0.12); font-weight: 600; }
+  .segmented label:has(input:focus-visible) { outline: 3px solid color-mix(in srgb, var(--accent) 70%, transparent); }
 </style>
+
+<script>
+  function initToolForm() {
+    const form = document.getElementById('tool-form') as HTMLFormElement | null;
+    if (!form) return;
+    form.querySelectorAll<HTMLInputElement>('input[name="tool"]').forEach((r) => {
+      r.onchange = () => { form.action = r.value; };
+    });
+    // The radio is navigation state, not a query parameter.
+    form.onsubmit = () => { form.querySelectorAll<HTMLInputElement>('input[name="tool"]').forEach((r) => (r.disabled = true)); };
+  }
+  document.addEventListener('astro:page-load', initToolForm);
+</script>

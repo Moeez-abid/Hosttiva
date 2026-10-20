@@ -5,8 +5,8 @@ const TYPES = ['ALL', 'A', 'AAAA', 'CNAME', 'MX', 'TXT', 'NS', 'CAA'];
 <ToolShell id="dns" label="Domain" placeholder="example.com" button="Check DNS"
   privacy="Lookups run in your browser using Cloudflare’s public DNS-over-HTTPS resolver (1.1.1.1). Hosttiva does not store your queries.">
   <label slot="controls">
-    <span class="eyebrow">Record</span>
-    <select name="type" class="mt-2 block rounded-md border border-border-strong bg-bg px-3 py-2 font-mono text-sm text-text focus:border-accent focus:outline-none">
+    <span class="label block pb-1.5 pl-1">Record</span>
+    <select name="type" class="field !bg-surface !w-auto pr-8">
       {TYPES.map((t) => <option value={t}>{t === 'ALL' ? 'All types' : t}</option>)}
     </select>
   </label>

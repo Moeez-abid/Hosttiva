@@ -1,58 +1,43 @@
 ---
-import Logo from './Logo.astro';
-import Icon from './Icon.astro';
 import { FOOTER_COLUMNS, FOOTER_BUTTONS } from '../config/nav';
 import { SITE } from '../config/site';
 const year = new Date().getFullYear();
 ---
-<footer class="mt-24 border-t border-border bg-sunken">
-  <div class="container-x py-14">
-    <div class="grid gap-10 lg:grid-cols-[1.1fr_3fr]">
-      <div class="max-w-sm">
-        <Logo />
-        <p class="mt-4 text-sm text-muted">{SITE.tagline}</p>
-        <p class="mt-6 text-sm text-text">
-          Need a website, app, AI system, automation workflow, or hosting migration? Inventomo can help you build and run it.
-        </p>
-        <div class="mt-5 flex flex-wrap gap-2">
-          {FOOTER_BUTTONS.map((b, i) => (
-            <a href={b.href} class:list={['btn !py-1.5 text-sm', i === 1 ? 'btn-primary' : 'btn-secondary']}>
-              {b.label}
-            </a>
-          ))}
-        </div>
-      </div>
+<footer class="section-alt mt-auto text-[0.75rem] leading-[1.45] text-muted">
+  <div class="container-x pb-8 pt-10">
+    <p class="max-w-4xl border-b border-border pb-4">
+      Hosttiva by Inventomo provides hosting, domains, email, cloud infrastructure, application deployment, reseller tools,
+      AI automation, and managed digital services. Service availability, resources, backups, support response times,
+      refunds, and usage limits are governed by the applicable plan and policy. Prices shown on this site are drafts until launch.
+    </p>
 
-      <div class="grid grid-cols-2 gap-8 sm:grid-cols-3 xl:grid-cols-6">
-        {FOOTER_COLUMNS.map((col) => (
-          <nav aria-label={col.title}>
-            <p class="mb-3 font-mono text-xs uppercase tracking-wider text-faint">{col.title}</p>
-            <ul class="space-y-2 text-sm">
-              {col.links.map((l) => (
-                <li>
-                  <a href={l.href} class="text-muted hover:text-text inline-flex items-center gap-1" {...(l.external ? { rel: 'noopener' } : {})}>
-                    {l.label}
-                    {l.external && <Icon name="ArrowUpRight" size={12} />}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </nav>
-        ))}
+    <div class="grid gap-x-6 gap-y-8 py-8 sm:grid-cols-3 lg:grid-cols-6">
+      {FOOTER_COLUMNS.map((col) => (
+        <nav aria-label={col.title}>
+          <h2 class="mb-2.5 text-[0.75rem] font-semibold tracking-normal text-text">{col.title}</h2>
+          <ul class="space-y-2">
+            {col.links.map((l) => (
+              <li>
+                <a href={l.href} class="hover:text-text hover:underline" {...(l.external ? { rel: 'noopener' } : {})}>{l.label}</a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      ))}
+    </div>
+
+    <div class="flex flex-col gap-4 border-t border-border pt-5 md:flex-row md:items-center md:justify-between">
+      <p class="text-[0.8125rem] text-text">
+        Need a website, app, AI system, automation workflow, or hosting migration? Inventomo can help you build and run it.
+      </p>
+      <div class="flex flex-wrap gap-x-4 gap-y-1">
+        {FOOTER_BUTTONS.map((b) => <a href={b.href} class="link-more text-[0.8125rem]">{b.label}</a>)}
       </div>
     </div>
 
-    <p class="mt-12 max-w-4xl text-xs leading-relaxed text-faint">
-      Hosttiva by Inventomo provides hosting, domains, email, cloud infrastructure, application deployment, reseller tools,
-      AI automation, and managed digital services. Service availability, resources, backups, support response times,
-      refunds, and usage limits are governed by the applicable plan and policy.
-    </p>
-
-    <div class="mt-8 flex flex-col gap-3 border-t border-border pt-6 text-xs text-faint sm:flex-row sm:items-center sm:justify-between">
-      <p>© {year} {SITE.fullName}. All rights reserved. · <a href="/sitemap" class="hover:text-text">Sitemap</a></p>
-      <p class="font-mono">
-        Powered by <a href={SITE.inventomoUrl} class="text-text hover:text-accent" rel="noopener">Inventomo</a>
-      </p>
+    <div class="mt-6 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+      <p>Copyright © {year} {SITE.fullName}. All rights reserved. <span class="mx-1.5 text-border-strong">|</span><a href="/sitemap" class="hover:text-text hover:underline">Sitemap</a></p>
+      <p>Powered by <a href={SITE.inventomoUrl} class="font-semibold text-text hover:underline" rel="noopener">Inventomo</a></p>
     </div>
   </div>
 </footer>

@@ -3,12 +3,12 @@ import Icon from './Icon.astro';
 ---
 <button
   type="button"
-  class="theme-toggle inline-flex h-9 w-9 items-center justify-center rounded-md border border-border text-muted hover:text-text hover:border-border-strong transition-colors"
+  class="theme-toggle inline-flex h-9 w-9 items-center justify-center rounded-full text-text/80 transition-colors hover:bg-text/7 hover:text-text"
   aria-label="Switch colour theme"
   title="Switch colour theme"
 >
-  <span class="icon-sun"><Icon name="Sun" size={16} /></span>
-  <span class="icon-moon"><Icon name="Moon" size={16} /></span>
+  <span class="icon-sun"><Icon name="Sun" size={17} /></span>
+  <span class="icon-moon"><Icon name="Moon" size={17} /></span>
 </button>
 
 <style>

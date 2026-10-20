@@ -30,7 +30,7 @@ const live = !!SSL_CHECK_API;
   function verdict(days: number, ok = true) {
     const tone = !ok || days < 0 ? 'text-danger' : days < 14 ? 'text-warn' : 'text-ok';
     const text = !ok ? 'Not trusted' : days < 0 ? 'Expired' : days < 14 ? `Expires in ${days} days` : `Valid · ${days} days left`;
-    return el('p', `mb-4 font-mono text-base ${tone}`, text);
+    return el('p', `mb-4 text-[1.3125rem] font-semibold tracking-tight ${tone}`, text);
   }
 
   async function liveCheck(d: string, api: string, out: HTMLElement) {

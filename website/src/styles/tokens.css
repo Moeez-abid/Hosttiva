@@ -1,69 +1,120 @@
 /*
- * Hosttiva design tokens — the ONLY place colours, type and radii are defined.
- * Keep names stable: the Lagom client-area theme will be matched to these.
- * Dark is the default; light overrides live under [data-theme='light'].
+ * Hosttiva design tokens — the ONLY place colour, type, radius, material and motion values live.
+ * Language: Apple-style. Neutral grounds, one accent (system blue), SF Pro where available,
+ * glass only on surfaces that float over content (nav, overlays, floating panels).
+ * Theme follows the OS; [data-theme] set by the toggle wins. Names are stable for the Lagom client area.
  */
 :root {
-  /* Brand accent (single accent colour: "signal teal") */
-  --accent: #2fd3a6;
-  --accent-strong: #5fe3bd;
-  --accent-ink: #04211a; /* text on accent fills */
-  --accent-soft: rgb(47 211 166 / 0.12);
+  /* Accent — Apple system blue */
+  --accent: #0071e3;
+  --accent-strong: #0062c4; /* hover — darker keeps AA with white text */
+  --accent-ink: #ffffff;
+  --accent-soft: rgb(0 113 227 / 0.1);
+  --link: #0066cc;
 
-  /* Neutrals — dark navy / near-black base */
-  --bg: #0a0f17;
-  --bg-raised: #0f1622;
-  --bg-sunken: #070b11;
-  --surface: #131c2a;
-  --border: #1f2a3a;
-  --border-strong: #2c3a4f;
-  --text: #e6ebf2;
-  --text-muted: #9aa7b8;
-  --text-faint: #7f8da2; /* ≥5:1 on all dark surfaces (WCAG AA) */
+  /* Grounds */
+  --bg: #ffffff;
+  --bg-raised: #f5f5f7; /* alternate section / tile */
+  --bg-sunken: #f5f5f7;
+  --surface: #ffffff; /* tile on an alternate section */
+  --inverse-bg: #000000; /* full-bleed dark sections in light mode */
+  --inverse-text: #f5f5f7;
+  --inverse-muted: #a1a1a6;
+
+  /* Lines */
+  --border: #d2d2d7;
+  --border-strong: #b0b0b5;
+
+  /* Text */
+  --text: #1d1d1f;
+  --text-muted: #6e6e73;
+  --text-faint: #6e6e73; /* same as muted: Apple uses two text levels; keeps AA everywhere */
 
   /* Status */
-  --ok: #3ccf7e;
-  --warn: #f0b429;
-  --danger: #f2555a;
+  --ok: #1a7f37;
+  --warn: #b25000;
+  --danger: #d70015;
+
+  /* Material — glass for floating chrome only */
+  --glass-bg: rgb(255 255 255 / 0.72);
+  --glass-strong: rgb(255 255 255 / 0.86);
+  --glass-border: rgb(0 0 0 / 0.08);
+  --glass-blur: saturate(180%) blur(20px);
+  --shadow-float: 0 18px 50px -12px rgb(0 0 0 / 0.18), 0 2px 6px rgb(0 0 0 / 0.06);
+  --shadow-tile: 0 2px 12px rgb(0 0 0 / 0.04);
 
   /* Type */
-  --font-sans: 'IBM Plex Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --font-display: 'Space Grotesk', 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
-  --font-mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+  --font-sans: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Inter Variable', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-display: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter Variable', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, monospace;
 
   /* Shape & layout */
-  --radius-sm: 4px;
-  --radius: 8px;
-  --radius-lg: 14px;
-  --container: 76rem;
-  --header-h: 4rem;
+  --radius-sm: 8px;
+  --radius: 12px;
+  --radius-lg: 18px;
+  --radius-xl: 28px;
+  --radius-pill: 980px;
+  --container: 80rem;
+  --header-h: 3.25rem;
 
   /* Motion */
-  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
-  --dur: 180ms;
-
-  color-scheme: dark;
-}
-
-:root[data-theme='light'] {
-  --accent: #08765a; /* ≥4.9:1 on light surfaces and with white text */
-  --accent-strong: #065c46;
-  --accent-ink: #ffffff;
-  --accent-soft: rgb(8 118 90 / 0.1);
-
-  --bg: #f7f8fa;
-  --bg-raised: #ffffff;
-  --bg-sunken: #eef1f5;
-  --surface: #ffffff;
-  --border: #dfe4eb;
-  --border-strong: #c5cdd8;
-  --text: #0d1420;
-  --text-muted: #4a5567;
-  --text-faint: #5d6878;
-
-  --ok: #16884a;
-  --warn: #8a5700;
-  --danger: #c62f34;
+  --ease: cubic-bezier(0.25, 0.1, 0.25, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur: 240ms;
 
   color-scheme: light;
+}
+
+/* Dark palette — applied by OS preference unless the toggle chose light, or by the toggle */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --accent: #0071e3;
+    --accent-strong: #0062c4;
+    --accent-soft: rgb(10 132 255 / 0.16);
+    --link: #2997ff;
+    --bg: #000000;
+    --bg-raised: #161617;
+    --bg-sunken: #0b0b0c;
+    --surface: #1d1d1f;
+    --inverse-bg: #161617;
+    --border: #333336;
+    --border-strong: #48484c;
+    --text: #f5f5f7;
+    --text-muted: #a1a1a6;
+    --text-faint: #a1a1a6;
+    --ok: #30d158;
+    --warn: #ff9f0a;
+    --danger: #ff453a;
+    --glass-bg: rgb(22 22 23 / 0.72);
+    --glass-strong: rgb(29 29 31 / 0.86);
+    --glass-border: rgb(255 255 255 / 0.1);
+    --shadow-float: 0 18px 50px -12px rgb(0 0 0 / 0.7), 0 2px 6px rgb(0 0 0 / 0.4);
+    --shadow-tile: none;
+    color-scheme: dark;
+  }
+}
+:root[data-theme='dark'] {
+  --accent: #0071e3;
+  --accent-strong: #0062c4;
+  --accent-soft: rgb(10 132 255 / 0.16);
+  --link: #2997ff;
+  --bg: #000000;
+  --bg-raised: #161617;
+  --bg-sunken: #0b0b0c;
+  --surface: #1d1d1f;
+  --inverse-bg: #161617;
+  --border: #333336;
+  --border-strong: #48484c;
+  --text: #f5f5f7;
+  --text-muted: #a1a1a6;
+  --text-faint: #a1a1a6;
+  --ok: #30d158;
+  --warn: #ff9f0a;
+  --danger: #ff453a;
+  --glass-bg: rgb(22 22 23 / 0.72);
+  --glass-strong: rgb(29 29 31 / 0.86);
+  --glass-border: rgb(255 255 255 / 0.1);
+  --shadow-float: 0 18px 50px -12px rgb(0 0 0 / 0.7), 0 2px 6px rgb(0 0 0 / 0.4);
+  --shadow-tile: none;
+  color-scheme: dark;
 }

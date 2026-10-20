@@ -1,15 +1,13 @@
 ---
 interface Props { class?: string }
 ---
-<a href="/" class:list={['inline-flex items-center gap-2.5 text-text', Astro.props.class]} aria-label="Hosttiva by Inventomo — home">
-  <svg width="26" height="26" viewBox="0 0 32 32" aria-hidden="true">
-    <rect x="1" y="1" width="30" height="30" rx="7" fill="none" stroke="currentColor" stroke-opacity=".35" stroke-width="2" />
-    <rect x="8" y="8" width="5" height="16" rx="1.5" fill="var(--accent)" />
-    <rect x="19" y="8" width="5" height="16" rx="1.5" fill="currentColor" />
-    <rect x="8" y="14" width="16" height="4" rx="1.5" fill="var(--accent)" />
+<a href="/" class:list={['inline-flex items-center gap-2 text-text', Astro.props.class]} aria-label="Hosttiva by Inventomo — home">
+  <svg width="24" height="24" viewBox="0 0 32 32" aria-hidden="true">
+    <path d="M16 0c9.9 0 13.1 0 14.6 1.4C32 2.9 32 6.1 32 16s0 13.1-1.4 14.6C29.1 32 25.9 32 16 32s-13.1 0-14.6-1.4C0 29.1 0 25.9 0 16S0 2.9 1.4 1.4C2.9 0 6.1 0 16 0Z" fill="var(--accent)" />
+    <path d="M10.5 8.5v15M21.5 8.5v15M10.5 16h11" stroke="#fff" stroke-width="3.2" stroke-linecap="round" fill="none" />
   </svg>
   <span class="flex items-baseline gap-1.5">
-    <span class="font-display text-lg font-semibold tracking-tight">hosttiva</span>
-    <span class="font-mono text-[0.68rem] text-faint hidden sm:inline">by Inventomo</span>
+    <span class="text-[1.0625rem] font-semibold tracking-[-0.03em]">Hosttiva</span>
+    <span class="hidden text-[0.75rem] text-muted xl:inline">by Inventomo</span>
   </span>
 </a>
