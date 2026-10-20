@@ -74,3 +74,13 @@ export const blogPosting = (o: { title: string; description: string; path: strin
   publisher: { '@id': `${SITE.url}/#organization` },
   inLanguage: SITE.locale,
 });
+
+export const howTo = (o: { title: string; description: string; path: string; totalTime: string; requirements: string[]; steps: { name: string; anchor: string }[] }) => ({
+  '@type': 'HowTo',
+  name: o.title,
+  description: o.description,
+  url: abs(o.path),
+  totalTime: o.totalTime,
+  ...(o.requirements.length ? { supply: o.requirements.map((r) => ({ '@type': 'HowToSupply', name: r })) } : {}),
+  step: o.steps.map((s, i) => ({ '@type': 'HowToStep', position: i + 1, name: s.name, text: s.name, url: `${abs(o.path)}#${s.anchor}` })),
+});

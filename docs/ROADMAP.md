@@ -34,7 +34,7 @@ Placeholder pages for Phase 2+ already exist in `website/src/data/pages.ts` (noi
 - [x] Our Story (/about)
 - [x] Product Updates / public roadmap (/roadmap)
 - [ ] Careers page
-- [ ] Tutorials collection with HowTo schema
+- [x] Tutorials collection with HowTo schema (3 tutorials)
 - [x] Agency landing page using the SRS "Agency hero" copy
 - [x] Pagefind search UI in the header
 

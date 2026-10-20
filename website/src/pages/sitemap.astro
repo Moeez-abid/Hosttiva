@@ -12,7 +12,8 @@ const posts = (await getCollection('blog', (p) => !p.data.draft)).sort((a, b) =>
 const company = [
   { label: 'Home', href: '/' }, { label: 'Pricing', href: '/pricing' }, { label: 'Marketplace', href: '/marketplace' },
   { label: 'For Agencies', href: '/agencies' }, { label: 'Our Story', href: '/about' }, { label: 'Trust Center', href: '/trust' },
-  { label: 'Contact', href: '/contact' }, { label: 'Blog', href: '/blog' }, { label: 'Search', href: '/search' },
+  { label: 'Contact', href: '/contact' }, { label: 'Blog', href: '/blog' }, { label: 'Tutorials', href: '/tutorials' },
+  { label: 'Product Updates', href: '/roadmap' }, { label: 'Search', href: '/search' },
 ];
 ---
 <Base title="Sitemap" description="Every page on the Hosttiva by Inventomo website, grouped by section." schema={[breadcrumbs(crumbs)]}>

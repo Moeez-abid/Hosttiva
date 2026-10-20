@@ -4,7 +4,6 @@ export interface PlannedPage { slug: string; title: string; blurb: string; phase
 
 export const PLANNED_PAGES: PlannedPage[] = [
   { slug: 'knowledgebase', title: 'Knowledge Base', blurb: 'Help articles and guides for every Hosttiva service.', phase: 3 },
-  { slug: 'tutorials', title: 'Tutorials', blurb: 'Step-by-step articles to help you launch, manage, and grow online.', phase: 2 },
   { slug: 'academy', title: 'Hosttiva Academy', blurb: 'Practical video guides for websites, hosting, cloud, applications, and online business.', phase: 3 },
   { slug: 'learning-lab', title: 'Learning Lab', blurb: 'Guided learning paths to build, launch, and grow online.', phase: 3 },
   { slug: 'status', title: 'Status', blurb: 'Live service status and maintenance announcements.', phase: 3 },
