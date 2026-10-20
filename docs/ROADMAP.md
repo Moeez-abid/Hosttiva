@@ -53,7 +53,9 @@ Placeholder pages for Phase 2+ already exist in `website/src/data/pages.ts` (noi
 - [ ] 410 handling, hreflang if more locales are added
 - [x] Per-page OG images (build-time, /og/*.png)
 - [ ] WebP/AVIF image pipeline
-- [ ] Performance budget: Lighthouse 95+, LCP < 2.5s, CLS < 0.1, INP < 200ms; WCAG 2.2 AA audit
+- [x] Split XML sitemaps (products, blog, tutorials, pages) under sitemap-index.xml
+- [x] Static performance budget: ~6 KB JS, 10 KB CSS, ~15 KB HTML per page (gzip); 3D chunk lazy on home only
+- [ ] Lighthouse / PageSpeed run on production (target 95+, LCP < 2.5s, CLS < 0.1, INP < 200ms); WCAG 2.2 AA audit
 - [x] Monitoring hooks in `site.ts` (Cloudflare Web Analytics, Google + Bing verification): paste IDs to enable
 - [ ] GA4 / Microsoft Clarity (after cookie banner + privacy policy), uptime and error monitoring
 - [x] Content Security Policy in `_headers`
