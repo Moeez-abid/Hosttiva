@@ -185,6 +185,23 @@ const explore = {
     from { opacity: 0; clip-path: inset(0 0 100% 0); }
     to { opacity: 1; clip-path: inset(0 0 0 0); }
   }
+  /* Menu items cascade in */
+  :global(.motion) .flyout li { animation: fly-item 460ms var(--ease-out) both; }
+  .flyout li:nth-child(1) { animation-delay: 22ms; }
+  .flyout li:nth-child(2) { animation-delay: 44ms; }
+  .flyout li:nth-child(3) { animation-delay: 66ms; }
+  .flyout li:nth-child(4) { animation-delay: 88ms; }
+  .flyout li:nth-child(5) { animation-delay: 110ms; }
+  .flyout li:nth-child(6) { animation-delay: 132ms; }
+  .flyout li:nth-child(7) { animation-delay: 154ms; }
+  .flyout li:nth-child(8) { animation-delay: 176ms; }
+  .flyout li:nth-child(9) { animation-delay: 198ms; }
+  .flyout li:nth-child(10) { animation-delay: 220ms; }
+  .flyout li:nth-child(11) { animation-delay: 242ms; }
+  .flyout li:nth-child(12) { animation-delay: 264ms; }
+  .flyout li:nth-child(13) { animation-delay: 286ms; }
+  .flyout li:nth-child(14) { animation-delay: 308ms; }
+  @keyframes fly-item { from { opacity: 0; transform: translate3d(0, -6px, 0); filter: blur(3px); } }
   /* Blurs the page behind an open flyout */
   .scrim {
     position: fixed; inset: var(--header-h) 0 0 0; z-index: 1;

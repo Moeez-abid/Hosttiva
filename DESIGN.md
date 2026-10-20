@@ -42,11 +42,24 @@ neon accent and grid backgrounds.
 - Segmented controls for billing term and tool choice.
 - FAQ: large questions, plus/minus glyph drawn in CSS.
 
-## Layout & motion
+## Layout
 - `container-x` (80rem) for wide sections, `container-narrow` (980px) for reading and centred heroes.
 - Sections breathe: 6–9rem vertical padding; alternate white / `#f5f5f7` / inverse.
-- One authored moment: the hero blur-lift entrance and stage rise. Elsewhere `.reveal` uses CSS scroll-driven
-  animation (no JS), content visible by default; all motion off under `prefers-reduced-motion`.
+
+## Motion (required on every page)
+Shared system in `website/src/lib/motion.ts` + `global.css`; armed by `html.motion` only when the visitor allows
+motion, with a 3s failsafe, so content is always visible without JS. Hooks:
+- `data-split="now"` on every page H1 (word-by-word rise from a mask); `data-split` on section H2s (on view).
+- `.enter` + `style="--d:320ms"` for hero copy/CTAs that follow the H1.
+- `.reveal` for blocks; wrap lists that appear as lists in `data-stagger` (70ms steps, capped at 560ms).
+- `data-tilt="5"` on interactive tiles/cards: 3D pointer tilt with glare (fine pointers only).
+- `data-count` on headline numbers (count up once, no layout shift).
+- `.icon-3d` for a hero icon's 3D flip-in.
+- `<details>` open/close, billing-term price swaps, flyout item cascade and page-to-page transitions are automatic.
+- Focal 3D: homepage hero rack (`src/lib/rack3d.ts`, three.js, lazy-loaded ~130 KB gzip, pauses off-screen,
+  SVG fallback without WebGL). Add further 3D only where it carries the product story.
+- Easing `--ease-out` (cubic-bezier(0.16,1,0.3,1)); entrances 500–1100ms, feedback 120–300ms; no bounce.
+  Everything static under `prefers-reduced-motion`.
 
 ## Imagery
 No photography or customer assets exist. The hero uses an authored SVG server rack; any demonstration data is

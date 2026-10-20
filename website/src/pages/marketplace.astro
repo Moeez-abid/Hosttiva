@@ -23,8 +23,8 @@ const schema = [
   <section>
     <div class="container-x pb-16 pt-10 sm:pb-20 sm:pt-14">
       <Breadcrumbs items={crumbs} />
-      <h1 class="display-lg mt-8 max-w-4xl">Services with a defined scope</h1>
-      <p class="lead mt-5 max-w-2xl">
+      <h1 class="display-lg mt-8 max-w-4xl" data-split="now">Services with a defined scope</h1>
+      <p class="lead enter mt-5 max-w-2xl" style="--d:320ms">
         Fixed-scope work from the Hosttiva and Inventomo team. Each item lists what is included, what we need from you,
         and how long support lasts after delivery.
       </p>
@@ -44,9 +44,9 @@ const schema = [
     {groups.map((g) => (
       <section id={g} class="scroll-mt-24" aria-labelledby={`${g}-h`}>
         <h2 id={`${g}-h`} class="text-2xl font-semibold">{MARKET_GROUPS[g]}</h2>
-        <ul class="mt-6 divide-y divide-border border-y border-border">
+        <ul class="mt-6 divide-y divide-border border-y border-border" data-stagger>
           {MARKET_ITEMS.filter((m) => m.group === g).map((m) => (
-            <li>
+            <li class="reveal">
               <details class="group">
                 <summary class="grid cursor-pointer list-none items-center gap-x-6 gap-y-1 py-5 sm:grid-cols-[1fr_9rem_10rem_1.5rem]">
                   <span>
@@ -87,9 +87,9 @@ const schema = [
     ))}
     <p class="text-xs text-muted">* Free migration applies to eligible hosting plans. Prices exclude applicable taxes.</p>
 
-    <section id="one-click" class="scroll-mt-24 tile p-6 sm:p-8" aria-labelledby="oc-h">
+    <section id="one-click" class="reveal scroll-mt-24 tile p-6 sm:p-8" aria-labelledby="oc-h">
       <div class="flex flex-wrap items-center gap-3">
-        <h2 id="oc-h" class="display-md">One-click apps</h2>
+        <h2 id="oc-h" class="display-md" data-split>One-click apps</h2>
         <span class="badge badge-warn">Coming soon</span>
       </div>
       <p class="mt-3 max-w-2xl text-sm text-muted">

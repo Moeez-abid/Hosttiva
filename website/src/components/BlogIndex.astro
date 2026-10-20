@@ -17,8 +17,8 @@ const crumbs = [{ name: 'Home', path: '/' }, { name: 'Blog', path: '/blog' }, ..
 <Base title={category ? `${title} articles` : 'Blog'} description={category ? `Hosttiva articles about ${title.toLowerCase()}.` : 'Expert tips, product updates, and customer stories from Hosttiva by Inventomo.'} schema={[breadcrumbs(crumbs)]}>
   <section class="container-x py-14 sm:py-20">
     <Breadcrumbs items={crumbs} />
-    <h1 class="display-lg mt-8 max-w-4xl">{category ? title : 'Notes from the people who run the servers'}</h1>
-    {!category && <p class="lead mt-5 max-w-2xl">Expert tips, product updates, and customer stories.</p>}
+    <h1 class="display-lg mt-8 max-w-4xl" data-split="now">{category ? title : 'Notes from the people who run the servers'}</h1>
+    {!category && <p class="lead enter mt-5 max-w-2xl" style="--d:320ms">Expert tips, product updates, and customer stories.</p>}
     <nav aria-label="Categories" class="mt-8 flex flex-wrap gap-2 text-sm">
       <a href="/blog" class:list={['rounded-full border px-3 py-1', !category ? 'border-accent text-accent' : 'border-border text-muted hover:text-text']}>All</a>
       {(Object.keys(BLOG_CATEGORIES) as Cat[]).filter((c) => used.has(c)).map((c) => (

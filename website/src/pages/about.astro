@@ -16,8 +16,8 @@ const schema = [
   <section class="pt-10 sm:pt-14">
     <div class="container-x"><Breadcrumbs items={crumbs} /></div>
     <div class="container-narrow py-20 text-center sm:py-28">
-      <h1 class="display-xl">Hosttiva hosts your technology.<br /><span class="text-muted">Inventomo helps you create it.</span></h1>
-      <p class="lead mx-auto mt-8 max-w-3xl">{BRAND.positioning}</p>
+      <h1 class="display-xl" data-split="now">Hosttiva hosts your technology.<br /><span class="text-muted">Inventomo helps you create it.</span></h1>
+      <p class="lead enter mx-auto mt-8 max-w-3xl" style="--d:420ms">{BRAND.positioning}</p>
     </div>
   </section>
 
@@ -36,7 +36,7 @@ const schema = [
 
   <section class="section-inverse" aria-labelledby="promise-h">
     <div class="container-x py-24 sm:py-32">
-      <h2 id="promise-h" class="display-lg reveal max-w-4xl">{BRAND.promise}</h2>
+      <h2 id="promise-h" class="display-lg max-w-4xl" data-split>{BRAND.promise}</h2>
       <ul class="mt-14 grid gap-x-10 gap-y-8 sm:grid-cols-2 lg:grid-cols-4">
         {BRAND.promiseLines.map((l) => (
           <li class="reveal border-t border-white/15 pt-6 text-[1.5rem] font-semibold leading-tight tracking-[-0.025em]">{l}</li>
@@ -46,7 +46,7 @@ const schema = [
   </section>
 
   <section class="container-x py-24 sm:py-32" aria-labelledby="values-h">
-    <h2 id="values-h" class="display-lg reveal max-w-3xl">What we hold ourselves to.</h2>
+    <h2 id="values-h" class="display-lg max-w-3xl" data-split>What we hold ourselves to.</h2>
     <dl class="mt-14 grid gap-x-12 sm:grid-cols-2 lg:grid-cols-3">
       {VALUES.map((v) => (
         <div class="reveal border-t border-border py-7">
@@ -60,7 +60,7 @@ const schema = [
   <section class="section-alt" aria-labelledby="eco-h">
     <div class="container-x grid gap-14 py-24 sm:py-32 lg:grid-cols-[1.1fr_1fr] lg:items-end">
       <div>
-        <h2 id="eco-h" class="display-lg reveal">One partner, from first domain to custom platform.</h2>
+        <h2 id="eco-h" class="display-lg" data-split>One partner, from first domain to custom platform.</h2>
         <p class="lead reveal mt-6 max-w-xl">{BRAND.usp}</p>
       </div>
       <nav aria-label="Hosttiva ecosystem" class="reveal">
@@ -80,7 +80,7 @@ const schema = [
         <><span class="text-text">{a.name.toLowerCase()}</span>{i < AUDIENCES.length - 2 ? ', ' : i === AUDIENCES.length - 2 ? ' and ' : '.'}</>
       ))}
     </p>
-    <h2 id="why-h" class="display-md reveal mt-20">{BRAND.finalStatement}</h2>
+    <h2 id="why-h" class="display-md mt-20" data-split>{BRAND.finalStatement}</h2>
     <ul class="mt-10 grid gap-x-10 gap-y-4 sm:grid-cols-2">
       {WHY_CHOOSE.map((w) => (
         <li class="reveal flex items-start gap-3 text-[1.0625rem]"><Icon name="CircleCheck" size={20} class="mt-0.5 shrink-0 text-link" />{w}</li>

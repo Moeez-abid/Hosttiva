@@ -27,6 +27,17 @@ const noindex = Astro.props.noindex ?? NOINDEX_PATHS.includes(path);
 const canonical = new URL(path, SITE.url).toString();
 const fullTitle = path === '/' ? `${SITE.fullName} — ${SITE.tagline}` : `${title} | ${SITE.fullName}`;
 const ogImageUrl = new URL(ogImage, SITE.url).toString();
+// Page-to-page motion: the old page lifts away, the new one rises in (keyframes in global.css).
+const pageTransition = {
+  forwards: {
+    old: { name: 'page-out', duration: '220ms', easing: 'cubic-bezier(0.4, 0, 1, 1)', fillMode: 'both' },
+    new: { name: 'page-in', duration: '520ms', delay: '60ms', easing: 'cubic-bezier(0.16, 1, 0.3, 1)', fillMode: 'both' },
+  },
+  backwards: {
+    old: { name: 'page-out', duration: '220ms', easing: 'cubic-bezier(0.4, 0, 1, 1)', fillMode: 'both' },
+    new: { name: 'page-in', duration: '520ms', delay: '60ms', easing: 'cubic-bezier(0.16, 1, 0.3, 1)', fillMode: 'both' },
+  },
+};
 ---
 <!doctype html>
 <html lang={SITE.locale}>
@@ -64,6 +75,16 @@ const ogImageUrl = new URL(ogImage, SITE.url).toString();
       }
       applyTheme();
       document.addEventListener('astro:after-swap', applyTheme);
+      // Arm the motion system only when motion is allowed; failsafe un-arms it if the script never runs.
+      (function () {
+        if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        var h = document.documentElement;
+        h.classList.add('motion');
+        setTimeout(function () { if (!window.__motion) h.classList.remove('motion'); }, 3000);
+      })();
+      document.addEventListener('astro:after-swap', function () {
+        if (!matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('motion');
+      });
     </script>
     <ClientRouter fallback="swap" />
     <JsonLd data={[organization(), website(), ...schema]} />
@@ -78,9 +99,13 @@ FORM: Pinned brief (Apple canon) over roll; seed key c5c5042b.
 FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md
 -->`} />
     <Header />
-    <main id="main" class="flex-1" data-pagefind-body={noindex ? undefined : true}>
+    <main id="main" class="flex-1" data-pagefind-body={noindex ? undefined : true} transition:animate={pageTransition}>
       <slot />
     </main>
     <Footer />
+    <script>
+      import { initMotion } from '../lib/motion';
+      document.addEventListener('astro:page-load', initMotion);
+    </script>
   </body>
 </html>

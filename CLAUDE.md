@@ -22,6 +22,7 @@ Lucide icons only (`src/components/Icon.astro`) · SF Pro system stack + self-ho
 
 ## Brand rules
 - Apple design language (see DESIGN.md): neutral grounds, ONE accent (system blue #0071e3), SF Pro/Inter, pills, glass only on floating chrome.
+- Every new page MUST ship motion via the shared hooks (DESIGN.md › Motion): `data-split` on H1/H2, `.enter`, `.reveal` + `data-stagger`, `data-tilt`, `data-count`; 3D where it fits.
 - Banned: eyebrows/kickers above headings, mono as decoration, gradient text, glow blobs, emoji icons, hype copy, identical card grids.
 - "Powered by Inventomo" in footer. Promo and renewal prices shown separately.
 - Never publish SRS-conditional items (GPU, Windows, AI website builder, Envato names, affiliate %):

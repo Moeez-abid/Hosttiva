@@ -15,8 +15,8 @@ const board = ROADMAP_STATUSES.filter((s) => s.id !== 'released');
   <section>
     <div class="container-x pb-16 pt-10 sm:pb-20 sm:pt-14">
       <Breadcrumbs items={crumbs} />
-      <h1 class="display-lg mt-8 max-w-4xl">What shipped, and what is next</h1>
-      <p class="lead mt-5 max-w-2xl">
+      <h1 class="display-lg mt-8 max-w-4xl" data-split="now">What shipped, and what is next</h1>
+      <p class="lead enter mt-5 max-w-2xl" style="--d:320ms">
         Follow the latest Hosttiva releases, improvements, maintenance notices, and upcoming features. Planned items have
         no dates until we are confident in them.
       </p>
@@ -25,12 +25,12 @@ const board = ROADMAP_STATUSES.filter((s) => s.id !== 'released');
 
   <div class="container-x space-y-16 py-16">
     <section aria-labelledby="board-h">
-      <h2 id="board-h" class="display-md">Roadmap</h2>
-      <div class="mt-10 grid gap-4 md:grid-cols-3">
+      <h2 id="board-h" class="display-md" data-split>Roadmap</h2>
+      <div class="mt-10 grid gap-4 md:grid-cols-3" data-stagger>
         {board.map((s) => {
           const items = ROADMAP.filter((r) => r.status === s.id);
           return (
-            <div class="tile p-6">
+            <div class="tile reveal p-6">
               <p class="flex items-baseline justify-between">
                 <span class="title !text-[1.3125rem]">{s.label}</span>
                 <span class="badge">{items.length}</span>
@@ -51,10 +51,10 @@ const board = ROADMAP_STATUSES.filter((s) => s.id !== 'released');
     </section>
 
     <section aria-labelledby="rel-h">
-      <h2 id="rel-h" class="display-md">Released</h2>
-      <ol class="mt-6 divide-y divide-border border-y border-border">
+      <h2 id="rel-h" class="display-md" data-split>Released</h2>
+      <ol class="mt-6 divide-y divide-border border-y border-border" data-stagger>
         {released.map((r) => (
-          <li class="grid gap-1 py-4 sm:grid-cols-[8rem_1fr]">
+          <li class="reveal grid gap-1 py-4 sm:grid-cols-[8rem_1fr]">
             <time class="spec" datetime={r.date}>{fmt(r.date!)}</time>
             <div>
               {r.href ? <a href={r.href} class="font-medium hover:text-link">{r.title}</a> : <span class="font-medium">{r.title}</span>}
@@ -65,7 +65,7 @@ const board = ROADMAP_STATUSES.filter((s) => s.id !== 'released');
       </ol>
     </section>
 
-    <section class="flex flex-col gap-6 tile p-8 sm:p-10 sm:flex-row sm:items-center sm:justify-between" aria-labelledby="fr-h">
+    <section class="reveal flex flex-col gap-6 tile p-8 sm:p-10 sm:flex-row sm:items-center sm:justify-between" aria-labelledby="fr-h">
       <div>
         <h2 id="fr-h" class="title">Feature requests</h2>
         <p class="mt-1 text-sm text-muted">Missing something? Tell us what you need and why. Requests shape what moves from planned to in development.</p>

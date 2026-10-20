@@ -4,10 +4,10 @@ interface Props { faqs: Faq[]; title?: string }
 const { faqs, title = 'Questions' } = Astro.props;
 ---
 <section aria-labelledby="faq-h" class="mx-auto max-w-[61.25rem]">
-  <h2 id="faq-h" class="display-md">{title}</h2>
-  <div class="mt-8 border-t border-border">
+  <h2 id="faq-h" class="display-md" data-split>{title}</h2>
+  <div class="mt-8 border-t border-border" data-stagger>
     {faqs.map((f) => (
-      <details class="faq group border-b border-border">
+      <details class="faq reveal group border-b border-border">
         <summary class="flex cursor-pointer list-none items-center justify-between gap-6 py-6 text-[1.3125rem] font-semibold tracking-[-0.02em]">
           {f.q}
           <span class="faq-icon relative h-4 w-4 shrink-0 text-muted" aria-hidden="true"></span>

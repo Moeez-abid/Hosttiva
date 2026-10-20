@@ -16,5 +16,6 @@ export default defineConfig({
       filter: (page) => !NOINDEX_PATHS.some((p) => new URL(page).pathname.replace(/\/$/, '') === p),
     }),
   ],
-  vite: { plugins: [tailwindcss()] },
+  // three.js (hero 3D) is a lazy-loaded ~130 KB gzip chunk; everything else is tiny.
+  vite: { plugins: [tailwindcss()], build: { chunkSizeWarningLimit: 700 } },
 });

@@ -4,9 +4,9 @@ import { BLOG_CATEGORIES } from '../content.config';
 interface Props { posts: CollectionEntry<'blog'>[] }
 const fmt = (d: Date) => d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
 ---
-<ul class="divide-y divide-border border-y border-border">
+<ul class="divide-y divide-border border-y border-border" data-stagger>
   {Astro.props.posts.map((p) => (
-    <li>
+    <li class="reveal">
       <a href={`/blog/${p.id}`} class="group grid gap-2 py-6 sm:grid-cols-[9rem_1fr]">
         <span class="spec">
           <time datetime={p.data.pubDate.toISOString()}>{fmt(p.data.pubDate)}</time>

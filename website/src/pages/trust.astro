@@ -13,8 +13,8 @@ const pending = TRUST_TOPICS.filter((t) => t.status === 'pending');
   <section>
     <div class="container-x pb-16 pt-10 sm:pb-20 sm:pt-14">
       <Breadcrumbs items={crumbs} />
-      <h1 class="display-lg mt-8 max-w-4xl">What we can show you today, and what comes next</h1>
-      <p class="lead mt-5 max-w-2xl">
+      <h1 class="display-lg mt-8 max-w-4xl" data-split="now">What we can show you today, and what comes next</h1>
+      <p class="lead enter mt-5 max-w-2xl" style="--d:320ms">
         We only publish what we can stand behind. Topics marked “Before launch” will be documented once the
         infrastructure, policies and legal review behind them are final.
       </p>
@@ -27,7 +27,7 @@ const pending = TRUST_TOPICS.filter((t) => t.status === 'pending');
   </section>
 
   <div class="container-x py-16">
-    <div class="space-y-4">
+    <div class="space-y-4" data-stagger>
       {published.map((t) => (
         <section id={t.id} class="tile reveal scroll-mt-24 grid gap-8 p-8 sm:p-10 md:grid-cols-[20rem_1fr]" aria-labelledby={`${t.id}-h`}>
           <div>
@@ -42,9 +42,9 @@ const pending = TRUST_TOPICS.filter((t) => t.status === 'pending');
       ))}
     </div>
 
-    <h2 class="display-md mt-24">Before launch</h2>
+    <h2 class="display-md mt-24" data-split>Before launch</h2>
     <p class="lead mt-4 max-w-2xl">These pages are in preparation. Each will list specifics rather than general assurances.</p>
-    <ul class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    <ul class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3" data-stagger>
       {pending.map((t) => (
         <li id={t.id} class="tile reveal scroll-mt-24 p-7">
           <div class="flex items-center justify-between gap-2">

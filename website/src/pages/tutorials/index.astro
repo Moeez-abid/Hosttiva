@@ -15,12 +15,12 @@ const minutes = (iso: string) => {
 <Base title="Tutorials" description="Step-by-step articles to help you launch, manage, and grow online with Hosttiva." schema={[breadcrumbs(crumbs)]}>
   <section class="container-x py-14 sm:py-20">
     <Breadcrumbs items={crumbs} />
-    <h1 class="display-lg mt-8 max-w-4xl">Step by step, start to finish</h1>
-    <p class="lead mt-5 max-w-2xl">Step-by-step articles to help you launch, manage, and grow online.</p>
+    <h1 class="display-lg mt-8 max-w-4xl" data-split="now">Step by step, start to finish</h1>
+    <p class="lead enter mt-5 max-w-2xl" style="--d:320ms">Step-by-step articles to help you launch, manage, and grow online.</p>
 
-    <ul class="mt-12 divide-y divide-border border-y border-border">
+    <ul class="mt-12 divide-y divide-border border-y border-border" data-stagger>
       {tutorials.map((t) => (
-        <li>
+        <li class="reveal">
           <a href={`/tutorials/${t.id}`} class="group grid gap-2 py-6 sm:grid-cols-[1fr_auto] sm:items-center">
             <span>
               <span class="title !text-[1.3125rem] group-hover:text-link">{t.data.title}</span>

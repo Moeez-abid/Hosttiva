@@ -27,8 +27,8 @@ const planned = items.filter((i) => i.planned);
   <section>
     <div class="container-x pb-16 pt-10 sm:pb-20 sm:pt-14">
       <Breadcrumbs items={crumbs} />
-      <h1 class="display-lg mt-8 max-w-4xl">Help that starts before you sign up</h1>
-      <p class="lead mt-5 max-w-2xl">
+      <h1 class="display-lg mt-8 max-w-4xl" data-split="now">Help that starts before you sign up</h1>
+      <p class="lead enter mt-5 max-w-2xl" style="--d:320ms">
         From moving your first site to reviewing your architecture as you grow, here is the help available today, and
         where to find it.
       </p>
@@ -36,9 +36,9 @@ const planned = items.filter((i) => i.planned);
   </section>
 
   <div class="container-x py-16">
-    <ul class="divide-y divide-border border-y border-border">
+    <ul class="divide-y divide-border border-y border-border" data-stagger>
       {available.map((i) => (
-        <li class="grid gap-4 py-6 md:grid-cols-[2.5rem_1fr_14rem_auto] md:items-center">
+        <li class="reveal grid gap-4 py-6 md:grid-cols-[2.5rem_1fr_14rem_auto] md:items-center">
           <span class="text-link"><Icon name={i.icon} size={22} /></span>
           <div>
             <h2 class="text-lg font-medium">{i.title}</h2>
@@ -50,10 +50,10 @@ const planned = items.filter((i) => i.planned);
       ))}
     </ul>
 
-    <h2 class="display-md mt-24">Coming next</h2>
-    <ul class="mt-6 grid gap-px overflow-hidden tile bg-border md:grid-cols-3">
+    <h2 class="display-md mt-24" data-split>Coming next</h2>
+    <ul class="mt-6 grid gap-4 md:grid-cols-3" data-stagger>
       {planned.map((i) => (
-        <li class="bg-bg p-5">
+        <li class="tile reveal p-6">
           <p class="flex items-center justify-between gap-2 font-medium">
             <span class="flex items-center gap-2"><Icon name={i.icon} size={16} class="text-muted" />{i.title}</span>
             <span class="badge">Planned</span>
@@ -63,7 +63,7 @@ const planned = items.filter((i) => i.planned);
       ))}
     </ul>
 
-    <div class="mt-16 flex flex-col gap-4 tile p-6 sm:flex-row sm:items-center sm:justify-between">
+    <div class="reveal mt-16 flex flex-col gap-4 tile p-8 sm:flex-row sm:items-center sm:justify-between">
       <div>
         <p class="font-medium">Already a customer?</p>
         <p class="text-sm text-muted">Open a ticket from the client area so we can see your services.</p>

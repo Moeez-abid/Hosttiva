@@ -31,8 +31,8 @@ const time = m[2] === 'H' ? `${m[1]} h` : `${m[1]} min`;
     <div class="mt-8 grid gap-12 lg:grid-cols-[1fr_16rem]">
       <div class="min-w-0">
         <header class="max-w-3xl">
-          <h1 class="display-lg max-w-4xl">{d.title}</h1>
-          <p class="lead mt-5">{d.description}</p>
+          <h1 class="display-lg max-w-4xl" data-split="now">{d.title}</h1>
+          <p class="lead enter mt-5" style="--d:320ms">{d.description}</p>
           <p class="spec mt-6 flex flex-wrap gap-x-5 gap-y-1">
             <span class="flex items-center gap-1.5"><Icon name="Clock" size={13} />{time}</span>
             <span>{d.level}</span>

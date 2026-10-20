@@ -33,19 +33,20 @@ const why = [
   <!-- Hero -->
   <section class="overflow-hidden pt-16 sm:pt-24">
     <div class="container-narrow text-center">
-      <h1 class="display-xl hero-in">Host what you build.</h1>
-      <p class="lead hero-in mx-auto mt-6 max-w-[42rem]" style="--d:80ms">
+      <h1 class="display-xl" data-split="now">Host what you build.</h1>
+      <p class="lead enter mx-auto mt-6 max-w-[42rem]" style="--d:380ms">
         Websites, online stores, applications, AI tools, business email and game servers, on reliable infrastructure
         with human support.
       </p>
-      <div class="hero-in mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-3" style="--d:160ms">
+      <div class="enter mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-3" style="--d:520ms">
         <a href="/pricing" class="btn btn-primary">Explore hosting plans</a>
         <a href="/contact" class="link-more text-[1.0625rem]">Talk to an expert</a>
       </div>
     </div>
 
     <div class="container-x mt-14 sm:mt-20">
-      <div class="stage hero-stage relative mx-auto max-w-[72rem]">
+      <div class="stage hero-stage relative mx-auto max-w-[72rem]" id="hero-stage">
+        <canvas class="rack3d" aria-hidden="true"></canvas>
         <svg class="rack block h-auto w-full" viewBox="0 0 1160 560" role="img" aria-label="Illustration of a server rack">
           <defs>
             <linearGradient id="unit" x1="0" y1="0" x2="0" y2="1">
@@ -67,7 +68,7 @@ const why = [
         </svg>
 
         <!-- Floating glass panels (real plan data; DNS values are documentation examples) -->
-        <div class="panel panel-plan glass-panel p-5 sm:p-6">
+        <div class="panel panel-plan glass-panel p-5 sm:p-6" style="--depth:18; --pd:1500ms">
           <div class="flex items-center justify-between gap-3">
             <p class="text-[0.8125rem] font-semibold text-muted">Web hosting</p>
             {PRICES_ARE_PLACEHOLDERS && <span class="badge badge-warn">Draft price</span>}
@@ -87,7 +88,7 @@ const why = [
           <ul class="mt-4 flex flex-wrap gap-1.5">{heroPlan.features.slice(0, 4).map((f) => <li class="badge">{f}</li>)}</ul>
         </div>
 
-        <div class="panel panel-dns glass-panel hidden p-5 md:block">
+        <div class="panel panel-dns glass-panel hidden p-5 md:block" style="--depth:-12; --pd:1750ms">
           <p class="text-[0.8125rem] font-semibold text-muted">DNS check · example</p>
           <dl class="mt-3 space-y-2 text-[0.8125rem] tabular">
             <div class="flex justify-between gap-6"><dt class="text-muted">A</dt><dd class="font-mono">203.0.113.24</dd></div>
@@ -97,7 +98,7 @@ const why = [
           <p class="mt-3 flex items-center gap-1.5 text-[0.8125rem] text-ok"><Icon name="CircleCheck" size={15} />Ready to switch</p>
         </div>
 
-        <div class="panel panel-migrate glass-panel hidden p-5 lg:block">
+        <div class="panel panel-migrate glass-panel hidden p-5 lg:block" style="--depth:26; --pd:2000ms">
           <p class="text-[0.8125rem] font-semibold text-muted">Free migration</p>
           <ul class="mt-3 space-y-2 text-[0.875rem]">
             {['Files copied', 'Databases imported', 'Mailboxes moved', 'SSL issued'].map((s) => (
@@ -106,17 +107,17 @@ const why = [
           </ul>
         </div>
       </div>
-      <p class="mt-4 text-center text-[0.75rem] text-muted">Illustration. Plan details from current draft pricing; DNS values are examples.</p>
+      <p class="mt-4 text-center text-[0.75rem] text-muted">Illustration, rendered in 3D where supported. Plan details from current draft pricing; DNS values are examples.</p>
     </div>
   </section>
 
   <!-- Product lines -->
   <section class="container-x pt-28 sm:pt-36" aria-labelledby="lines-h">
-    <h2 id="lines-h" class="display-lg reveal max-w-3xl">Pick the hosting that fits.</h2>
+    <h2 id="lines-h" class="display-lg max-w-3xl" data-split>Pick the hosting that fits.</h2>
     <p class="lead reveal mt-4 max-w-2xl">Start small, move up when you need to. Every plan lists what it includes and what it renews at.</p>
 
-    <div class="bento mt-12 grid gap-4 md:grid-cols-6">
-      <a href="/hosting/web" class="tile reveal group flex flex-col justify-between p-8 md:col-span-4 md:row-span-2 md:p-10">
+    <div class="bento mt-12 grid gap-4 md:grid-cols-6" data-stagger>
+      <a href="/hosting/web" data-tilt="5" class="tile reveal group flex flex-col justify-between p-8 md:col-span-4 md:row-span-2 md:p-10">
         <div>
           <h3 class="display-md">Web hosting</h3>
           <p class="mt-3 max-w-md text-muted">For websites, blogs, portfolios, landing pages and small businesses. cPanel, SSL, email and backups included.</p>
@@ -126,7 +127,7 @@ const why = [
             {pricedWeb.map((p) => (
               <li class="rounded-2xl bg-surface p-4">
                 <p class="text-[0.8125rem] text-muted">{p.name}</p>
-                <p class="mt-1 text-[1.375rem] font-semibold tracking-tight">{formatPrice(p.price!.annual.promo)}</p>
+                <p class="mt-1 text-[1.375rem] font-semibold tracking-tight" data-count>{formatPrice(p.price!.annual.promo)}</p>
                 <p class="text-[0.75rem] text-muted">renews {formatPrice(p.price!.annual.renewal)}</p>
               </li>
             ))}
@@ -135,7 +136,7 @@ const why = [
         </div>
       </a>
 
-      <a href="/hosting/wordpress" class="tile reveal flex flex-col justify-between p-8 md:col-span-2">
+      <a href="/hosting/wordpress" data-tilt="5" class="tile reveal flex flex-col justify-between p-8 md:col-span-2">
         <div>
           <h3 class="title">Managed WordPress</h3>
           <p class="mt-2 text-[0.9375rem] text-muted">Installed, updated, backed up and cached for you.</p>
@@ -143,7 +144,7 @@ const why = [
         <p class="mt-8 flex items-baseline justify-between"><span class="tabular">From <strong class="font-semibold">{fromPrice('wordpress')}</strong>/mo</span><span class="link-more">Learn more</span></p>
       </a>
 
-      <a href="/email/business" class="tile reveal flex flex-col justify-between p-8 md:col-span-2">
+      <a href="/email/business" data-tilt="5" class="tile reveal flex flex-col justify-between p-8 md:col-span-2">
         <div>
           <h3 class="title">Business email</h3>
           <p class="mt-2 text-[0.9375rem] text-muted"><span class="font-mono text-[0.875rem] text-text">hello@yourcompany.com</span>, set up with SPF, DKIM and DMARC.</p>
@@ -151,7 +152,7 @@ const why = [
         <p class="mt-8 flex items-baseline justify-between"><span class="text-muted">Quoted per team</span><span class="link-more">Learn more</span></p>
       </a>
 
-      <a href="/hosting/vps" class="tile section-inverse reveal flex flex-col justify-between p-8 md:col-span-3 md:p-10">
+      <a href="/hosting/vps" data-tilt="5" class="tile section-inverse reveal flex flex-col justify-between p-8 md:col-span-3 md:p-10">
         <div>
           <h3 class="display-md">Cloud &amp; VPS</h3>
           <p class="mt-3 max-w-md text-inverse-muted">APIs, SaaS platforms, dashboards, PWAs, databases and AI systems, with NVMe storage, Docker and root access where available.</p>
@@ -159,7 +160,7 @@ const why = [
         <p class="mt-10 flex items-baseline justify-between"><span class="tabular text-[#f5f5f7]">From <strong class="font-semibold">{fromPrice('apps')}</strong>/mo managed</span><span class="link-more !text-[#2997ff]">Learn more</span></p>
       </a>
 
-      <div class="tile reveal flex flex-col justify-between p-8 md:col-span-3 md:p-10">
+      <div data-tilt="5" class="tile reveal flex flex-col justify-between p-8 md:col-span-3 md:p-10">
         <div>
           <h3 class="display-md">Domains</h3>
           <p class="mt-3 text-muted">Find a name, register it, and connect it to everything else in one account.</p>
@@ -172,7 +173,7 @@ const why = [
         </form>
       </div>
 
-      <a href="/agencies" class="tile reveal flex flex-col justify-between p-8 md:col-span-3">
+      <a href="/agencies" data-tilt="5" class="tile reveal flex flex-col justify-between p-8 md:col-span-3">
         <div>
           <h3 class="title">For agencies</h3>
           <p class="mt-2 text-[0.9375rem] text-muted">Reseller hosting, a white-label client area and Inventomo builds for your clients.</p>
@@ -180,7 +181,7 @@ const why = [
         <p class="mt-8 flex items-baseline justify-between"><span class="tabular">From <strong class="font-semibold">{fromPrice('agency')}</strong>/mo</span><span class="link-more">Learn more</span></p>
       </a>
 
-      <a href="/hosting/game-servers" class="tile reveal flex flex-col justify-between p-8 md:col-span-3">
+      <a href="/hosting/game-servers" data-tilt="5" class="tile reveal flex flex-col justify-between p-8 md:col-span-3">
         <div>
           <h3 class="title">Game servers</h3>
           <p class="mt-2 text-[0.9375rem] text-muted">Configurable resources, a game panel and backups, on a cluster separate from web hosting.</p>
@@ -194,10 +195,10 @@ const why = [
   <!-- Honest renewal pricing -->
   <section class="section-inverse mt-28 sm:mt-36" aria-labelledby="renew-h">
     <div class="container-x py-24 sm:py-32">
-      <h2 id="renew-h" class="display-lg reveal max-w-4xl">The second year shouldn’t be a surprise.</h2>
+      <h2 id="renew-h" class="display-lg max-w-4xl" data-split>The second year shouldn’t be a surprise.</h2>
       <p class="lead reveal mt-5 max-w-2xl">Every Hosttiva plan shows the first-term price and the renewal price side by side. No asterisk, no small print.</p>
 
-      <div class="reveal mt-14 overflow-x-auto">
+      <div class="mt-14 overflow-x-auto">
         <table class="w-full min-w-[36rem] text-left tabular">
           <caption class="sr-only">Web hosting plans: first-year and renewal prices per month, billed annually</caption>
           <thead>
@@ -208,12 +209,12 @@ const why = [
               <th scope="col" class="pb-4 font-normal">Includes</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody data-stagger>
             {pricedWeb.map((p) => (
-              <tr class="border-t border-white/15 align-baseline">
+              <tr class="reveal border-t border-white/15 align-baseline">
                 <th scope="row" class="py-6 pr-6 text-[1.5rem] font-semibold tracking-tight">{p.name}</th>
-                <td class="py-6 pr-6 text-[clamp(1.75rem,4vw,3rem)] font-semibold tracking-tight">{formatPrice(p.price!.annual.promo)}</td>
-                <td class="py-6 pr-6 text-[clamp(1.75rem,4vw,3rem)] font-semibold tracking-tight text-[#2997ff]">{formatPrice(p.price!.annual.renewal)}</td>
+                <td class="py-6 pr-6 text-[clamp(1.75rem,4vw,3rem)] font-semibold tracking-tight"><span data-count>{formatPrice(p.price!.annual.promo)}</span></td>
+                <td class="py-6 pr-6 text-[clamp(1.75rem,4vw,3rem)] font-semibold tracking-tight text-[#2997ff]"><span data-count>{formatPrice(p.price!.annual.renewal)}</span></td>
                 <td class="py-6 text-[0.9375rem] text-inverse-muted">{p.features.slice(0, 3).join(' · ')}</td>
               </tr>
             ))}
@@ -229,8 +230,8 @@ const why = [
 
   <!-- Why -->
   <section class="container-x py-28 sm:py-36" aria-labelledby="why-h">
-    <h2 id="why-h" class="display-lg reveal max-w-3xl">Infrastructure, and the people who build on it.</h2>
-    <dl class="mt-14 grid gap-x-12 sm:grid-cols-2 lg:grid-cols-3">
+    <h2 id="why-h" class="display-lg max-w-3xl" data-split>Infrastructure, and the people who build on it.</h2>
+    <dl class="mt-14 grid gap-x-12 sm:grid-cols-2 lg:grid-cols-3" data-stagger>
       {why.map((w) => (
         <div class="reveal border-t border-border py-7">
           <dt class="title">{w.t}</dt>
@@ -243,7 +244,7 @@ const why = [
   <!-- Free tools -->
   <section class="section-alt" aria-labelledby="tools-h">
     <div class="container-narrow py-24 text-center sm:py-32">
-      <h2 id="tools-h" class="display-md reveal">Check any domain. Free.</h2>
+      <h2 id="tools-h" class="display-md" data-split>Check any domain. Free.</h2>
       <p class="lead reveal mx-auto mt-4 max-w-xl">DNS records, registration details and certificates, without signing up.</p>
       <form id="tool-form" action="/domains/dns-checker" method="get" class="reveal tile-surface mx-auto mt-10 max-w-2xl p-3 text-left">
         <fieldset class="segmented mb-3 flex gap-1 rounded-full bg-raised p-1 text-[0.875rem]">
@@ -267,17 +268,17 @@ const why = [
   <section class="container-x py-28 sm:py-36" aria-labelledby="inv-h">
     <div class="grid gap-14 lg:grid-cols-[1.15fr_1fr] lg:items-end">
       <div>
-        <h2 id="inv-h" class="display-lg reveal">Hosttiva hosts it.<br /><span class="text-muted">Inventomo builds it.</span></h2>
+        <h2 id="inv-h" class="display-lg" data-split>Hosttiva hosts it.<br /><span class="text-muted">Inventomo builds it.</span></h2>
         <p class="lead reveal mt-6 max-w-xl">
           Hosttiva is the hosting and cloud division of Inventomo. Inventomo can design your website, build your application,
           connect AI tools, migrate your systems and keep supporting them.
         </p>
         <a href="/solutions/inventomo-web-solutions" class="btn btn-primary reveal mt-8">Explore Inventomo Web Solutions</a>
       </div>
-      <nav aria-label="Everything in one account" class="reveal">
-        <ul class="divide-y divide-border border-y border-border">
+      <nav aria-label="Everything in one account">
+        <ul class="divide-y divide-border border-y border-border" data-stagger>
           {ECOSYSTEM.map((e) => (
-            <li><a href={e.href} class="flex items-center justify-between py-3.5 text-[1.3125rem] font-semibold tracking-tight hover:text-link">{e.name}<Icon name="ChevronRight" size={18} class="text-muted" /></a></li>
+            <li class="reveal"><a href={e.href} class="flex items-center justify-between py-3.5 text-[1.3125rem] font-semibold tracking-tight hover:text-link">{e.name}<Icon name="ChevronRight" size={18} class="text-muted" /></a></li>
           ))}
         </ul>
       </nav>
@@ -318,7 +319,15 @@ const why = [
     overflow: hidden;
     box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.06);
   }
-  .rack { margin-bottom: -2px; }
+  .rack { margin-bottom: -2px; transition: opacity 600ms var(--ease-out); }
+  .rack3d { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; transition: opacity 900ms var(--ease-out); }
+  .stage.is-3d .rack3d { opacity: 1; }
+  .stage.is-3d .rack { opacity: 0; }
+
+  /* Glass panels arrive after the rack has seated, then drift with the pointer at their own depth */
+  .panel { --tx: 0px; --ty: 0px; translate: calc(var(--px, 0) * var(--depth, 10) * 1px) calc(var(--py, 0) * var(--depth, 10) * 1px); transition: translate 600ms var(--ease-out); }
+  .motion .panel { animation: panel-in 900ms var(--ease-out) var(--pd, 1200ms) both; }
+  @keyframes panel-in { from { opacity: 0; filter: blur(10px); scale: 0.94; } }
   .led { animation: led 3.2s ease-in-out infinite; animation-delay: calc(var(--i) * -0.7s); }
   .led-b { animation-duration: 4.6s; }
   @keyframes led { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
@@ -333,11 +342,11 @@ const why = [
     .panel-migrate { right: 7%; bottom: 10%; width: 15rem; }
   }
   @media (max-width: 767px) {
-    .stage { padding-bottom: 15rem; }
+    .stage { padding-bottom: 19rem; }
+    .rack3d { height: calc(100% - 18.5rem); }
+    .panel-plan { bottom: 1.25rem; }
   }
 
-  .bento .tile { transition: transform 400ms var(--ease-out), box-shadow 400ms var(--ease-out); }
-  .bento a.tile:hover { transform: translateY(-3px); box-shadow: var(--shadow-float); }
 
   .segmented label:has(input:checked) { background: var(--surface); box-shadow: 0 1px 4px rgb(0 0 0 / 0.12); font-weight: 600; }
   .segmented label:has(input:focus-visible) { outline: 3px solid color-mix(in srgb, var(--accent) 70%, transparent); }
@@ -354,4 +363,36 @@ const why = [
     form.onsubmit = () => { form.querySelectorAll<HTMLInputElement>('input[name="tool"]').forEach((r) => (r.disabled = true)); };
   }
   document.addEventListener('astro:page-load', initToolForm);
+
+  // Hero: load the 3D rack only when WebGL exists and the stage is near the viewport.
+  let disposeRack: (() => void) | undefined;
+  function initHero() {
+    const stage = document.getElementById('hero-stage');
+    const canvas = stage?.querySelector<HTMLCanvasElement>('canvas.rack3d');
+    if (!stage || !canvas) return;
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const gl = (() => { try { return !!document.createElement('canvas').getContext('webgl2'); } catch { return false; } })();
+
+    if (gl) {
+      const io = new IntersectionObserver(async ([e]) => {
+        if (!e.isIntersecting) return;
+        io.disconnect();
+        const { mountRack } = await import('../lib/rack3d');
+        disposeRack = mountRack(canvas, { reducedMotion: reduced, onReady: () => stage.classList.add('is-3d') });
+      }, { rootMargin: '200px' });
+      io.observe(stage);
+    }
+
+    // Glass panels drift with the pointer at different depths.
+    if (!reduced && matchMedia('(hover: hover) and (pointer: fine)').matches) {
+      stage.addEventListener('pointermove', (ev) => {
+        const r = stage.getBoundingClientRect();
+        stage.style.setProperty('--px', (((ev.clientX - r.left) / r.width) * 2 - 1).toFixed(3));
+        stage.style.setProperty('--py', (((ev.clientY - r.top) / r.height) * 2 - 1).toFixed(3));
+      });
+      stage.addEventListener('pointerleave', () => { stage.style.setProperty('--px', '0'); stage.style.setProperty('--py', '0'); });
+    }
+  }
+  document.addEventListener('astro:page-load', initHero);
+  document.addEventListener('astro:before-swap', () => { disposeRack?.(); disposeRack = undefined; });
 </script>

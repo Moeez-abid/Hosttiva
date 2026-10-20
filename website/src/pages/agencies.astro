@@ -22,8 +22,8 @@ const faqs = CATEGORY_FAQS.agencies ?? [];
   <section>
     <div class="container-x pb-16 pt-10 sm:pb-20 sm:pt-14">
       <Breadcrumbs items={crumbs} />
-      <h1 class="display-lg mt-8 max-w-4xl">Grow your agency with Hosttiva</h1>
-      <p class="lead mt-5 max-w-2xl">
+      <h1 class="display-lg mt-8 max-w-4xl" data-split="now">Grow your agency with Hosttiva</h1>
+      <p class="lead enter mt-5 max-w-2xl" style="--d:320ms">
         Manage client websites, sell hosting, earn referral rewards, join our partner network, or ask Inventomo to build
         a custom digital solution for your business.
       </p>
@@ -37,10 +37,10 @@ const faqs = CATEGORY_FAQS.agencies ?? [];
 
   <div class="container-x space-y-20 py-16">
     <section aria-labelledby="tools-h">
-      <h2 id="tools-h" class="display-md">Everything in the agency toolkit</h2>
-      <ul class="mt-6 divide-y divide-border border-y border-border">
+      <h2 id="tools-h" class="display-md" data-split>Everything in the agency toolkit</h2>
+      <ul class="mt-6 divide-y divide-border border-y border-border" data-stagger>
         {items.map((p) => (
-          <li>
+          <li class="reveal">
             <a href={`/${p.slug}`} class="group grid items-center gap-4 py-5 sm:grid-cols-[2rem_14rem_1fr_auto]">
               <span class="text-link"><Icon name={p.icon} size={20} /></span>
               <span class="font-medium">{p.name}</span>

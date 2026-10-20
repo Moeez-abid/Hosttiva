@@ -10,15 +10,15 @@ const terms: Term[] = ['annual', 'monthly'];
 <section data-pagefind-ignore class="plan-group scroll-mt-32" id={`plans-${group.id}`} aria-labelledby={`plans-${group.id}-h`}>
   <div class="flex flex-wrap items-end justify-between gap-4">
     <div>
-      <H id={`plans-${group.id}-h`} class="display-md">{group.name}</H>
+      <H id={`plans-${group.id}-h`} class="display-md" data-split>{group.name}</H>
       <p class="mt-2 text-[1.0625rem] text-muted">{group.intro}</p>
     </div>
     {PRICES_ARE_PLACEHOLDERS && <span class="badge badge-warn" title="Prices are drafts and will change before launch">Draft prices</span>}
   </div>
 
-  <ul class="plans mt-10 grid snap-x snap-mandatory auto-cols-[78%] grid-flow-col gap-4 overflow-x-auto pb-2 sm:auto-cols-[45%] lg:grid-flow-row lg:grid-cols-4 lg:overflow-visible">
+  <ul data-stagger class="plans mt-10 grid snap-x snap-mandatory auto-cols-[78%] grid-flow-col gap-4 overflow-x-auto pb-2 sm:auto-cols-[45%] lg:grid-flow-row lg:grid-cols-4 lg:overflow-visible">
     {group.plans.map((plan) => (
-      <li class:list={['plan flex snap-start flex-col rounded-[var(--radius-xl)] p-7', plan.featured ? 'plan-featured bg-raised' : 'bg-transparent']}>
+      <li class:list={['plan reveal flex snap-start flex-col rounded-[var(--radius-xl)] p-7', plan.featured ? 'plan-featured bg-raised' : 'bg-transparent']}>
         <div class="flex min-h-7 items-center gap-2">
           <h3 class="title !text-[1.5rem]">{plan.name}</h3>
           {plan.featured && <span class="badge badge-accent">Popular</span>}

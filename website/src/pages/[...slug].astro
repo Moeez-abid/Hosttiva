@@ -51,11 +51,11 @@ const clip = (s: string, n = 158) => (s.length <= n ? s : s.slice(0, s.lastIndex
       <section class="pt-10 sm:pt-14">
         <div class="container-x"><Breadcrumbs items={crumbs} /></div>
         <div class="container-narrow pb-16 pt-10 text-center sm:pb-20 sm:pt-16">
-          <span class="mx-auto mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-raised text-link"><Icon name={p.icon} size={26} /></span>
-          <h1 class="display-lg">{p.name}</h1>
-          <p class="title mx-auto mt-4 max-w-2xl !font-medium">{p.headline}</p>
-          <p class="lead mx-auto mt-4 max-w-2xl">{p.summary}</p>
-          <div class="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-3">
+          <span class="icon-3d mx-auto mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-raised text-link"><Icon name={p.icon} size={26} /></span>
+          <h1 class="display-lg" data-split="now">{p.name}</h1>
+          <p class="title enter mx-auto mt-4 max-w-2xl !font-medium" style="--d:260ms">{p.headline}</p>
+          <p class="lead enter mx-auto mt-4 max-w-2xl" style="--d:380ms">{p.summary}</p>
+          <div class="enter mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-3" style="--d:500ms">
             {soon && <span class="badge badge-warn">Coming soon</span>}
             {group && <a href={`#plans-${group.id}`} class="btn btn-primary">See plans</a>}
             {p.status === 'enquiry' && <a href={LINKS.enquiry(p.name)} class="btn btn-primary">Request a quote</a>}
@@ -64,7 +64,7 @@ const clip = (s: string, n = 158) => (s.length <= n ? s : s.slice(0, s.lastIndex
           </div>
 
           {domainForm && (
-            <form action={domainForm === 'register' ? LINKS.domainSearch.split('?')[0] : LINKS.domainTransfer.split('?')[0]} method="get" class="tile-surface mx-auto mt-12 max-w-xl p-3 text-left" role="search">
+            <form action={domainForm === 'register' ? LINKS.domainSearch.split('?')[0] : LINKS.domainTransfer.split('?')[0]} method="get" class="tile-surface enter mx-auto mt-12 max-w-xl p-3 text-left" style="--d:620ms" role="search">
               <input type="hidden" name="a" value="add" />
               <input type="hidden" name="domain" value={domainForm} />
               <label for="domain-q" class="sr-only">{domainForm === 'register' ? 'Domain to check' : 'Domain to transfer'}</label>
@@ -78,7 +78,7 @@ const clip = (s: string, n = 158) => (s.length <= n ? s : s.slice(0, s.lastIndex
           )}
         </div>
         {p.tool && (
-          <div class="container-x pb-16">
+          <div class="container-x enter pb-16" style="--d:500ms">
             {p.tool === 'dns' && <DnsTool />}
             {p.tool === 'whois' && <WhoisTool />}
             {p.tool === 'generator' && <DomainGenerator />}
@@ -101,8 +101,8 @@ const clip = (s: string, n = 158) => (s.length <= n ? s : s.slice(0, s.lastIndex
           <div class="container-x py-20 sm:py-28">
             {p.features?.length && (
               <>
-                <h2 class="display-md reveal">{soon ? 'Planned features' : 'What you get'}</h2>
-                <ul class="mt-10 grid gap-x-10 gap-y-5 sm:grid-cols-2 lg:grid-cols-3">
+                <h2 class="display-md" data-split>{soon ? 'Planned features' : 'What you get'}</h2>
+                <ul class="mt-10 grid gap-x-10 gap-y-5 sm:grid-cols-2 lg:grid-cols-3" data-stagger>
                   {p.features.map((f) => (
                     <li class="reveal flex items-start gap-3 text-[1.0625rem]"><Icon name="CircleCheck" size={20} class="mt-0.5 shrink-0 text-link" />{f}</li>
                   ))}
@@ -133,11 +133,11 @@ const clip = (s: string, n = 158) => (s.length <= n ? s : s.slice(0, s.lastIndex
 
         {related.length > 0 && (
           <section aria-labelledby="rel-h">
-            <h2 id="rel-h" class="display-md">Related</h2>
-            <ul class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <h2 id="rel-h" class="display-md" data-split>Related</h2>
+            <ul class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3" data-stagger>
               {related.map((r) => (
-                <li>
-                  <a href={`/${r.slug}`} class="tile group flex h-full flex-col p-7 transition-transform duration-300 hover:-translate-y-0.5">
+                <li class="reveal">
+                  <a href={`/${r.slug}`} data-tilt="6" class="tile group flex h-full flex-col p-7">
                     <span class="text-link"><Icon name={r.icon} size={22} /></span>
                     <span class="title mt-4 flex items-center gap-2 !text-[1.3125rem]">{r.name}{r.status === 'coming-soon' && <span class="badge">Soon</span>}</span>
                     <span class="mt-1.5 flex-1 text-[0.9375rem] text-muted">{r.headline}</span>
@@ -157,7 +157,7 @@ const clip = (s: string, n = 158) => (s.length <= n ? s : s.slice(0, s.lastIndex
       <div class="container-x"><Breadcrumbs items={[{ name: 'Home', path: '/' }, { name: planned.title, path: `/${planned.slug}` }]} /></div>
       <div class="container-narrow py-24 text-center sm:py-32">
         <span class="badge">Coming soon</span>
-        <h1 class="display-lg mt-5">{planned.title}</h1>
+        <h1 class="display-lg mt-5" data-split="now">{planned.title}</h1>
         <p class="lead mx-auto mt-5 max-w-2xl">{planned.blurb}</p>
         <p class="mx-auto mt-5 max-w-xl text-[0.9375rem] text-muted">This page is being prepared and is not published yet. If you need something now, contact the team and a person will reply.</p>
         <div class="mt-9 flex flex-wrap items-center justify-center gap-x-6 gap-y-3">

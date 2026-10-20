@@ -27,8 +27,8 @@ const fmt = (x: Date) => x.toLocaleDateString('en-GB', { day: 'numeric', month: 
   <article class="container-x pb-20 pt-10 sm:pt-14">
     <Breadcrumbs items={crumbs} />
     <header class="mt-10 max-w-3xl">
-      <h1 class="display-lg max-w-4xl">{d.title}</h1>
-      <p class="lead mt-5">{d.description}</p>
+      <h1 class="display-lg max-w-4xl" data-split="now">{d.title}</h1>
+      <p class="lead enter mt-5" style="--d:320ms">{d.description}</p>
       <p class="spec mt-6">
         <a href={`/blog/category/${d.category}`} class="link">{section}</a> · {d.author} · <time datetime={d.pubDate.toISOString()}>{fmt(d.pubDate)}</time> · {minutes} min read
         {d.updatedDate && <> · updated <time datetime={d.updatedDate.toISOString()}>{fmt(d.updatedDate)}</time></>}

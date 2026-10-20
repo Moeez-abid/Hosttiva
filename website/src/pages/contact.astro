@@ -16,12 +16,12 @@ const routes = [
 <Base title="Contact" description="Need help choosing a plan or moving your website? Contact the Hosttiva by Inventomo team." schema={[breadcrumbs(crumbs)]}>
   <section class="container-x py-16 sm:py-20">
     <Breadcrumbs items={crumbs} />
-    <h1 class="display-lg mt-8">Contact</h1>
-    <p class="lead mt-5 max-w-2xl">Need help choosing a plan or moving your website? We’re here to help.</p>
+    <h1 class="display-lg mt-8" data-split="now">Contact</h1>
+    <p class="lead enter mt-5 max-w-2xl" style="--d:320ms">Need help choosing a plan or moving your website? We’re here to help.</p>
 
-    <ul class="mt-12 divide-y divide-border border-y border-border">
+    <ul class="mt-12 divide-y divide-border border-y border-border" data-stagger>
       {routes.map((r) => (
-        <li class="grid items-center gap-4 py-6 sm:grid-cols-[2.5rem_1fr_auto]">
+        <li class="reveal grid items-center gap-4 py-6 sm:grid-cols-[2.5rem_1fr_auto]">
           <span class="text-link"><Icon name={r.icon} size={22} /></span>
           <div>
             <h2 class="text-lg font-medium">{r.title}</h2>

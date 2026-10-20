@@ -4,8 +4,8 @@ import { LINKS } from '../config/site';
 interface Props { subject: string; comingSoon?: boolean }
 const { subject, comingSoon = false } = Astro.props;
 ---
-<div class="tile mx-auto max-w-[61.25rem] px-8 py-14 text-center sm:px-14 sm:py-16">
-  <h2 class="display-md">{comingSoon ? 'Want to know when this launches?' : 'Get a quote for your setup.'}</h2>
+<div class="tile reveal mx-auto max-w-[61.25rem] px-8 py-14 text-center sm:px-14 sm:py-16">
+  <h2 class="display-md" data-split>{comingSoon ? 'Want to know when this launches?' : 'Get a quote for your setup.'}</h2>
   <p class="lead mx-auto mt-4 max-w-xl !text-[1.1875rem]">
     {comingSoon
       ? 'Send a short note about what you need. We will reply when it is available, with confirmed pricing and limits.'
