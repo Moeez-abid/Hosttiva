@@ -12,7 +12,7 @@ const released = ROADMAP.filter((r) => r.status === 'released').sort((a, b) => (
 const board = ROADMAP_STATUSES.filter((s) => s.id !== 'released');
 ---
 <Base title="Product Updates and Roadmap" description="Follow the latest Hosttiva releases, improvements, maintenance notices, and upcoming features." schema={[breadcrumbs(crumbs)]}>
-  <section>
+  <section class="grid-backdrop">
     <div class="container-x pb-16 pt-10 sm:pb-20 sm:pt-14">
       <Breadcrumbs items={crumbs} />
       <h1 class="display-lg mt-8 max-w-4xl" data-split="now">What shipped, and what is next</h1>

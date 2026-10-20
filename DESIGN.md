@@ -4,19 +4,19 @@ The visual system of the Hosttiva site, recorded from the built world (2026-10-2
 `website/src/styles/tokens.css`; component classes in `website/src/styles/global.css`.
 
 ## Direction
-Apple design language, pinned by the owner. Hosting is presented like Apple presents hardware: one idea per
-section, very large plain type, real numbers (first-term and renewal price) as the visual object, and quiet
-neutral grounds so the single accent means "act here". The refused default is the dark hosting dashboard with a
-neon accent and grid backgrounds.
+Apple structure and typography with a Vercel/Linear finish (owner's choice, 2026-10-21). One idea per section,
+very large plain type, real numbers as the visual object; surfaces are monochrome with hairline borders, faint
+engineering grid detail and a cursor spotlight on borders. The refused defaults: neon accents, colour glows,
+purple/blue gradients, grid-of-identical-cards pages.
 
 ## Color
-- Strategy: Restrained. Neutrals plus one accent.
-- Light: grounds `#ffffff` and `#f5f5f7`, ink `#1d1d1f`, secondary `#6e6e73`, hairlines `#d2d2d7`.
-- Dark (OS preference or toggle): `#000000` / `#161617` / `#1d1d1f`, ink `#f5f5f7`, secondary `#a1a1a6`, hairlines `#333336`.
-- Accent: Apple system blue `#0071e3` for filled buttons (white text 4.7:1), hover `#0062c4`. Text links use
-  `--link` (`#0066cc` light, `#2997ff` dark). Never use the accent as a large field or a gradient.
-- Status: ok `#1a7f37`/`#30d158`, warn `#b25000`/`#ff9f0a`, danger `#d70015`/`#ff453a`. All text tokens pass WCAG AA.
-- Inverse sections (`.section-inverse`): black in light mode, `#161617` in dark; used once or twice per page for emphasis.
+- Strategy: Restrained. Monochrome plus one accent.
+- Light: `#ffffff` / `#fafafa` / `#f5f5f5`, ink `#171717`, secondary `#666666`, borders `#eaeaea` / `#d4d4d4`.
+- Dark: `#0a0a0a` / `#111111` / `#161616`, ink `#ededed`, secondary `#a1a1a1`, borders `#232323` / `#333333`.
+- Accent: system blue `#0071e3` for filled buttons (white text 4.7:1), hover `#0062c4`; links `--link`
+  (`#0066cc` light, `#3b9eff` dark). Never a large field or gradient.
+- Status: ok `#1a7f37`/`#3ccf6e`, warn `#b25000`/`#ffb224`, danger `#d70015`/`#ff5c5c`. All text pairs pass WCAG AA.
+- Inverse sections (`.section-inverse`): `#0a0a0a` light mode, `#111111` dark.
 
 ## Typography
 - SF Pro (system) on Apple devices; Inter Variable with optical sizing, self-hosted, everywhere else. System mono only for code and data values.
@@ -26,15 +26,17 @@ neon accent and grid backgrounds.
 - Small labels (`.label`) only for form fields, column titles and metadata.
 
 ## Shape, depth, material
-- Radii: 8 / 12 / 18 / 28px; buttons and badges are pills (980px).
-- Tiles (`.tile`, `.tile-surface`): filled `#f5f5f7` / surface panels, no borders, generous padding.
+- Radii: 6 / 10 / 14 / 20px. Buttons 10px (small 8px); badges are pills with a hairline inset border.
+- Tiles (`.tile`, `.tile-surface`): 1px `--border`, inset top highlight, and a border spotlight that follows the
+  cursor (`--mx/--my`, set by motion.ts). `.grid-backdrop` adds a faint 56px grid fading from the top of a section.
 - Glass (`.glass`, `.glass-panel`): only for chrome and panels that float over content: the sticky nav,
   flyouts, the mobile sheet, the page scrim behind an open flyout, and hero panels over the rack illustration.
   `saturate(180%) blur(20px)` with a hairline border; opaque fallback without backdrop-filter.
 - Shadows: `--shadow-float` for floating glass and hovered tiles only.
 
 ## Components
-- Buttons: `.btn-primary` (blue pill), `.btn-secondary` (blue outline pill), `.btn-quiet` (neutral pill), `.btn-sm`.
+- Buttons: `.btn-primary` (blue, inset highlight), `.btn-secondary` (neutral surface + hairline border, Vercel-style),
+  `.btn-quiet` (neutral fill), `.btn-sm`.
   Secondary actions are usually `.link-more` text links with a chevron.
 - Header: 52px glass bar, centred nav, flyouts with a large "Explore" column; page behind is blurred.
 - Plan comparison (`PlanTable`): one column per plan, large price, "Renews at" directly beneath, features below;

@@ -10,7 +10,7 @@ const published = TRUST_TOPICS.filter((t) => t.status === 'published');
 const pending = TRUST_TOPICS.filter((t) => t.status === 'pending');
 ---
 <Base title="Trust Center" description="Security, backups, responsible disclosure and email compliance at Hosttiva, plus what we will publish about infrastructure, privacy and incident response." schema={[breadcrumbs(crumbs)]}>
-  <section>
+  <section class="grid-backdrop">
     <div class="container-x pb-16 pt-10 sm:pb-20 sm:pt-14">
       <Breadcrumbs items={crumbs} />
       <h1 class="display-lg mt-8 max-w-4xl" data-split="now">What we can show you today, and what comes next</h1>

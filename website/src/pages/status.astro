@@ -17,7 +17,7 @@ const fmt = (iso: string) =>
 const impactLabel = { minor: 'Minor', major: 'Major', outage: 'Outage' } as const;
 ---
 <Base title="Status" description="Live status, scheduled maintenance and incident history for Hosttiva hosting, email, DNS, API and client area." schema={[breadcrumbs(crumbs)]}>
-  <section class="pt-10 sm:pt-14">
+  <section class="grid-backdrop pt-10 sm:pt-14">
     <div class="container-x"><Breadcrumbs items={crumbs} /></div>
     <div class="container-narrow pb-16 pt-12 text-center sm:pb-20 sm:pt-16">
       <h1 class="display-lg" data-split="now">Service status</h1>

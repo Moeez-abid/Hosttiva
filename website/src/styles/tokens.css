@@ -1,47 +1,50 @@
 /*
  * Hosttiva design tokens — the ONLY place colour, type, radius, material and motion values live.
- * Language: Apple-style. Neutral grounds, one accent (system blue), SF Pro where available,
- * glass only on surfaces that float over content (nav, overlays, floating panels).
+ * Language: Apple structure and type, Vercel/Linear finish. Monochrome grounds with hairline borders,
+ * one accent (system blue), faint grid detail, glass only on floating chrome. No colour glows.
  * Theme follows the OS; [data-theme] set by the toggle wins. Names are stable for the Lagom client area.
  */
 :root {
-  /* Accent — Apple system blue */
+  /* Accent — system blue */
   --accent: #0071e3;
-  --accent-strong: #0062c4; /* hover — darker keeps AA with white text */
+  --accent-strong: #0062c4; /* hover — keeps AA with white text */
   --accent-ink: #ffffff;
-  --accent-soft: rgb(0 113 227 / 0.1);
+  --accent-soft: rgb(0 113 227 / 0.08);
   --link: #0066cc;
 
   /* Grounds */
   --bg: #ffffff;
-  --bg-raised: #f5f5f7; /* alternate section / tile */
-  --bg-sunken: #f5f5f7;
-  --surface: #ffffff; /* tile on an alternate section */
-  --inverse-bg: #000000; /* full-bleed dark sections in light mode */
-  --inverse-text: #f5f5f7;
-  --inverse-muted: #a1a1a6;
+  --bg-raised: #fafafa;
+  --bg-sunken: #f5f5f5;
+  --surface: #ffffff;
+  --inverse-bg: #0a0a0a;
+  --inverse-text: #ededed;
+  --inverse-muted: #a1a1a1;
 
   /* Lines */
-  --border: #d2d2d7;
-  --border-strong: #b0b0b5;
+  --border: #eaeaea;
+  --border-strong: #d4d4d4;
+  --grid-line: rgb(0 0 0 / 0.045);
 
   /* Text */
-  --text: #1d1d1f;
-  --text-muted: #6e6e73;
-  --text-faint: #6e6e73; /* same as muted: Apple uses two text levels; keeps AA everywhere */
+  --text: #171717;
+  --text-muted: #666666;
+  --text-faint: #666666;
 
   /* Status */
   --ok: #1a7f37;
   --warn: #b25000;
   --danger: #d70015;
 
-  /* Material — glass for floating chrome only */
-  --glass-bg: rgb(255 255 255 / 0.72);
-  --glass-strong: rgb(255 255 255 / 0.86);
+  /* Material */
+  --glass-bg: rgb(255 255 255 / 0.75);
+  --glass-strong: rgb(255 255 255 / 0.88);
   --glass-border: rgb(0 0 0 / 0.08);
   --glass-blur: saturate(180%) blur(20px);
-  --shadow-float: 0 18px 50px -12px rgb(0 0 0 / 0.18), 0 2px 6px rgb(0 0 0 / 0.06);
-  --shadow-tile: 0 2px 12px rgb(0 0 0 / 0.04);
+  --highlight: rgb(255 255 255 / 0.9); /* top-edge light on tiles */
+  --spotlight: rgb(0 0 0 / 0.07);     /* cursor spotlight on borders */
+  --shadow-float: 0 20px 50px -16px rgb(0 0 0 / 0.16), 0 2px 6px rgb(0 0 0 / 0.05);
+  --shadow-tile: 0 1px 2px rgb(0 0 0 / 0.04);
 
   /* Type */
   --font-sans: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Inter Variable', 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -49,18 +52,18 @@
   --font-mono: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, monospace;
 
   /* Shape & layout */
-  --radius-sm: 8px;
-  --radius: 12px;
-  --radius-lg: 18px;
-  --radius-xl: 28px;
+  --radius-sm: 6px;
+  --radius: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
   --radius-pill: 980px;
   --container: 80rem;
-  --header-h: 3.25rem;
+  --header-h: 3.5rem;
 
   /* Motion */
   --ease: cubic-bezier(0.25, 0.1, 0.25, 1);
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-  --dur: 240ms;
+  --dur: 200ms;
 
   color-scheme: light;
 }
@@ -68,53 +71,55 @@
 /* Dark palette — applied by OS preference unless the toggle chose light, or by the toggle */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) {
-    --accent: #0071e3;
-    --accent-strong: #0062c4;
-    --accent-soft: rgb(10 132 255 / 0.16);
-    --link: #2997ff;
-    --bg: #000000;
-    --bg-raised: #161617;
-    --bg-sunken: #0b0b0c;
-    --surface: #1d1d1f;
-    --inverse-bg: #161617;
-    --border: #333336;
-    --border-strong: #48484c;
-    --text: #f5f5f7;
-    --text-muted: #a1a1a6;
-    --text-faint: #a1a1a6;
-    --ok: #30d158;
-    --warn: #ff9f0a;
-    --danger: #ff453a;
-    --glass-bg: rgb(22 22 23 / 0.72);
-    --glass-strong: rgb(29 29 31 / 0.86);
-    --glass-border: rgb(255 255 255 / 0.1);
-    --shadow-float: 0 18px 50px -12px rgb(0 0 0 / 0.7), 0 2px 6px rgb(0 0 0 / 0.4);
+    --accent-soft: rgb(59 158 255 / 0.12);
+    --link: #3b9eff;
+    --bg: #0a0a0a;
+    --bg-raised: #111111;
+    --bg-sunken: #0d0d0d;
+    --surface: #161616;
+    --inverse-bg: #111111;
+    --border: #232323;
+    --border-strong: #333333;
+    --grid-line: rgb(255 255 255 / 0.045);
+    --text: #ededed;
+    --text-muted: #a1a1a1;
+    --text-faint: #a1a1a1;
+    --ok: #3ccf6e;
+    --warn: #ffb224;
+    --danger: #ff5c5c;
+    --glass-bg: rgb(10 10 10 / 0.7);
+    --glass-strong: rgb(17 17 17 / 0.86);
+    --glass-border: rgb(255 255 255 / 0.08);
+    --highlight: rgb(255 255 255 / 0.06);
+    --spotlight: rgb(255 255 255 / 0.1);
+    --shadow-float: 0 20px 50px -16px rgb(0 0 0 / 0.8), 0 0 0 1px rgb(255 255 255 / 0.04);
     --shadow-tile: none;
     color-scheme: dark;
   }
 }
 :root[data-theme='dark'] {
-  --accent: #0071e3;
-  --accent-strong: #0062c4;
-  --accent-soft: rgb(10 132 255 / 0.16);
-  --link: #2997ff;
-  --bg: #000000;
-  --bg-raised: #161617;
-  --bg-sunken: #0b0b0c;
-  --surface: #1d1d1f;
-  --inverse-bg: #161617;
-  --border: #333336;
-  --border-strong: #48484c;
-  --text: #f5f5f7;
-  --text-muted: #a1a1a6;
-  --text-faint: #a1a1a6;
-  --ok: #30d158;
-  --warn: #ff9f0a;
-  --danger: #ff453a;
-  --glass-bg: rgb(22 22 23 / 0.72);
-  --glass-strong: rgb(29 29 31 / 0.86);
-  --glass-border: rgb(255 255 255 / 0.1);
-  --shadow-float: 0 18px 50px -12px rgb(0 0 0 / 0.7), 0 2px 6px rgb(0 0 0 / 0.4);
+  --accent-soft: rgb(59 158 255 / 0.12);
+  --link: #3b9eff;
+  --bg: #0a0a0a;
+  --bg-raised: #111111;
+  --bg-sunken: #0d0d0d;
+  --surface: #161616;
+  --inverse-bg: #111111;
+  --border: #232323;
+  --border-strong: #333333;
+  --grid-line: rgb(255 255 255 / 0.045);
+  --text: #ededed;
+  --text-muted: #a1a1a1;
+  --text-faint: #a1a1a1;
+  --ok: #3ccf6e;
+  --warn: #ffb224;
+  --danger: #ff5c5c;
+  --glass-bg: rgb(10 10 10 / 0.7);
+  --glass-strong: rgb(17 17 17 / 0.86);
+  --glass-border: rgb(255 255 255 / 0.08);
+  --highlight: rgb(255 255 255 / 0.06);
+  --spotlight: rgb(255 255 255 / 0.1);
+  --shadow-float: 0 20px 50px -16px rgb(0 0 0 / 0.8), 0 0 0 1px rgb(255 255 255 / 0.04);
   --shadow-tile: none;
   color-scheme: dark;
 }

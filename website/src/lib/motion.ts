@@ -135,11 +135,26 @@ function counts() {
   }, '0px 0px -8% 0px');
 }
 
+// Border spotlight that follows the cursor across any .tile / .tile-surface (one delegated listener).
+let spotlightBound = false;
+function spotlight() {
+  if (spotlightBound || !matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+  spotlightBound = true;
+  document.addEventListener('pointermove', (e) => {
+    const el = (e.target as Element | null)?.closest<HTMLElement>('.tile, .tile-surface') ?? null;
+    if (!el) return;
+    const r = el.getBoundingClientRect();
+    el.style.setProperty('--mx', `${e.clientX - r.left}px`);
+    el.style.setProperty('--my', `${e.clientY - r.top}px`);
+  }, { passive: true });
+}
+
 export function initMotion() {
   cleanups.forEach((c) => c());
   cleanups = [];
   const html = document.documentElement;
   (window as unknown as { __motion: boolean }).__motion = true;
+  spotlight();
   if (!html.classList.contains('motion')) return; // reduced motion: everything stays static and visible
   staggers();
   splits();
