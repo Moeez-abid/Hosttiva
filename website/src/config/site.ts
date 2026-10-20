@@ -19,6 +19,19 @@ export const SITE = {
 } as const;
 
 /**
+ * Monitoring (SRS §6). Each is off while null. Paste the value, push, done.
+ * - cfBeaconToken: Cloudflare dashboard → Analytics & Logs → Web Analytics → Add site → copy the token
+ *   (cookieless, no consent banner needed). Alternative: enable "automatic setup" on the Pages project instead.
+ * - googleSiteVerification / bingSiteVerification: the content="" value of each tool's HTML meta-tag method.
+ * GA4 and Microsoft Clarity set cookies: add them only after the cookie banner + privacy policy exist.
+ */
+export const MONITORING = {
+  cfBeaconToken: null as string | null,
+  googleSiteVerification: null as string | null,
+  bingSiteVerification: null as string | null,
+};
+
+/**
  * Live SSL check API (infra/ssl-check-api). null → the SSL checker falls back to
  * certificate-transparency logs (crt.sh). Set to e.g. 'https://tools.hosttiva.com/ssl' once deployed.
  */

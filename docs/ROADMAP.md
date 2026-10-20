@@ -54,7 +54,8 @@ Placeholder pages for Phase 2+ already exist in `website/src/data/pages.ts` (noi
 - [x] Per-page OG images (build-time, /og/*.png)
 - [ ] WebP/AVIF image pipeline
 - [ ] Performance budget: Lighthouse 95+, LCP < 2.5s, CLS < 0.1, INP < 200ms; WCAG 2.2 AA audit
-- [ ] Monitoring: Search Console, Bing Webmaster, privacy-friendly analytics, uptime checks
+- [x] Monitoring hooks in `site.ts` (Cloudflare Web Analytics, Google + Bing verification): paste IDs to enable
+- [ ] GA4 / Microsoft Clarity (after cookie banner + privacy policy), uptime and error monitoring
 - [x] Content Security Policy in `_headers`
 
 ## Phase 4: one-click deploy and conditional products
