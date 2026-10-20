@@ -1,0 +1,78 @@
+---
+// Customer Success (SRS §14). Every "available" item links to the plan feature, service or page that backs it.
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import { LINKS } from '../config/site';
+import { breadcrumbs } from '../lib/schema';
+
+const crumbs = [{ name: 'Home', path: '/' }, { name: 'Customer Success', path: '/customer-success' }];
+
+type Item = { title: string; icon: string; text: string; where: string; href: string; cta: string; planned?: boolean };
+const items: Item[] = [
+  { title: 'Migration team', icon: 'ArrowRightLeft', text: 'We move files, databases and mailboxes from your current host and check everything before DNS is switched.', where: 'Free on eligible plans', href: '/marketplace#care', cta: 'Plan a migration' },
+  { title: 'Onboarding', icon: 'Rocket', text: 'WordPress installation, deployment assistance on application plans, and launch packs that set up domain, hosting and email together.', where: 'WP plans · App plans · Website Launch Pack', href: '/marketplace#websites', cta: 'See launch services' },
+  { title: 'Priority support', icon: 'LifeBuoy', text: 'Faster handling for business-critical sites and applications.', where: 'Scale · WP Pro · Agency Pro (partner support)', href: '/pricing', cta: 'Compare plans' },
+  { title: 'Technical reviews', icon: 'SearchCheck', text: 'Architecture reviews for larger workloads and before/after performance reports from Inventomo engineers.', where: 'Custom Cloud · Speed Optimization', href: '/marketplace#care', cta: 'Request a review' },
+  { title: 'Tutorials', icon: 'ListChecks', text: 'Step-by-step guides for domains, SSL, email and more.', where: 'Free', href: '/tutorials', cta: 'Browse tutorials' },
+  { title: 'Guides and articles', icon: 'Newspaper', text: 'Longer explainers on hosting, VPS, email deliverability, RAG and agency hosting.', where: 'Free', href: '/blog', cta: 'Read the blog' },
+  { title: 'Knowledge Base', icon: 'BookOpen', text: 'Help articles for every Hosttiva service.', where: 'Planned', href: '/roadmap', cta: 'See roadmap', planned: true },
+  { title: 'Academy and video tutorials', icon: 'GraduationCap', text: 'Practical video guides and guided learning paths.', where: 'Planned', href: '/roadmap', cta: 'See roadmap', planned: true },
+  { title: 'Community', icon: 'Users', text: 'A place for customers and partners to share questions, feature requests and stories.', where: 'Planned', href: '/roadmap', cta: 'See roadmap', planned: true },
+];
+const available = items.filter((i) => !i.planned);
+const planned = items.filter((i) => i.planned);
+---
+<Base title="Customer Success" description="Migration, onboarding, priority support and technical reviews from Hosttiva and Inventomo, plus tutorials and guides." schema={[breadcrumbs(crumbs)]}>
+  <section class="border-b border-border">
+    <div class="container-x py-14 sm:py-20">
+      <Breadcrumbs items={crumbs} />
+      <p class="eyebrow mt-8">Customer success</p>
+      <h1 class="mt-3 max-w-3xl text-4xl font-semibold sm:text-5xl">Help that starts before you sign up</h1>
+      <p class="mt-4 max-w-2xl text-muted">
+        From moving your first site to reviewing your architecture as you grow, here is the help available today, and
+        where to find it.
+      </p>
+    </div>
+  </section>
+
+  <div class="container-x py-16">
+    <ul class="divide-y divide-border border-y border-border">
+      {available.map((i) => (
+        <li class="grid gap-4 py-6 md:grid-cols-[2.5rem_1fr_14rem_auto] md:items-center">
+          <span class="text-accent"><Icon name={i.icon} size={22} /></span>
+          <div>
+            <h2 class="text-lg font-medium">{i.title}</h2>
+            <p class="text-sm text-muted">{i.text}</p>
+          </div>
+          <p class="spec !text-xs">{i.where}</p>
+          <a href={i.href} class="btn btn-secondary !py-1.5 text-sm justify-self-start">{i.cta}</a>
+        </li>
+      ))}
+    </ul>
+
+    <h2 class="mt-16 text-2xl font-semibold">Coming next</h2>
+    <ul class="mt-6 grid gap-px overflow-hidden rounded-lg border border-border bg-border md:grid-cols-3">
+      {planned.map((i) => (
+        <li class="bg-bg p-5">
+          <p class="flex items-center justify-between gap-2 font-medium">
+            <span class="flex items-center gap-2"><Icon name={i.icon} size={16} class="text-faint" />{i.title}</span>
+            <span class="badge">Planned</span>
+          </p>
+          <p class="mt-2 text-sm text-muted">{i.text}</p>
+        </li>
+      ))}
+    </ul>
+
+    <div class="mt-16 flex flex-col gap-4 rounded-lg border border-border bg-raised p-6 sm:flex-row sm:items-center sm:justify-between">
+      <div>
+        <p class="font-medium">Already a customer?</p>
+        <p class="text-sm text-muted">Open a ticket from the client area so we can see your services.</p>
+      </div>
+      <div class="flex flex-wrap gap-2">
+        <a href={LINKS.clientArea} class="btn btn-primary">Client area</a>
+        <a href="/contact" class="btn btn-secondary">Contact</a>
+      </div>
+    </div>
+  </div>
+</Base>

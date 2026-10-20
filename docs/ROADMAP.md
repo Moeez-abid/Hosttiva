@@ -59,7 +59,8 @@ Placeholder pages for Phase 2+ already exist in `website/src/data/pages.ts` (noi
 ## Phase 4: one-click deploy and conditional products
 - [ ] One-click application catalogue backed by `deploy-stacks/` templates (n8n, Mautic, supported open-source apps)
 - [ ] Deploy-from-GitHub flow for Web App Hosting
-- [ ] AI marketplace, Enterprise services, Customer success and Community pages
+- [x] Customer success page (/customer-success)
+- [ ] AI marketplace, Enterprise services and Community pages
 - [ ] Conditional products — publish only once confirmed (currently `coming-soon`):
   - [ ] GPU hosting (availability, pricing, locations, storage costs, usage limits)
   - [ ] Windows hosting (upstream support + licensing)
