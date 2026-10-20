@@ -51,7 +51,8 @@ Placeholder pages for Phase 2+ already exist in `website/src/data/pages.ts` (noi
 - [x] security.txt, humans.txt, HTML sitemap, split sitemaps (products, blog, KB, docs, tutorials, academy, pages)
 - [x] 301 redirect map (`public/_redirects`)
 - [ ] 410 handling, hreflang if more locales are added
-- [ ] Per-page OG images; WebP/AVIF image pipeline
+- [x] Per-page OG images (build-time, /og/*.png)
+- [ ] WebP/AVIF image pipeline
 - [ ] Performance budget: Lighthouse 95+, LCP < 2.5s, CLS < 0.1, INP < 200ms; WCAG 2.2 AA audit
 - [ ] Monitoring: Search Console, Bing Webmaster, privacy-friendly analytics, uptime checks
 - [x] Content Security Policy in `_headers`
