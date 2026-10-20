@@ -1,0 +1,131 @@
+---
+// Status Center (SRS §8). Live state is only ever shown by the real status page (STATUS_URL);
+// this page lists what is monitored plus human-written maintenance notices and incident summaries.
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import { STATUS_URL } from '../config/site';
+import { MONITORED, MAINTENANCE, INCIDENTS } from '../data/status';
+import { breadcrumbs } from '../lib/schema';
+
+const crumbs = [{ name: 'Home', path: '/' }, { name: 'Status', path: '/status' }];
+const now = Date.now();
+const upcoming = MAINTENANCE.filter((m) => +new Date(m.end) >= now).sort((a, b) => a.start.localeCompare(b.start));
+const incidents = [...INCIDENTS].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 20);
+const fmt = (iso: string) =>
+  new Date(iso).toLocaleString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', timeZone: 'UTC', timeZoneName: 'short' });
+const impactLabel = { minor: 'Minor', major: 'Major', outage: 'Outage' } as const;
+---
+<Base title="Status" description="Live status, scheduled maintenance and incident history for Hosttiva hosting, email, DNS, API and client area." schema={[breadcrumbs(crumbs)]}>
+  <section class="pt-10 sm:pt-14">
+    <div class="container-x"><Breadcrumbs items={crumbs} /></div>
+    <div class="container-narrow pb-16 pt-12 text-center sm:pb-20 sm:pt-16">
+      <h1 class="display-lg" data-split="now">Service status</h1>
+      <p class="lead enter mx-auto mt-5 max-w-2xl" style="--d:320ms">
+        Live status for every Hosttiva service, scheduled maintenance, and what happened when something went wrong.
+      </p>
+    </div>
+
+    <div class="container-x">
+      <div class="status-card section-inverse enter relative mx-auto max-w-[61.25rem] overflow-hidden rounded-[var(--radius-xl)] p-8 sm:p-12" style="--d:480ms">
+        <svg class="heartbeat pointer-events-none absolute inset-x-0 bottom-0 h-28 w-full" viewBox="0 0 1000 120" preserveAspectRatio="none" aria-hidden="true">
+          <path class="hb-line" d="M0 80 H300 L330 80 L350 30 L372 110 L392 55 L410 80 H620 L645 80 L662 40 L682 104 L700 62 L716 80 H1000" fill="none" stroke="currentColor" stroke-width="2" vector-effect="non-scaling-stroke" />
+        </svg>
+        <div class="relative flex flex-col gap-8 sm:flex-row sm:items-center sm:justify-between">
+          <div class="flex items-start gap-4">
+            <span class="beacon mt-2" aria-hidden="true"></span>
+            <div>
+              {STATUS_URL ? (
+                <>
+                  <h2 class="title">Live status, updated every minute</h2>
+                  <p class="mt-2 max-w-md text-inverse-muted">Uptime, response times and active incidents for each service are published on our status page.</p>
+                </>
+              ) : (
+                <>
+                  <h2 class="title">Status page launching soon</h2>
+                  <p class="mt-2 max-w-md text-inverse-muted">Independent monitoring for every service is being set up at status.hosttiva.com. Until then, contact support if something looks wrong.</p>
+                </>
+              )}
+            </div>
+          </div>
+          {STATUS_URL
+            ? <a href={STATUS_URL} class="btn btn-primary shrink-0" rel="noopener">Open status page</a>
+            : <a href="/contact" class="btn btn-primary shrink-0">Contact support</a>}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="container-x py-24 sm:py-32" aria-labelledby="mon-h">
+    <h2 id="mon-h" class="display-md" data-split>What we monitor</h2>
+    <p class="lead reveal mt-4 max-w-2xl">Each service is checked from outside our own network, so the status page stays up when a server does not.</p>
+    <ul class="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4" data-stagger>
+      {MONITORED.map((m) => (
+        <li class="reveal">
+          <div data-tilt="5" class="tile h-full p-7">
+            <span class="text-link"><Icon name={m.icon} size={22} /></span>
+            <p class="title mt-4 !text-[1.3125rem]">{m.name}</p>
+            <p class="mt-1.5 text-[0.9375rem] text-muted">{m.what}</p>
+          </div>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="section-alt" aria-labelledby="maint-h">
+    <div class="container-narrow py-24 sm:py-28">
+      <h2 id="maint-h" class="display-md" data-split>Scheduled maintenance</h2>
+      {upcoming.length ? (
+        <ol class="mt-10 space-y-4" data-stagger>
+          {upcoming.map((m) => (
+            <li class="tile-surface reveal p-7">
+              <p class="title !text-[1.3125rem]">{m.title}</p>
+              <p class="spec mt-1"><time datetime={m.start}>{fmt(m.start)}</time> – <time datetime={m.end}>{fmt(m.end)}</time></p>
+              <p class="mt-3 text-muted">{m.detail}</p>
+              <ul class="mt-4 flex flex-wrap gap-1.5">{m.services.map((s) => <li class="badge">{s}</li>)}</ul>
+            </li>
+          ))}
+        </ol>
+      ) : (
+        <p class="reveal mt-8 flex items-center gap-3 text-[1.1875rem] text-muted"><Icon name="CalendarCheck" size={22} class="text-link" />No maintenance is scheduled. Planned work is announced here and on the status page in advance.</p>
+      )}
+    </div>
+  </section>
+
+  <section class="container-narrow py-24 sm:py-28" aria-labelledby="inc-h">
+    <h2 id="inc-h" class="display-md" data-split>Incident history</h2>
+    {incidents.length ? (
+      <ol class="mt-10 divide-y divide-border border-y border-border" data-stagger>
+        {incidents.map((i) => (
+          <li class="reveal py-6">
+            <div class="flex flex-wrap items-center gap-3">
+              <p class="title !text-[1.3125rem]">{i.title}</p>
+              <span class:list={['badge', i.impact !== 'minor' && 'badge-warn']}>{impactLabel[i.impact]}</span>
+            </div>
+            <p class="spec mt-1"><time datetime={i.date}>{fmt(i.date)}</time>{i.resolvedAt && <> · resolved <time datetime={i.resolvedAt}>{fmt(i.resolvedAt)}</time></>}</p>
+            <p class="mt-3 text-muted">{i.summary}</p>
+          </li>
+        ))}
+      </ol>
+    ) : (
+      <p class="reveal mt-8 flex items-center gap-3 text-[1.1875rem] text-muted"><Icon name="History" size={22} class="text-link" />No incidents recorded yet. When something goes wrong, a summary of what happened and what we changed is posted here.</p>
+    )}
+    <div class="reveal mt-14 flex flex-wrap items-center gap-x-6 gap-y-3">
+      <a href="/trust" class="link-more">How we handle security and backups</a>
+      <a href="/roadmap" class="link-more">Product updates</a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .heartbeat { color: color-mix(in srgb, #2997ff 55%, transparent); }
+  .hb-line { stroke-dasharray: 1400; stroke-dashoffset: 0; }
+  :global(.motion) .hb-line { animation: hb-draw 3.6s var(--ease-out) 700ms both, hb-loop 6s linear 4.3s infinite; }
+  @keyframes hb-draw { from { stroke-dashoffset: 1400; } }
+  @keyframes hb-loop { 0% { stroke-dashoffset: 0; } 100% { stroke-dashoffset: -2800; } }
+
+  .beacon { position: relative; width: 12px; height: 12px; border-radius: 999px; background: #2997ff; flex: none; }
+  .beacon::after { content: ''; position: absolute; inset: 0; border-radius: inherit; border: 2px solid #2997ff; }
+  :global(.motion) .beacon::after { animation: ping 2.4s var(--ease-out) infinite; }
+  @keyframes ping { from { transform: scale(1); opacity: 0.8; } to { transform: scale(3.2); opacity: 0; } }
+</style>

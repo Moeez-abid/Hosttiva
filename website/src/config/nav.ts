@@ -104,7 +104,7 @@ export const FOOTER_COLUMNS: { title: string; links: NavLink[] }[] = [
       { label: 'Trust Center', href: '/trust' },
       { label: 'Security', href: '/trust#security' },
       { label: 'Compliance', href: '/trust#compliance' },
-      { label: 'Status', href: '/status', soon: true },
+      { label: 'Status', href: '/status' },
       { label: 'Roadmap', href: '/roadmap' },
       { label: 'Developers', href: '/developers', soon: true },
       { label: 'Community', href: '/community', soon: true },

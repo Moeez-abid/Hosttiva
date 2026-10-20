@@ -33,7 +33,7 @@ const ITEMS: RoadmapItem[] = [
   { status: 'in-development', title: 'Client area', detail: 'Ordering, billing, domains and support tickets in one portal.' },
   { status: 'in-development', title: 'Live SSL check service', detail: 'Reads the certificate your server presents, including chain and trust.' },
   { status: 'in-development', title: 'Legal and policy pages', detail: 'Terms, privacy, refunds, SLA and backup policy, with legal review.' },
-  { status: 'planned', title: 'Status page', detail: 'Current status, maintenance, incidents and uptime per service.' },
+  { status: 'in-development', title: 'Status page', detail: 'Live status, maintenance and incident history per service at status.hosttiva.com.', href: '/status' },
   { status: 'planned', title: 'Knowledge Base', detail: 'Help articles for every Hosttiva service.' },
   { status: 'planned', title: 'One-click app deploys', detail: 'n8n, Flowise, Open WebUI, NocoDB, Uptime Kuma and more on a VPS of your choice.', href: '/marketplace#one-click' },
   { status: 'planned', title: 'Hosttiva Academy and Learning Lab', detail: 'Video guides and guided learning paths.' },

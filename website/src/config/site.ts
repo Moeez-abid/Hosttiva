@@ -31,6 +31,9 @@ export const MONITORING = {
   bingSiteVerification: null as string | null,
 };
 
+/** Public status page (infra/status-page). null → /status shows a "launching soon" notice. */
+export const STATUS_URL: string | null = null;
+
 /**
  * Live SSL check API (infra/ssl-check-api). null → the SSL checker falls back to
  * certificate-transparency logs (crt.sh). Set to e.g. 'https://tools.hosttiva.com/ssl' once deployed.

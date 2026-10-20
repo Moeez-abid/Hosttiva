@@ -14,6 +14,7 @@ export const STATIC_OG: OgEntry[] = [
   { slug: 'customer-success', title: 'Help that starts before you sign up', subtitle: 'Migration, onboarding, support and technical reviews.', section: 'Customer success' },
   { slug: 'blog', title: 'Notes from the people who run the servers', subtitle: 'Guides on hosting, email, VPS, AI and agencies.', section: 'Blog' },
   { slug: 'tutorials', title: 'Step by step, start to finish', subtitle: 'Guides to launch, manage and grow online.', section: 'Tutorials' },
+  { slug: 'status', title: 'Service status', subtitle: 'Live status, scheduled maintenance and incident history.', section: 'Status' },
   { slug: 'contact', title: 'Talk to a person', subtitle: 'Plan advice, migrations, Inventomo projects and support.', section: 'Contact' },
 ];
 

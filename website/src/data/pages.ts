@@ -6,7 +6,6 @@ export const PLANNED_PAGES: PlannedPage[] = [
   { slug: 'knowledgebase', title: 'Knowledge Base', blurb: 'Help articles and guides for every Hosttiva service.', phase: 3 },
   { slug: 'academy', title: 'Hosttiva Academy', blurb: 'Practical video guides for websites, hosting, cloud, applications, and online business.', phase: 3 },
   { slug: 'learning-lab', title: 'Learning Lab', blurb: 'Guided learning paths to build, launch, and grow online.', phase: 3 },
-  { slug: 'status', title: 'Status', blurb: 'Live service status and maintenance announcements.', phase: 3 },
   { slug: 'developers', title: 'Developer Center', blurb: 'API, CLI, Git deploy, SSH keys, Docker, runtimes, webhooks and API tokens.', phase: 3 },
   { slug: 'community', title: 'Community', blurb: 'Feature requests, partner directory, developer community and customer stories.', phase: 3 },
   { slug: 'infrastructure', title: 'Infrastructure', blurb: 'Server locations, data centres, CPU platforms, storage, backups and disaster recovery.', phase: 3 },
