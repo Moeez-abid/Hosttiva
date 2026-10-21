@@ -1,0 +1,17 @@
+services:
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:main
+    restart: unless-stopped
+    environment:
+      - WEBUI_SECRET_KEY=${SECRET_KEY}
+      # Point at an Ollama server or leave empty and add an OpenAI-compatible API key in the admin panel.
+      - OLLAMA_BASE_URL=${OLLAMA_BASE_URL:-}
+    volumes: [webui-data:/app/backend/data]
+    networks: [web]
+    labels:
+      caddy: ${DOMAIN}
+      caddy.reverse_proxy: "{{upstreams 8080}}"
+networks:
+  web: { external: true }
+volumes:
+  webui-data:

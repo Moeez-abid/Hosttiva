@@ -1,0 +1,32 @@
+services:
+  langflow:
+    image: langflowai/langflow:latest
+    restart: unless-stopped
+    environment:
+      - LANGFLOW_DATABASE_URL=postgresql://langflow:${DB_PASSWORD}@db:5432/langflow
+      - LANGFLOW_CONFIG_DIR=/app/langflow
+      - LANGFLOW_AUTO_LOGIN=false
+      - LANGFLOW_SUPERUSER=${ADMIN_USER}
+      - LANGFLOW_SUPERUSER_PASSWORD=${ADMIN_PASSWORD}
+      - LANGFLOW_SECRET_KEY=${SECRET_KEY}
+    volumes: [langflow-data:/app/langflow]
+    depends_on: [db]
+    networks: [web, internal]
+    labels:
+      caddy: ${DOMAIN}
+      caddy.reverse_proxy: "{{upstreams 7860}}"
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      - POSTGRES_DB=langflow
+      - POSTGRES_USER=langflow
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    volumes: [db-data:/var/lib/postgresql/data]
+    networks: [internal]
+networks:
+  web: { external: true }
+  internal: {}
+volumes:
+  langflow-data:
+  db-data:

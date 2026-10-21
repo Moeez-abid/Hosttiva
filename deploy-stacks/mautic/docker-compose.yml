@@ -1,0 +1,51 @@
+# Mautic 5 with separate web, cron and queue-worker roles (pattern from the official docker-mautic images).
+x-mautic: &mautic
+  image: mautic/mautic:5-apache
+  restart: unless-stopped
+  environment: &mautic-env
+    MAUTIC_DB_HOST: db
+    MAUTIC_DB_PORT: "3306"
+    MAUTIC_DB_NAME: mautic
+    MAUTIC_DB_USER: mautic
+    MAUTIC_DB_PASSWORD: ${DB_PASSWORD}
+    MAUTIC_MESSENGER_DSN_EMAIL: doctrine://default
+    MAUTIC_MESSENGER_DSN_HIT: doctrine://default
+  volumes:
+    - mautic-config:/var/www/html/config
+    - mautic-logs:/var/www/html/var/logs
+    - mautic-media:/var/www/html/docroot/media
+  depends_on: [db]
+services:
+  mautic_web:
+    <<: *mautic
+    networks: [web, internal]
+    labels:
+      caddy: ${DOMAIN}
+      caddy.reverse_proxy: "{{upstreams 80}}"
+  mautic_cron:
+    <<: *mautic
+    environment: { <<: *mautic-env, DOCKER_MAUTIC_ROLE: mautic_cron }
+    networks: [internal]
+  mautic_worker:
+    <<: *mautic
+    environment: { <<: *mautic-env, DOCKER_MAUTIC_ROLE: mautic_worker }
+    networks: [internal]
+  db:
+    image: mariadb:11
+    restart: unless-stopped
+    environment:
+      MARIADB_DATABASE: mautic
+      MARIADB_USER: mautic
+      MARIADB_PASSWORD: ${DB_PASSWORD}
+      MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    volumes: [db-data:/var/lib/mysql]
+    networks: [internal]
+networks:
+  web: { external: true }
+  internal: {}
+volumes:
+  mautic-config:
+  mautic-logs:
+  mautic-media:
+  db-data:

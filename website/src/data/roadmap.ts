@@ -35,7 +35,7 @@ const ITEMS: RoadmapItem[] = [
   { status: 'in-development', title: 'Legal and policy pages', detail: 'Terms, privacy, refunds, SLA and backup policy, with legal review.' },
   { status: 'in-development', title: 'Status page', detail: 'Live status, maintenance and incident history per service at status.hosttiva.com.', href: '/status' },
   { status: 'planned', title: 'Knowledge Base', detail: 'Help articles for every Hosttiva service.' },
-  { status: 'planned', title: 'One-click app deploys', detail: 'n8n, Flowise, Open WebUI, NocoDB, Uptime Kuma and more on a VPS of your choice.', href: '/marketplace#one-click' },
+  { status: 'in-development', title: 'One-click app deploys', detail: 'n8n, Flowise, Open WebUI, NocoDB, Mautic, Langflow, Typebot and more, with automatic HTTPS on your VPS.', href: '/marketplace#one-click' },
   { status: 'planned', title: 'Hosttiva Academy and Learning Lab', detail: 'Video guides and guided learning paths.' },
 ];
 

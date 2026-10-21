@@ -62,7 +62,8 @@ Placeholder pages for Phase 2+ already exist in `website/src/data/pages.ts` (noi
 - [x] Content Security Policy in `_headers`
 
 ## Phase 4: one-click deploy and conditional products
-- [ ] One-click application catalogue backed by `deploy-stacks/` templates (n8n, Mautic, supported open-source apps)
+- [x] `deploy-stacks/`: 9 compose stacks (n8n, Flowise, Open WebUI, NocoDB, Mautic, AnythingLLM, Langflow, Typebot, Uptime Kuma) + shared HTTPS proxy + `deploy.sh`
+- [ ] Wire deploy-stacks into WHMCS provisioning (client-area "Deploy" button) and test each stack on a real VPS
 - [ ] Deploy-from-GitHub flow for Web App Hosting
 - [x] Customer success page (/customer-success)
 - [ ] AI marketplace, Enterprise services and Community pages

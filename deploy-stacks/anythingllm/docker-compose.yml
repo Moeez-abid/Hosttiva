@@ -1,0 +1,17 @@
+services:
+  anythingllm:
+    image: mintplexlabs/anythingllm:latest
+    restart: unless-stopped
+    cap_add: [SYS_ADMIN]
+    environment:
+      - STORAGE_DIR=/app/server/storage
+      - JWT_SECRET=${JWT_SECRET}
+    volumes: [anythingllm-data:/app/server/storage]
+    networks: [web]
+    labels:
+      caddy: ${DOMAIN}
+      caddy.reverse_proxy: "{{upstreams 3001}}"
+networks:
+  web: { external: true }
+volumes:
+  anythingllm-data:

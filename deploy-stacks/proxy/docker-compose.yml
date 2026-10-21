@@ -1,0 +1,29 @@
+# Shared HTTPS proxy for every stack on this server.
+# Apps join the external "web" network and declare their domain with two labels:
+#   caddy: app.example.com
+#   caddy.reverse_proxy: "{{upstreams 5678}}"
+services:
+  caddy:
+    image: lucaslorentz/caddy-docker-proxy:2.9-alpine
+    container_name: caddy-proxy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    environment:
+      - CADDY_INGRESS_NETWORKS=web
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - caddy-data:/data
+    networks: [web]
+    labels:
+      caddy.email: ${ACME_EMAIL}
+
+networks:
+  web:
+    name: web
+    external: true
+
+volumes:
+  caddy-data:

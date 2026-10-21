@@ -1,0 +1,45 @@
+# Typebot needs two domains (builder + viewer) and SMTP for magic-link sign-in.
+x-typebot-env: &env
+  DATABASE_URL: postgresql://typebot:${DB_PASSWORD}@db:5432/typebot
+  ENCRYPTION_SECRET: ${ENCRYPTION_SECRET}
+  NEXTAUTH_URL: https://${DOMAIN}
+  NEXT_PUBLIC_VIEWER_URL: https://${VIEWER_DOMAIN}
+  ADMIN_EMAIL: ${ADMIN_EMAIL}
+  SMTP_HOST: ${SMTP_HOST}
+  SMTP_PORT: ${SMTP_PORT}
+  SMTP_USERNAME: ${SMTP_USERNAME}
+  SMTP_PASSWORD: ${SMTP_PASSWORD}
+  NEXT_PUBLIC_SMTP_FROM: ${SMTP_FROM}
+services:
+  builder:
+    image: baptistearno/typebot-builder:latest
+    restart: unless-stopped
+    environment: *env
+    depends_on: [db]
+    networks: [web, internal]
+    labels:
+      caddy: ${DOMAIN}
+      caddy.reverse_proxy: "{{upstreams 3000}}"
+  viewer:
+    image: baptistearno/typebot-viewer:latest
+    restart: unless-stopped
+    environment: *env
+    depends_on: [db]
+    networks: [web, internal]
+    labels:
+      caddy: ${VIEWER_DOMAIN}
+      caddy.reverse_proxy: "{{upstreams 3000}}"
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      - POSTGRES_DB=typebot
+      - POSTGRES_USER=typebot
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    volumes: [db-data:/var/lib/postgresql/data]
+    networks: [internal]
+networks:
+  web: { external: true }
+  internal: {}
+volumes:
+  db-data:
