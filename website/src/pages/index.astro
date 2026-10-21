@@ -4,6 +4,16 @@ import Icon from '../components/Icon.astro';
 import { SITE, LINKS } from '../config/site';
 import { PLAN_GROUPS, formatPrice, PRICES_ARE_PLACEHOLDERS, getPlanGroup } from '../data/plans';
 import { AUDIENCES, ECOSYSTEM } from '../data/brand';
+import ProductVisual from '../components/ProductVisual.astro';
+import { getProduct } from '../data/products';
+
+// Scroll showcase: each step pins a product scene on the right (reused from product pages).
+const showcase = [
+  { title: 'Launch your site', text: 'WordPress or a hand-built site, with SSL, backups and email on your domain from day one.', product: getProduct('hosting/wordpress')!, href: '/hosting/wordpress' },
+  { title: 'Deploy your app', text: 'A VPS or managed app server for Node.js, Python, PHP and Docker, with root access where available.', product: getProduct('hosting/vps')!, href: '/hosting/vps' },
+  { title: 'Automate the busywork', text: 'Self-hosted n8n connects your forms, CRM, email and AI tools on infrastructure you control.', product: getProduct('products/self-hosted-n8n')!, href: '/products/self-hosted-n8n' },
+  { title: 'Build what is missing', text: 'Inventomo designs and builds custom platforms, then runs them on Hosttiva with ongoing support.', product: getProduct('agencies/custom-build')!, href: '/agencies/custom-build' },
+];
 
 const fromPrice = (groupId: string) => {
   const g = PLAN_GROUPS.find((x) => x.id === groupId);
@@ -192,6 +202,33 @@ const why = [
     <p class="mt-5 text-[0.8125rem] text-muted">Prices billed annually, excluding tax. {PRICES_ARE_PLACEHOLDERS && 'Draft figures, confirmed before launch.'}</p>
   </section>
 
+  <!-- Scroll showcase -->
+  <section class="showcase container-x pt-28 sm:pt-36" aria-labelledby="show-h">
+    <h2 id="show-h" class="display-lg max-w-3xl" data-split>From first page to full platform.</h2>
+    <p class="lead reveal mt-4 max-w-2xl">One account grows with you: start with a website, add an app, automate it, and bring in Inventomo when you need something built.</p>
+    <div class="show-grid mt-14 lg:mt-20">
+      <ol class="show-steps">
+        {showcase.map((st, i) => (
+          <li class="show-step" data-step={i}>
+            <span class="show-num tabular">{String(i + 1).padStart(2, '0')}</span>
+            <h3 class="display-md mt-3">{st.title}</h3>
+            <p class="lead mt-4 max-w-md !text-[1.1875rem]">{st.text}</p>
+            <a href={st.href} class="link-more mt-5">Learn more</a>
+            <div class="show-inline mt-8 lg:hidden"><ProductVisual product={st.product} /></div>
+          </li>
+        ))}
+      </ol>
+      <div class="show-pin hidden lg:block" aria-hidden="true">
+        <div class="show-stage">
+          {showcase.map((st, i) => (
+            <div class:list={['show-layer', i === 0 && 'is-active']} data-layer={i}><ProductVisual product={st.product} /></div>
+          ))}
+        </div>
+        <div class="show-progress">{showcase.map((_, i) => <span class:list={[i === 0 && 'is-active']} data-dot={i} />)}</div>
+      </div>
+    </div>
+  </section>
+
   <!-- Honest renewal pricing -->
   <section class="section-inverse mt-28 sm:mt-36" aria-labelledby="renew-h">
     <div class="container-x py-24 sm:py-32">
@@ -352,6 +389,23 @@ const why = [
   }
 
 
+  /* Showcase: steps scroll, the stage pins and cross-fades between product scenes */
+  .show-grid { display: grid; gap: 4rem; }
+  @media (min-width: 1024px) {
+    .show-grid { grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr); gap: 5rem; }
+    .show-step { min-height: 78vh; display: flex; flex-direction: column; justify-content: center; opacity: 0.28; transition: opacity 600ms var(--ease-out); }
+    .show-step.is-active { opacity: 1; }
+    .show-pin { position: sticky; top: calc(var(--header-h) + 8vh); height: fit-content; }
+  }
+  .show-num { font-size: 0.875rem; font-weight: 600; color: var(--link); }
+  .show-stage { position: relative; aspect-ratio: 16 / 11; }
+  .show-layer { position: absolute; inset: 0; opacity: 0; transform: scale(0.97) translateY(12px); filter: blur(8px); transition: opacity 700ms var(--ease-out), transform 900ms var(--ease-out), filter 700ms var(--ease-out); pointer-events: none; }
+  .show-layer.is-active { opacity: 1; transform: none; filter: none; }
+  .show-layer :global(.pv), .show-layer :global(.pv-stage) { height: 100%; max-width: none; aspect-ratio: auto; }
+  .show-progress { display: flex; gap: 6px; justify-content: center; margin-top: 1.25rem; }
+  .show-progress span { width: 22px; height: 3px; border-radius: 2px; background: var(--border-strong); transition: background 400ms var(--ease-out), width 400ms var(--ease-out); }
+  .show-progress span.is-active { width: 44px; background: var(--link); }
+
   .segmented label:has(input:checked) { background: var(--surface); box-shadow: 0 1px 4px rgb(0 0 0 / 0.12); font-weight: 600; }
   .segmented label:has(input:focus-visible) { outline: 3px solid color-mix(in srgb, var(--accent) 70%, transparent); }
 </style>
@@ -398,5 +452,34 @@ const why = [
     }
   }
   document.addEventListener('astro:page-load', initHero);
+
+  // Showcase: the step nearest the viewport centre activates its scene and replays it.
+  function initShowcase() {
+    const steps = [...document.querySelectorAll<HTMLElement>('.show-step')];
+    const layers = [...document.querySelectorAll<HTMLElement>('.show-layer')];
+    const dots = [...document.querySelectorAll<HTMLElement>('[data-dot]')];
+    if (!steps.length || !layers.length) return;
+    let current = -1;
+    const activate = (i: number) => {
+      if (i === current) return;
+      current = i;
+      steps.forEach((s, k) => s.classList.toggle('is-active', k === i));
+      dots.forEach((d, k) => d.classList.toggle('is-active', k === i));
+      layers.forEach((l, k) => {
+        l.classList.toggle('is-active', k === i);
+        const pv = l.querySelector('.pv');
+        if (!pv) return;
+        // Replay the scene's entrance each time it becomes active.
+        pv.classList.remove('in');
+        if (k === i) requestAnimationFrame(() => requestAnimationFrame(() => pv.classList.add('in')));
+      });
+    };
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => { if (e.isIntersecting) activate(Number((e.target as HTMLElement).dataset.step)); });
+    }, { rootMargin: '-45% 0px -45% 0px' });
+    steps.forEach((s) => io.observe(s));
+    activate(0);
+  }
+  document.addEventListener('astro:page-load', initShowcase);
   document.addEventListener('astro:before-swap', () => { disposeRack?.(); disposeRack = undefined; });
 </script>

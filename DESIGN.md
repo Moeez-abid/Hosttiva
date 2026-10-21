@@ -58,6 +58,10 @@ motion, with a 3s failsafe, so content is always visible without JS. Hooks:
 - `data-count` on headline numbers (count up once, no layout shift).
 - `.icon-3d` for a hero icon's 3D flip-in.
 - `<details>` open/close, billing-term price swaps, flyout item cascade and page-to-page transitions are automatic.
+- Product scenes: `ProductVisual.astro` gives every product page an authored animated illustration (servers,
+  terminal, dot globe, mail+DNS, site/store, automation flow, game panel, accounts, blueprint→app), chosen by slug
+  then category. Examples only; no invented metrics.
+- Homepage showcase: pinned scroll section; the step nearest the viewport centre activates and replays its scene.
 - Focal 3D: homepage hero rack (`src/lib/rack3d.ts`, three.js, lazy-loaded ~130 KB gzip, pauses off-screen,
   SVG fallback without WebGL). Add further 3D only where it carries the product story.
 - Easing `--ease-out` (cubic-bezier(0.16,1,0.3,1)); entrances 500–1100ms, feedback 120–300ms; no bounce.
