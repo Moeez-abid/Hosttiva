@@ -43,7 +43,8 @@ Placeholder pages for Phase 2+ already exist in `website/src/data/pages.ts` (noi
 - [x] Free tools, client-side: DNS checker (DoH), WHOIS (RDAP), domain name generator
 - [x] SSL checker via Certificate Transparency logs (crt.sh)
 - [ ] Deploy `infra/ssl-check-api` to a VPS and set `SSL_CHECK_API` in site.ts for live checks
-- [ ] Knowledge Base and docs on Starlight (/knowledgebase); Developer Center
+- [x] Knowledge Base (/knowledgebase): content collection, 6 categories, 12 starter articles, TechArticle schema, own sitemap
+- [ ] More KB articles per service; Developer Center (API/CLI docs once the platform has them)
 - [ ] Hosttiva Academy (VideoObject schema) and Learning Lab paths
 - [x] /status page (monitored services, maintenance, incident history) + Uptime Kuma stack in infra/status-page
 - [ ] Deploy infra/status-page to a separate VPS and set STATUS_URL in site.ts

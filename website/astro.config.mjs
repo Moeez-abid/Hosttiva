@@ -21,6 +21,7 @@ export default defineConfig({
         products: (item) => (PRODUCT_PREFIX.test(new URL(item.url).pathname) ? item : undefined),
         blog: (item) => (new URL(item.url).pathname.startsWith('/blog') ? item : undefined),
         tutorials: (item) => (new URL(item.url).pathname.startsWith('/tutorials') ? item : undefined),
+        knowledgebase: (item) => (new URL(item.url).pathname.startsWith('/knowledgebase') ? item : undefined),
       },
     }),
   ],

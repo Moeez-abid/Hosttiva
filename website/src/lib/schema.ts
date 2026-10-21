@@ -84,3 +84,16 @@ export const howTo = (o: { title: string; description: string; path: string; tot
   ...(o.requirements.length ? { supply: o.requirements.map((r) => ({ '@type': 'HowToSupply', name: r })) } : {}),
   step: o.steps.map((s, i) => ({ '@type': 'HowToStep', position: i + 1, name: s.name, text: s.name, url: `${abs(o.path)}#${s.anchor}` })),
 });
+
+export const techArticle = (o: { title: string; description: string; path: string; updated: Date; section: string }) => ({
+  '@type': 'TechArticle',
+  headline: o.title,
+  description: o.description,
+  url: abs(o.path),
+  mainEntityOfPage: abs(o.path),
+  dateModified: o.updated.toISOString(),
+  articleSection: o.section,
+  author: { '@id': `${SITE.url}/#organization` },
+  publisher: { '@id': `${SITE.url}/#organization` },
+  inLanguage: SITE.locale,
+});

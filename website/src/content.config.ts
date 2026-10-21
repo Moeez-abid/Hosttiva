@@ -47,4 +47,27 @@ const tutorials = defineCollection({
   }),
 });
 
-export const collections = { blog, tutorials };
+// Knowledge Base (SRS §5): short, task-focused help articles grouped by category.
+export const KB_CATEGORIES = {
+  'getting-started': { label: 'Getting started', icon: 'Rocket', blurb: 'Your account, client area and first steps.' },
+  'domains-dns': { label: 'Domains and DNS', icon: 'Globe', blurb: 'Nameservers, records, transfers and propagation.' },
+  email: { label: 'Email', icon: 'Mail', blurb: 'Mailboxes, mail apps and deliverability.' },
+  'ssl-security': { label: 'SSL and security', icon: 'ShieldCheck', blurb: 'Certificates, HTTPS and account safety.' },
+  websites: { label: 'Websites and WordPress', icon: 'PanelsTopLeft', blurb: 'Uploading, WordPress and troubleshooting.' },
+  'vps-apps': { label: 'VPS and applications', icon: 'Server', blurb: 'SSH, firewalls, backups and deployments.' },
+} as const;
+
+const kb = defineCollection({
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/kb' }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string().max(170),
+    category: z.enum(Object.keys(KB_CATEGORIES) as [keyof typeof KB_CATEGORIES, ...(keyof typeof KB_CATEGORIES)[]]),
+    updated: z.coerce.date(),
+    order: z.number().default(100),
+    related: z.array(z.string()).default([]),
+    draft: z.boolean().default(false),
+  }),
+});
+
+export const collections = { blog, tutorials, kb };

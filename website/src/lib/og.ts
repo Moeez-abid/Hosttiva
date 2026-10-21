@@ -15,6 +15,7 @@ export const STATIC_OG: OgEntry[] = [
   { slug: 'blog', title: 'Notes from the people who run the servers', subtitle: 'Guides on hosting, email, VPS, AI and agencies.', section: 'Blog' },
   { slug: 'tutorials', title: 'Step by step, start to finish', subtitle: 'Guides to launch, manage and grow online.', section: 'Tutorials' },
   { slug: 'status', title: 'Service status', subtitle: 'Live status, scheduled maintenance and incident history.', section: 'Status' },
+  { slug: 'knowledgebase', title: 'How can we help?', subtitle: 'Help articles for every Hosttiva service.', section: 'Knowledge Base' },
   { slug: 'contact', title: 'Talk to a person', subtitle: 'Plan advice, migrations, Inventomo projects and support.', section: 'Contact' },
 ];
 
@@ -30,7 +31,7 @@ const OG_PATHS = new Set([...STATIC_OG, ...PRODUCT_OG].map((e) => `/${e.slug}`))
 /** Share image for a page path, or null when the page uses the site default. */
 export function ogFor(path: string): string | null {
   if (path.startsWith('/blog/') && !path.startsWith('/blog/category')) return `/og${path}.png`;
-  if (path.startsWith('/tutorials/')) return `/og${path}.png`;
+  if (path.startsWith('/tutorials/') || path.startsWith('/knowledgebase/')) return `/og${path}.png`;
   return OG_PATHS.has(path) ? `/og${path}.png` : null;
 }
 

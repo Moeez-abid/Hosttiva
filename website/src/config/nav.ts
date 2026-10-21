@@ -39,7 +39,7 @@ export const RESOURCES_MENU: NavLink[] = [
   { label: 'Our Story', href: '/about', desc: 'The people and vision behind Hosttiva.', icon: 'BookOpen' },
   { label: 'Contact', href: '/contact', desc: 'Help choosing a plan or moving your website.', icon: 'MessagesSquare' },
   { label: 'Customer Success', href: '/customer-success', desc: 'Migration, onboarding, support and reviews.', icon: 'LifeBuoy' },
-  { label: 'Knowledge Base', href: '/knowledgebase', desc: 'Help articles for every Hosttiva service.', icon: 'LifeBuoy', soon: true },
+  { label: 'Knowledge Base', href: '/knowledgebase', desc: 'Help articles for every Hosttiva service.', icon: 'LifeBuoy' },
   { label: 'Tutorials', href: '/tutorials', desc: 'Step-by-step guides to launch and grow.', icon: 'ListChecks' },
   { label: 'Hosttiva Academy', href: '/academy', desc: 'Practical video guides.', icon: 'GraduationCap', soon: true },
   { label: 'Learning Lab', href: '/learning-lab', desc: 'Guided learning paths.', icon: 'FlaskConical', soon: true },
@@ -85,7 +85,7 @@ export const FOOTER_COLUMNS: { title: string; links: NavLink[] }[] = [
     title: 'Resources',
     links: [
       { label: 'Blog', href: '/blog' },
-      { label: 'Knowledge Base', href: '/knowledgebase', soon: true },
+      { label: 'Knowledge Base', href: '/knowledgebase' },
       { label: 'Tutorials', href: '/tutorials' },
       { label: 'Academy', href: '/academy', soon: true },
       { label: 'Learning Lab', href: '/learning-lab', soon: true },

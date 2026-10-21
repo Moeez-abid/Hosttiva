@@ -1,0 +1,78 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Icon from '../../components/Icon.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import { KB_CATEGORIES } from '../../content.config';
+import { CLIENT_AREA } from '../../config/site';
+import { breadcrumbs, techArticle } from '../../lib/schema';
+
+export const getStaticPaths = (async () => {
+  const all = await getCollection('kb', (a) => !a.data.draft);
+  return all.map((article) => ({ params: { slug: article.id }, props: { article, all } }));
+}) satisfies GetStaticPaths;
+
+const { article, all } = Astro.props;
+const { Content, headings } = await render(article);
+const d = article.data;
+const cat = KB_CATEGORIES[d.category];
+const path = `/knowledgebase/${article.id}`;
+const crumbs = [{ name: 'Home', path: '/' }, { name: 'Knowledge Base', path: '/knowledgebase' }, { name: d.title, path }];
+const siblings = all.filter((a) => a.data.category === d.category).sort((a, b) => a.data.order - b.data.order);
+const related = d.related.map((r) => all.find((a) => a.id === r.split('/').pop())).filter((a): a is typeof article => !!a);
+const toc = headings.filter((h) => h.depth === 2);
+const fmt = (x: Date) => x.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+---
+<Base title={d.title} description={d.description} ogType="article"
+  schema={[breadcrumbs(crumbs), techArticle({ title: d.title, description: d.description, path, updated: d.updated, section: cat.label })]}>
+  <div class="container-x pb-24 pt-10 sm:pt-14">
+    <Breadcrumbs items={crumbs} />
+    <div class="mt-10 grid gap-12 lg:grid-cols-[15rem_minmax(0,1fr)_13rem]">
+      <aside class="hidden lg:block">
+        <nav aria-label={cat.label} class="sticky top-24 text-[0.875rem]">
+          <p class="mb-3 flex items-center gap-2 font-semibold"><Icon name={cat.icon} size={16} class="text-link" />{cat.label}</p>
+          <ul class="space-y-1 border-l border-border">
+            {siblings.map((a) => (
+              <li><a href={`/knowledgebase/${a.id}`} class:list={['-ml-px block border-l py-1 pl-3', a.id === article.id ? 'border-link font-medium text-text' : 'border-transparent text-muted hover:text-text']} aria-current={a.id === article.id ? 'page' : undefined}>{a.data.title}</a></li>
+            ))}
+          </ul>
+          <a href="/knowledgebase" class="link-more mt-6">All categories</a>
+        </nav>
+      </aside>
+
+      <article class="min-w-0">
+        <p class="text-[0.875rem] font-semibold text-link">{cat.label}</p>
+        <h1 class="display-md mt-2 max-w-3xl" data-split="now">{d.title}</h1>
+        <p class="lead enter mt-4 max-w-2xl !text-[1.1875rem]" style="--d:300ms">{d.description}</p>
+        <p class="spec mt-4">Updated <time datetime={d.updated.toISOString()}>{fmt(d.updated)}</time></p>
+        <div class="prose reveal mt-10 max-w-3xl"><Content /></div>
+
+        {related.length > 0 && (
+          <section class="reveal mt-14 max-w-3xl" aria-labelledby="rel-h">
+            <h2 id="rel-h" class="title !text-[1.3125rem]">Related articles</h2>
+            <ul class="mt-4 grid gap-3 sm:grid-cols-2" data-stagger>
+              {related.map((r) => (
+                <li class="reveal"><a href={`/knowledgebase/${r.id}`} data-tilt="4" class="tile flex h-full flex-col p-5"><span class="font-semibold">{r.data.title}</span><span class="mt-1 text-[0.875rem] text-muted">{r.data.description}</span></a></li>
+              ))}
+            </ul>
+          </section>
+        )}
+
+        <div class="reveal mt-14 flex max-w-3xl flex-col gap-4 rounded-[var(--radius-xl)] border border-border p-6 sm:flex-row sm:items-center sm:justify-between">
+          <p><span class="font-semibold">Still stuck?</span> <span class="text-muted">A person on our team can help.</span></p>
+          <a href={`${CLIENT_AREA}/submitticket.php`} class="btn btn-primary btn-sm shrink-0">Open a ticket</a>
+        </div>
+      </article>
+
+      {toc.length > 1 && (
+        <aside class="hidden lg:block">
+          <nav aria-label="On this page" class="sticky top-24 text-[0.8125rem]">
+            <p class="label mb-3">On this page</p>
+            <ul class="space-y-2">{toc.map((h) => <li><a href={`#${h.slug}`} class="text-muted hover:text-text">{h.text}</a></li>)}</ul>
+          </nav>
+        </aside>
+      )}
+    </div>
+  </div>
+</Base>

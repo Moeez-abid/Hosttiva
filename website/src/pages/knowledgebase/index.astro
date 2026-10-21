@@ -1,0 +1,58 @@
+---
+import Base from '../../layouts/Base.astro';
+import Icon from '../../components/Icon.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import { getCollection } from 'astro:content';
+import { KB_CATEGORIES } from '../../content.config';
+import { LINKS, CLIENT_AREA } from '../../config/site';
+import { breadcrumbs } from '../../lib/schema';
+
+type Cat = keyof typeof KB_CATEGORIES;
+const crumbs = [{ name: 'Home', path: '/' }, { name: 'Knowledge Base', path: '/knowledgebase' }];
+const articles = (await getCollection('kb', (a) => !a.data.draft)).sort((a, b) => a.data.order - b.data.order);
+const cats = (Object.keys(KB_CATEGORIES) as Cat[]).map((id) => ({ id, ...KB_CATEGORIES[id], items: articles.filter((a) => a.data.category === id) })).filter((c) => c.items.length);
+---
+<Base title="Knowledge Base" description="Help articles and guides for every Hosttiva service: domains, DNS, email, SSL, WordPress, VPS and your client area." schema={[breadcrumbs(crumbs)]}>
+  <section class="grid-backdrop pt-10 sm:pt-14">
+    <div class="container-x"><Breadcrumbs items={crumbs} /></div>
+    <div class="container-narrow pb-16 pt-12 text-center sm:pb-20 sm:pt-16">
+      <h1 class="display-lg" data-split="now">How can we help?</h1>
+      <p class="lead enter mx-auto mt-5 max-w-2xl" style="--d:320ms">Help articles and guides for every Hosttiva service.</p>
+      <form action="/search" method="get" role="search" class="tile-surface enter mx-auto mt-10 flex max-w-xl gap-2 p-2.5" style="--d:460ms">
+        <label for="kb-q" class="sr-only">Search help articles</label>
+        <input id="kb-q" name="q" class="field !border-transparent !shadow-none" placeholder="Search, e.g. SPF record" autocomplete="off" />
+        <button class="btn btn-primary shrink-0" type="submit">Search</button>
+      </form>
+    </div>
+  </section>
+
+  <section class="container-x pb-24" aria-label="Help categories">
+    <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3" data-stagger>
+      {cats.map((c) => (
+        <section class="reveal" aria-labelledby={`cat-${c.id}`}>
+          <div data-tilt="4" class="tile h-full p-7">
+            <span class="flex h-10 w-10 items-center justify-center rounded-[10px] border border-border bg-surface text-link"><Icon name={c.icon} size={20} /></span>
+            <h2 id={`cat-${c.id}`} class="title mt-5 !text-[1.3125rem]">{c.label}</h2>
+            <p class="mt-1 text-[0.9375rem] text-muted">{c.blurb}</p>
+            <ul class="mt-5 space-y-2.5 border-t border-border pt-5">
+              {c.items.map((a) => (
+                <li><a href={`/knowledgebase/${a.id}`} class="group flex items-start gap-2 text-[0.9375rem] hover:text-link"><Icon name="FileText" size={16} class="mt-0.5 shrink-0 text-muted group-hover:text-link" />{a.data.title}</a></li>
+              ))}
+            </ul>
+          </div>
+        </section>
+      ))}
+    </div>
+
+    <div class="reveal mt-16 flex flex-col gap-6 rounded-[var(--radius-xl)] border border-border p-8 sm:flex-row sm:items-center sm:justify-between sm:p-10">
+      <div>
+        <h2 class="title">Can't find what you need?</h2>
+        <p class="mt-1 text-muted">Open a ticket from the client area and a person on our team will reply.</p>
+      </div>
+      <div class="flex flex-wrap gap-3">
+        <a href={`${CLIENT_AREA}/submitticket.php`} class="btn btn-primary">Open a ticket</a>
+        <a href="/tutorials" class="btn btn-secondary">Step-by-step tutorials</a>
+      </div>
+    </div>
+  </section>
+</Base>
