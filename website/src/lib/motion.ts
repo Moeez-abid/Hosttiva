@@ -149,6 +149,17 @@ function spotlight() {
   }, { passive: true });
 }
 
+// Pause decorative CSS loops (LEDs, packets, heartbeat) while their scene is off screen.
+function pauseOffscreen() {
+  const els = [...document.querySelectorAll<HTMLElement>('.pv, .status-card, .hero-stage')];
+  if (!els.length) return;
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e) => e.target.classList.toggle('is-offscreen', !e.isIntersecting));
+  }, { rootMargin: '100px' });
+  els.forEach((el) => io.observe(el));
+  cleanups.push(() => io.disconnect());
+}
+
 export function initMotion() {
   cleanups.forEach((c) => c());
   cleanups = [];
@@ -159,6 +170,7 @@ export function initMotion() {
   staggers();
   splits();
   reveals();
+  pauseOffscreen();
   tilts();
   counts();
 }

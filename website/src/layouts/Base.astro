@@ -26,7 +26,10 @@ const { title, description, schema = [], ogType = 'website' } = Astro.props;
 const path = Astro.url.pathname.replace(/(\/index)?\.html$/, '').replace(/\/$/, '') || '/';
 const noindex = Astro.props.noindex ?? NOINDEX_PATHS.includes(path);
 const canonical = new URL(path, SITE.url).toString();
-const fullTitle = path === '/' ? `${SITE.fullName} — ${SITE.tagline}` : `${title} | ${SITE.fullName}`;
+// Keep titles within ~65 characters so search results don't truncate: full brand, short brand, or none.
+const fullTitle = path === '/'
+  ? `${SITE.fullName} — ${SITE.tagline}`
+  : [`${title} | ${SITE.fullName}`, `${title} | ${SITE.name}`].find((t) => t.length <= 65) ?? title;
 const ogImage = Astro.props.ogImage ?? ogFor(path) ?? SITE.ogImage;
 const ogImageUrl = new URL(ogImage, SITE.url).toString();
 // Page-to-page motion: the old page lifts away, the new one rises in (keyframes in global.css).

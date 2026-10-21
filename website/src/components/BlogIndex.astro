@@ -14,7 +14,7 @@ const used = new Set(all.map((p) => p.data.category));
 const title = category ? BLOG_CATEGORIES[category] : 'Blog';
 const crumbs = [{ name: 'Home', path: '/' }, { name: 'Blog', path: '/blog' }, ...(category ? [{ name: title, path: `/blog/category/${category}` }] : [])];
 ---
-<Base title={category ? `${title} articles` : 'Blog'} description={category ? `Hosttiva articles about ${title.toLowerCase()}.` : 'Expert tips, product updates, and customer stories from Hosttiva by Inventomo.'} schema={[breadcrumbs(crumbs)]}>
+<Base title={category ? `${title} articles` : 'Blog'} description={category ? `Practical guides on ${title.toLowerCase()} from the Hosttiva by Inventomo team: how-tos, explainers and checklists you can act on.` : 'Expert tips, product updates, and customer stories from Hosttiva by Inventomo.'} schema={[breadcrumbs(crumbs)]}>
   <section class="container-x py-14 sm:py-20">
     <Breadcrumbs items={crumbs} />
     <h1 class="display-lg mt-8 max-w-4xl" data-split="now">{category ? title : 'Notes from the people who run the servers'}</h1>

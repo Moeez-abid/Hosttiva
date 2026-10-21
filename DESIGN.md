@@ -51,8 +51,10 @@ purple/blue gradients, grid-of-identical-cards pages.
 ## Motion (required on every page)
 Shared system in `website/src/lib/motion.ts` + `global.css`; armed by `html.motion` only when the visitor allows
 motion, with a 3s failsafe, so content is always visible without JS. Hooks:
-- `data-split="now"` on every page H1 (word-by-word rise from a mask); `data-split` on section H2s (on view).
-- `.enter` + `style="--d:320ms"` for hero copy/CTAs that follow the H1.
+- `data-split="now"` on every page H1: words rise and unblur but stay painted and unclipped from the first frame
+  (protects LCP). `data-split` on section H2s uses the masked rise on view.
+- `.enter` + `style="--d:320ms"` for hero copy/CTAs that follow the H1 (transform + blur only, never opacity).
+- Decorative loops pause off screen (`.is-offscreen`, toggled by motion.ts for `.pv`, `.status-card`, `.hero-stage`).
 - `.reveal` for blocks; wrap lists that appear as lists in `data-stagger` (70ms steps, capped at 560ms).
 - `data-tilt="5"` on interactive tiles/cards: 3D pointer tilt with glare (fine pointers only).
 - `data-count` on headline numbers (count up once, no layout shift).

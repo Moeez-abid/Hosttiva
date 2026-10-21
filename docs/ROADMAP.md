@@ -4,6 +4,8 @@ Derived from SRS sections 3–6. Phase 1 (scaffold, homepage, product pages, pri
 Placeholder pages for Phase 2+ already exist in `website/src/data/pages.ts` (noindex); replace them as each item ships.
 
 ## Before launch (blockers)
+See **docs/LAUNCH.md** for the ordered, step-by-step launch checklist.
+
 - [ ] Confirm placeholder marketplace prices/delivery/support in `marketplace.ts`, and the security@ mailbox
 - [ ] Replace placeholder prices in `website/src/data/plans.ts`, then set `PRICES_ARE_PLACEHOLDERS = false` (turns on Offer schema later)
 - [ ] Flip `CLIENT_AREA_LIVE` to true in site.ts when client.hosttiva.com works
@@ -59,7 +61,8 @@ Placeholder pages for Phase 2+ already exist in `website/src/data/pages.ts` (noi
 - [ ] WebP/AVIF image pipeline
 - [x] Split XML sitemaps (products, blog, tutorials, pages) under sitemap-index.xml
 - [x] Static performance budget: ~6 KB JS, 10 KB CSS, ~15 KB HTML per page (gzip); 3D chunk lazy on home only
-- [ ] Lighthouse / PageSpeed run on production (target 95+, LCP < 2.5s, CLS < 0.1, INP < 200ms); WCAG 2.2 AA audit
+- [x] Launch-readiness pass: 133-page audit (titles, descriptions, headings, alt text, internal links: 0 issues), keyboard menus, LCP-safe hero, off-screen pausing, 375px overflow check
+- [ ] PageSpeed run on production (target 95+, LCP < 2.5s, CLS < 0.1, INP < 200ms); manual screen-reader pass
 - [x] Monitoring hooks in `site.ts` (Cloudflare Web Analytics, Google + Bing verification): paste IDs to enable
 - [ ] GA4 / Microsoft Clarity (after cookie banner + privacy policy), uptime and error monitoring
 - [x] Content Security Policy in `_headers`

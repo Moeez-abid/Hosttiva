@@ -46,6 +46,8 @@ export interface Product {
   note?: string;
   faqs?: Faq[];
   related?: string[];
+  /** Page <title> when the product name is shared with another page. */
+  seoTitle?: string;
   /** Hide from mega-menu (still gets a page). */
   hideInNav?: boolean;
 }
@@ -412,6 +414,7 @@ export const PRODUCTS: Product[] = [
   {
     slug: 'create/wordpress',
     name: 'Managed WordPress',
+    seoTitle: 'Create a WordPress Website',
     category: 'create',
     icon: 'PanelsTopLeft',
     status: 'available',
@@ -681,6 +684,7 @@ export const PRODUCTS: Product[] = [
   {
     slug: 'solutions/ecommerce',
     name: 'Managed E-commerce',
+    seoTitle: 'E-commerce Infrastructure',
     category: 'solutions',
     icon: 'ShoppingBag',
     status: 'enquiry',

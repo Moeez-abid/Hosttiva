@@ -44,6 +44,8 @@
     text-rendering: optimizeLegibility;
     scroll-padding-top: calc(var(--header-h) + 1.5rem);
   }
+  /* Clip (not hide): stops transient animation overflow from causing sideways scroll, without breaking position: sticky. */
+  main { overflow-x: clip; }
   body {
     background: var(--bg);
     font-size: 1.0625rem; /* 17px, Apple body */
@@ -259,7 +261,8 @@
 
 /* Page-load entrance for hero copy that follows a split headline: class="enter" style="--d:300ms" */
 .motion .enter { animation: enter 900ms var(--ease-out) var(--d, 0ms) both; }
-@keyframes enter { from { opacity: 0; transform: translate3d(0, 14px, 0); filter: blur(6px); } }
+/* No opacity: hero copy is painted from the first frame, so it never delays Largest Contentful Paint. */
+@keyframes enter { from { transform: translate3d(0, 14px, 0); filter: blur(6px); } }
 /* 3D flip-in for hero icons */
 .motion .icon-3d { animation: icon-3d 1100ms var(--ease-out) both; transform-origin: 50% 50%; }
 @keyframes icon-3d { from { opacity: 0; transform: perspective(500px) rotateY(-100deg) rotateX(20deg) scale(0.7); } }
@@ -272,6 +275,14 @@
   transition: transform 1000ms var(--ease-out), opacity 700ms var(--ease-out);
   transition-delay: calc(min(var(--wi, 0) * 55ms, 650ms) + var(--split-delay, 0ms));
 }
+/* Page H1s (data-split="now") are usually the LCP element: keep every word painted and unclipped from the
+   first frame and animate only position and blur. The masked rise is kept for headings further down. */
+[data-split='now'] .w { overflow: visible; }
+.motion [data-split='now']:not(.in) .wi { transform: translate3d(0, 0.28em, 0); opacity: 1; filter: blur(10px); }
+.motion [data-split='now'] .wi { transition: transform 1000ms var(--ease-out), filter 900ms var(--ease-out); transition-delay: calc(min(var(--wi, 0) * 55ms, 650ms)); }
+
+/* Loops pause while their scene is off screen (class toggled by motion.ts). */
+.is-offscreen, .is-offscreen * { animation-play-state: paused !important; }
 
 /* 3D pointer tilt with glare */
 [data-tilt] {

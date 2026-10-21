@@ -52,10 +52,10 @@ const explore = {
             </li>
           ))}
           <li>
-            <a href="/pricing" class:list={['inline-block rounded-full px-3.5 py-1.5 text-[0.875rem] leading-normal transition-colors', path.startsWith('/pricing') ? 'text-text' : 'text-text/80 hover:text-text']}>Pricing</a>
+            <a href="/pricing" aria-current={path.startsWith('/pricing') ? 'page' : undefined} class:list={['inline-block rounded-full px-3.5 py-1.5 text-[0.875rem] leading-normal transition-colors', path.startsWith('/pricing') ? 'text-text' : 'text-text/80 hover:text-text']}>Pricing</a>
           </li>
           <li>
-            <a href="/trust" class:list={['inline-block rounded-full px-3.5 py-1.5 text-[0.875rem] leading-normal transition-colors', path.startsWith('/trust') ? 'text-text' : 'text-text/80 hover:text-text']}>Trust</a>
+            <a href="/trust" aria-current={path.startsWith('/trust') ? 'page' : undefined} class:list={['inline-block rounded-full px-3.5 py-1.5 text-[0.875rem] leading-normal transition-colors', path.startsWith('/trust') ? 'text-text' : 'text-text/80 hover:text-text']}>Trust</a>
           </li>
         </ul>
       </nav>
@@ -276,16 +276,40 @@ const explore = {
     }
 
     header.querySelector('.scrim')!.addEventListener('click', closeAll);
+
+    // Keyboard: Enter/Space/ArrowDown opens a flyout and moves focus into it; Escape returns to the trigger.
+    const panelOf = (t: HTMLButtonElement) => document.getElementById(t.getAttribute('aria-controls')!)!;
+    triggers.forEach((t) => {
+      t.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowDown') {
+          e.preventDefault();
+          open(t);
+          requestAnimationFrame(() => panelOf(t).querySelector<HTMLElement>('a')?.focus());
+        }
+      });
+      panelOf(t).addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') { e.stopPropagation(); closeAll(); t.focus(); }
+      });
+    });
+    // Close when keyboard focus leaves the header and its flyouts.
+    header.addEventListener('focusout', (e) => {
+      const next = e.relatedTarget as Node | null;
+      if (next && !header.contains(next)) closeAll();
+    });
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeAll(); }, { signal });
 
     const mobileBtn = header.querySelector<HTMLButtonElement>('.mobile-toggle')!;
     const sheet = document.getElementById('mobile-nav')!;
-    mobileBtn.addEventListener('click', () => {
-      const isOpen = mobileBtn.getAttribute('aria-expanded') === 'true';
-      mobileBtn.setAttribute('aria-expanded', String(!isOpen));
-      mobileBtn.setAttribute('aria-label', isOpen ? 'Open menu' : 'Close menu');
-      sheet.hidden = isOpen;
-      document.documentElement.style.overflow = isOpen ? '' : 'hidden';
+    const setSheet = (open: boolean) => {
+      mobileBtn.setAttribute('aria-expanded', String(open));
+      mobileBtn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+      sheet.hidden = !open;
+      document.documentElement.style.overflow = open ? 'hidden' : '';
+      if (open) requestAnimationFrame(() => sheet.querySelector<HTMLElement>('summary, a')?.focus());
+    };
+    mobileBtn.addEventListener('click', () => setSheet(mobileBtn.getAttribute('aria-expanded') !== 'true'));
+    sheet.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') { setSheet(false); mobileBtn.focus(); }
     });
   }
   document.addEventListener('astro:page-load', initHeader);
