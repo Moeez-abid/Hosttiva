@@ -17,6 +17,7 @@ import DnsTool from '../components/tools/DnsTool.astro';
 import WhoisTool from '../components/tools/WhoisTool.astro';
 import DomainGenerator from '../components/tools/DomainGenerator.astro';
 import SslTool from '../components/tools/SslTool.astro';
+import ProductVisual from '../components/ProductVisual.astro';
 import { breadcrumbs, service, faqPage } from '../lib/schema';
 
 export const getStaticPaths = (() => [
@@ -77,6 +78,11 @@ const clip = (s: string, n = 158) => (s.length <= n ? s : s.slice(0, s.lastIndex
             </form>
           )}
         </div>
+        {!p.tool && (
+          <div class="container-x pb-20">
+            <ProductVisual product={p} />
+          </div>
+        )}
         {p.tool && (
           <div class="container-x enter pb-16" style="--d:500ms">
             {p.tool === 'dns' && <DnsTool />}
