@@ -7,7 +7,7 @@ import {
   productsIn,
   type Product,
 } from '../data/products';
-import { LINKS, SITE } from './site';
+import { LINKS, SITE, PRELAUNCH } from './site';
 
 export interface NavLink { label: string; href: string; soon?: boolean; external?: boolean; desc?: string; icon?: string }
 
@@ -126,8 +126,8 @@ export const FOOTER_COLUMNS: { title: string; links: NavLink[] }[] = [
 ];
 
 export const FOOTER_BUTTONS: NavLink[] = [
-  { label: 'Client Area', href: LINKS.clientArea, external: true },
-  { label: 'Get Started', href: LINKS.getStarted, external: true },
+  ...(PRELAUNCH ? [] : [{ label: 'Client Area', href: LINKS.clientArea, external: true }]),
+  { label: 'Get Started', href: LINKS.getStarted, external: !PRELAUNCH },
   { label: 'Contact Inventomo', href: '/contact' },
   { label: 'View Hosting Plans', href: '/pricing' },
 ];

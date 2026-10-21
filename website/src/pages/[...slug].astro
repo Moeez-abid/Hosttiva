@@ -12,7 +12,7 @@ import BillingToggle from '../components/BillingToggle.astro';
 import { PRODUCTS, CATEGORIES, CATEGORY_FAQS, getProduct, type Product } from '../data/products';
 import { PLANNED_PAGES, type PlannedPage } from '../data/pages';
 import { getPlanGroup } from '../data/plans';
-import { LINKS } from '../config/site';
+import { LINKS, PRELAUNCH } from '../config/site';
 import DnsTool from '../components/tools/DnsTool.astro';
 import WhoisTool from '../components/tools/WhoisTool.astro';
 import DomainGenerator from '../components/tools/DomainGenerator.astro';
@@ -65,16 +65,15 @@ const clip = (s: string, n = 158) => (s.length <= n ? s : s.slice(0, s.lastIndex
           </div>
 
           {domainForm && (
-            <form action={domainForm === 'register' ? LINKS.domainSearch.split('?')[0] : LINKS.domainTransfer.split('?')[0]} method="get" class="tile-surface enter mx-auto mt-12 max-w-xl p-3 text-left" style="--d:620ms" role="search">
-              <input type="hidden" name="a" value="add" />
-              <input type="hidden" name="domain" value={domainForm} />
+            <form action={PRELAUNCH ? '/domains/whois' : domainForm === 'register' ? LINKS.domainSearch.split('?')[0] : LINKS.domainTransfer.split('?')[0]} method="get" class="tile-surface enter mx-auto mt-12 max-w-xl p-3 text-left" style="--d:620ms" role="search">
+              {!PRELAUNCH && <><input type="hidden" name="a" value="add" /><input type="hidden" name="domain" value={domainForm} /></>}
               <label for="domain-q" class="sr-only">{domainForm === 'register' ? 'Domain to check' : 'Domain to transfer'}</label>
               <div class="flex gap-2">
-                <input id="domain-q" name="query" type="text" required inputmode="url" autocomplete="off" spellcheck="false"
+                <input id="domain-q" name={PRELAUNCH ? 'q' : 'query'} type="text" required inputmode="url" autocomplete="off" spellcheck="false"
                   placeholder={domainForm === 'register' ? 'yourbrand.com' : 'example.com'} class="field" />
-                <button type="submit" class="btn btn-primary shrink-0">{domainForm === 'register' ? 'Search' : 'Transfer'}</button>
+                <button type="submit" class="btn btn-primary shrink-0">{PRELAUNCH ? 'Check' : domainForm === 'register' ? 'Search' : 'Transfer'}</button>
               </div>
-              <p class="mt-2.5 px-1 text-[0.8125rem] text-muted">Continues in the Hosttiva client area.</p>
+              <p class="mt-2.5 px-1 text-[0.8125rem] text-muted">{PRELAUNCH ? (domainForm === 'register' ? 'Checks whether a name is taken. Registration opens at launch.' : 'Shows the domain\'s current registration. Transfers open at launch.') : 'Continues in the Hosttiva client area.'}</p>
             </form>
           )}
         </div>

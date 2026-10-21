@@ -2,24 +2,46 @@
 import Base from '../layouts/Base.astro';
 import Icon from '../components/Icon.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
-import { LINKS, SITE, CLIENT_AREA } from '../config/site';
+import { LINKS, SITE, PRELAUNCH } from '../config/site';
 import { breadcrumbs } from '../lib/schema';
 
 const crumbs = [{ name: 'Home', path: '/' }, { name: 'Contact', path: '/contact' }];
+// Pre-launch: every route is an email with a ready subject. Live: WHMCS contact form and tickets.
+const mail = (subject: string) => `mailto:${SITE.email}?subject=${encodeURIComponent(subject)}`;
 const routes = [
-  { icon: 'MessagesSquare', title: 'Sales and plan advice', text: 'Not sure which plan fits? Tell us what you are running and we will recommend one.', cta: 'Ask sales', href: LINKS.enquiry('Sales enquiry') },
-  { icon: 'ArrowRightLeft', title: 'Website migration', text: 'Moving from another host? Free migration is available on eligible plans.', cta: 'Plan a migration', href: LINKS.enquiry('Migration request') },
-  { icon: 'Hammer', title: 'Build something with Inventomo', text: 'Websites, applications, AI systems and automation, designed and built by Inventomo.', cta: 'Start a project', href: LINKS.enquiry('Inventomo project') },
-  { icon: 'LifeBuoy', title: 'Existing customers', text: 'Open a support ticket from the client area so we can see your services.', cta: 'Open a ticket', href: `${CLIENT_AREA}/submitticket.php` },
-];
+  { icon: 'MessagesSquare', title: 'Sales and plan advice', text: 'Not sure which plan fits? Tell us what you are running and we will recommend one.', cta: 'Ask sales', subject: 'Sales enquiry' },
+  { icon: 'ArrowRightLeft', title: 'Website migration', text: 'Moving from another host? Free migration is available on eligible plans.', cta: 'Plan a migration', subject: 'Migration request' },
+  { icon: 'Hammer', title: 'Build something with Inventomo', text: 'Websites, applications, AI systems and automation, designed and built by Inventomo.', cta: 'Start a project', subject: 'Inventomo project' },
+  PRELAUNCH
+    ? { icon: 'BellRing', title: 'Launch updates', text: 'Want to know when ordering opens? We will email you once, when the client area goes live.', cta: 'Notify me', subject: 'Launch notice' }
+    : { icon: 'LifeBuoy', title: 'Existing customers', text: 'Open a support ticket from the client area so we can see your services.', cta: 'Open a ticket', subject: '' },
+].map((r) => ({ ...r, href: PRELAUNCH ? mail(r.subject) : r.subject ? LINKS.enquiry(r.subject) : LINKS.ticket }));
 ---
 <Base title="Contact" description="Need help choosing a plan or moving your website? Contact the Hosttiva by Inventomo team." schema={[breadcrumbs(crumbs)]}>
-  <section class="container-x py-16 sm:py-20">
-    <Breadcrumbs items={crumbs} />
-    <h1 class="display-lg mt-8" data-split="now">Contact</h1>
-    <p class="lead enter mt-5 max-w-2xl" style="--d:320ms">Need help choosing a plan or moving your website? We’re here to help.</p>
+  <section class="grid-backdrop">
+    <div class="container-x pb-16 pt-10 sm:pb-20 sm:pt-14">
+      <Breadcrumbs items={crumbs} />
+      <h1 class="display-lg mt-8" data-split="now">Contact</h1>
+      <p class="lead enter mt-5 max-w-2xl" style="--d:320ms">Need help choosing a plan or moving your website? We’re here to help.</p>
 
-    <ul class="mt-12 divide-y divide-border border-y border-border" data-stagger>
+      {PRELAUNCH && (
+        <div class="tile enter mt-8 max-w-3xl p-6" style="--d:440ms" role="note">
+          <p class="flex items-center gap-2 font-semibold"><Icon name="Rocket" size={18} class="text-link" />We’re launching soon</p>
+          <p class="mt-2 text-muted">
+            Ordering and the client area open at launch. Until then, email us at{' '}
+            <a href={`mailto:${SITE.email}`} class="link font-medium">{SITE.email}</a>{' '}and a person will reply.
+          </p>
+          <p class="asked mt-4 hidden rounded-[var(--radius)] border border-border bg-surface px-4 py-3 text-[0.9375rem]">
+            You asked about <strong class="asked-subject"></strong>.{' '}
+            <a class="asked-mail link" href={`mailto:${SITE.email}`}>Email us about it</a>
+          </p>
+        </div>
+      )}
+    </div>
+  </section>
+
+  <section class="container-x pb-24">
+    <ul class="divide-y divide-border border-y border-border" data-stagger>
       {routes.map((r) => (
         <li class="reveal grid items-center gap-4 py-6 sm:grid-cols-[2.5rem_1fr_auto]">
           <span class="text-link"><Icon name={r.icon} size={22} /></span>
@@ -27,14 +49,28 @@ const routes = [
             <h2 class="text-lg font-medium">{r.title}</h2>
             <p class="text-sm text-muted">{r.text}</p>
           </div>
-          <a href={r.href} class="btn btn-secondary !py-1.5 text-sm justify-self-start">{r.cta} <Icon name="ArrowUpRight" size={14} /></a>
+          <a href={r.href} class="btn btn-secondary btn-sm justify-self-start">{r.cta} <Icon name={PRELAUNCH ? 'Mail' : 'ArrowUpRight'} size={14} /></a>
         </li>
       ))}
     </ul>
 
-    <p class="mt-8 text-sm text-muted">
-      Prefer email? Write to <span class="text-text">{SITE.email}</span>
-      <a href={`mailto:${SITE.email}`} class="link ml-1">(open mail app)</a>.
+    <p class="reveal mt-8 text-sm text-muted">
+      Prefer to write directly? Our address is <span class="font-medium text-text">{SITE.email}</span>.
     </p>
   </section>
 </Base>
+
+<script define:vars={{ email: SITE.email }}>
+  // Show the topic a visitor came from (e.g. a plan's "Notify me at launch") and prefill the email subject.
+  function initAsked() {
+    var box = document.querySelector('.asked');
+    if (!box) return;
+    var subject = new URLSearchParams(location.search).get('subject');
+    if (!subject) return;
+    box.querySelector('.asked-subject').textContent = subject;
+    box.querySelector('.asked-mail').setAttribute('href', 'mailto:' + email + '?subject=' + encodeURIComponent(subject));
+    box.classList.remove('hidden');
+  }
+  initAsked();
+  document.addEventListener('astro:page-load', initAsked);
+</script>

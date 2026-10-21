@@ -6,7 +6,7 @@ import ToolShell from './ToolShell.astro';
 
 <script>
   import { bindTool, cleanDomain, DOMAIN_RE, message, table, el } from '../../lib/tools';
-  import { LINKS } from '../../config/site';
+  import { LINKS, CLIENT_AREA_LIVE } from '../../config/site';
 
   type Rdap = {
     ldhName?: string;
@@ -29,9 +29,10 @@ import ToolShell from './ToolShell.astro';
       const r = await fetch(`https://rdap.org/domain/${encodeURIComponent(d)}`, { headers: { accept: 'application/rdap+json' } });
       if (r.status === 404) {
         const p = el('p', 'text-text', `No registration record found for ${d}. It may be available.`);
-        const a = el('a', 'btn btn-primary mt-4 !py-1.5 text-sm', 'Check availability');
-        a.setAttribute('href', `${LINKS.domainSearch}&query=${encodeURIComponent(d)}`);
-        return out.replaceChildren(p, a);
+        const a = el('a', 'btn btn-primary btn-sm mt-4', CLIENT_AREA_LIVE ? 'Register it' : 'Get notified at launch');
+        a.setAttribute('href', CLIENT_AREA_LIVE ? `${LINKS.domainSearch}&query=${encodeURIComponent(d)}` : `/contact?subject=${encodeURIComponent(`Domain: ${d}`)}`);
+        const note = CLIENT_AREA_LIVE ? null : el('p', 'mt-2 text-[0.8125rem] text-muted', 'Domain registration opens when our client area launches.');
+        return out.replaceChildren(...[p, a, note].filter(Boolean) as HTMLElement[]);
       }
       if (!r.ok) return message(out, `The registry for this extension did not return data (HTTP ${r.status}). Some extensions do not offer public RDAP yet.`, 'error');
       const j: Rdap = await r.json();

@@ -3,7 +3,7 @@ import Logo from './Logo.astro';
 import Icon from './Icon.astro';
 import ThemeToggle from './ThemeToggle.astro';
 import { PRODUCTS_MENU, SOLUTIONS_MENU, RESOURCES_MENU } from '../config/nav';
-import { LINKS } from '../config/site';
+import { LINKS, PRELAUNCH } from '../config/site';
 
 const path = Astro.url.pathname;
 const active = (prefixes: string[]) => prefixes.some((p) => path.startsWith(p));
@@ -63,7 +63,7 @@ const explore = {
       <div class="ml-auto flex items-center gap-1 lg:ml-0">
         <a href="/search" class="icon-btn" aria-label="Search" title="Search"><Icon name="Search" size={17} /></a>
         <ThemeToggle />
-        <a href={LINKS.clientArea} class="hidden px-3 text-[0.875rem] text-text/80 hover:text-text sm:inline">Client area</a>
+        {!PRELAUNCH && <a href={LINKS.clientArea} class="hidden px-3 text-[0.875rem] text-text/80 hover:text-text sm:inline">Client area</a>}
         <a href="/pricing" class="btn btn-primary btn-sm ml-1 hidden sm:inline-flex">Get started</a>
         <button type="button" class="mobile-toggle icon-btn lg:hidden" aria-expanded="false" aria-controls="mobile-nav" aria-label="Open menu">
           <span class="burger" aria-hidden="true"><span></span><span></span></span>
@@ -156,7 +156,7 @@ const explore = {
       <a href="/pricing" class="block border-b border-border py-4 text-[1.75rem] font-semibold tracking-tight">Pricing</a>
       <a href="/trust" class="block border-b border-border py-4 text-[1.75rem] font-semibold tracking-tight">Trust</a>
       <div class="mt-6 flex gap-3">
-        <a href={LINKS.clientArea} class="btn btn-quiet flex-1">Client area</a>
+        {PRELAUNCH ? <a href="/contact" class="btn btn-quiet flex-1">Contact</a> : <a href={LINKS.clientArea} class="btn btn-quiet flex-1">Client area</a>}
         <a href="/pricing" class="btn btn-primary flex-1">Get started</a>
       </div>
     </nav>

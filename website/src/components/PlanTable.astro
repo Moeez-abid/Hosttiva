@@ -1,7 +1,7 @@
 ---
 // Plan comparison in Apple "compare models" form: one column per plan, price first, renewal directly beneath.
 import Icon from './Icon.astro';
-import { LINKS } from '../config/site';
+import { LINKS, PRELAUNCH } from '../config/site';
 import { formatPrice, PRICES_ARE_PLACEHOLDERS, type PlanGroup, type Term } from '../data/plans';
 interface Props { group: PlanGroup; headingLevel?: 'h2' | 'h3' }
 const { group, headingLevel: H = 'h2' } = Astro.props;
@@ -41,7 +41,7 @@ const terms: Term[] = ['annual', 'monthly'];
         </div>
 
         {plan.price
-          ? <a href={LINKS.order(plan.pid, group.whmcsGroup)} class:list={['btn btn-sm mt-6 self-start !px-5 !py-2 !text-[0.9375rem]', plan.featured ? 'btn-primary' : 'btn-secondary']} aria-label={`Choose ${plan.name}`}>Choose {plan.name}</a>
+          ? <a href={LINKS.order(plan.pid, group.whmcsGroup, `${group.name} ${plan.name}`)} class:list={['btn btn-sm mt-6 self-start !px-5 !py-2 !text-[0.9375rem]', plan.featured ? 'btn-primary' : 'btn-secondary']} aria-label={PRELAUNCH ? `Get notified when ${plan.name} launches` : `Choose ${plan.name}`}>{PRELAUNCH ? 'Notify me at launch' : `Choose ${plan.name}`}</a>
           : <a href={LINKS.enquiry(`${group.name}: ${plan.name}`)} class="btn btn-secondary btn-sm mt-6 self-start !px-5 !py-2 !text-[0.9375rem]">Request a quote</a>}
 
         <ul class="mt-7 space-y-3 border-t border-border pt-6 text-[0.9375rem]">

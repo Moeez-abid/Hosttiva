@@ -2,11 +2,11 @@
 import ToolShell from './ToolShell.astro';
 ---
 <ToolShell id="generator" label="Business name or keywords" placeholder="green bakery lahore" button="Suggest names"
-  privacy="Suggestions are generated in your browser. Availability is confirmed when you search in the client area." />
+  privacy="Suggestions are generated in your browser. Check looks up public registration data; registration itself happens in the client area." />
 
 <script>
   import { bindTool, message, el } from '../../lib/tools';
-  import { LINKS } from '../../config/site';
+  import { LINKS, CLIENT_AREA_LIVE } from '../../config/site';
 
   const TLDS = ['com', 'net', 'io', 'co', 'app', 'dev', 'store', 'online', 'pk'];
   const PREFIXES = ['get', 'try', 'go', 'my', 'the'];
@@ -42,12 +42,12 @@ import ToolShell from './ToolShell.astro';
         const li = el('li', 'flex items-center justify-between gap-2 rounded-xl bg-raised px-4 py-2.5');
         li.append(el('span', 'font-mono text-sm text-text break-all', d));
         const a = el('a', 'link shrink-0 text-xs', 'Check');
-        a.setAttribute('href', `${LINKS.domainSearch}&query=${encodeURIComponent(d)}`);
+        a.setAttribute('href', CLIENT_AREA_LIVE ? `${LINKS.domainSearch}&query=${encodeURIComponent(d)}` : `/domains/whois?q=${encodeURIComponent(d)}`);
         a.setAttribute('aria-label', `Check availability of ${d}`);
         li.append(a);
         ul.append(li);
       });
-      out.replaceChildren(el('p', 'mb-3 text-muted', `${list.length} ideas. Availability is not checked until you click.`), ul);
+      out.replaceChildren(el('p', 'mb-3 text-muted', `${list.length} ideas. Click Check to see whether a name is taken.`), ul);
     });
   }
   document.addEventListener('astro:page-load', init);

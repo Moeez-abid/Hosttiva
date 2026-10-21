@@ -7,7 +7,7 @@ order: 1
 related: ['getting-started/open-support-ticket']
 ---
 
-The client area at **client.hosttiva.com** is where you manage everything you buy from Hosttiva.
+The client area at **client.hosttiva.com** is where you manage everything you buy from Hosttiva. It opens at launch; until then, [contact us](/contact) with any questions.
 
 ## The main sections
 

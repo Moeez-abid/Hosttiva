@@ -4,7 +4,7 @@ import Icon from '../../components/Icon.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import { getCollection } from 'astro:content';
 import { KB_CATEGORIES } from '../../content.config';
-import { LINKS, CLIENT_AREA } from '../../config/site';
+import { LINKS } from '../../config/site';
 import { breadcrumbs } from '../../lib/schema';
 
 type Cat = keyof typeof KB_CATEGORIES;
@@ -50,7 +50,7 @@ const cats = (Object.keys(KB_CATEGORIES) as Cat[]).map((id) => ({ id, ...KB_CATE
         <p class="mt-1 text-muted">Open a ticket from the client area and a person on our team will reply.</p>
       </div>
       <div class="flex flex-wrap gap-3">
-        <a href={`${CLIENT_AREA}/submitticket.php`} class="btn btn-primary">Open a ticket</a>
+        <a href={LINKS.ticket} class="btn btn-primary">Open a ticket</a>
         <a href="/tutorials" class="btn btn-secondary">Step-by-step tutorials</a>
       </div>
     </div>

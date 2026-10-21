@@ -1,5 +1,5 @@
 // Builds llms.txt / llms-full.txt from the same data that renders the site.
-import { SITE, LINKS } from '../config/site';
+import { SITE, LINKS, CLIENT_AREA_LIVE } from '../config/site';
 import { PRODUCTS, CATEGORIES, PRODUCT_CATEGORIES, type CategoryId } from '../data/products';
 import { PLAN_GROUPS, PRICES_ARE_PLACEHOLDERS, formatPrice } from '../data/plans';
 
@@ -47,7 +47,7 @@ export function llmsTxt(full = false): string {
   out.push(
     '',
     '## Support',
-    `- [Client area](${LINKS.clientArea}): billing, services, domains and support tickets`,
+    CLIENT_AREA_LIVE ? `- [Client area](${LINKS.clientArea}): billing, services, domains and support tickets` : `- Client area: launching soon; contact ${SITE.url}/contact`,
     '',
     '## Not yet available',
     ...PRODUCTS.filter((p) => p.status === 'coming-soon').map((p) => `- ${p.name}: planned, not offered yet`),

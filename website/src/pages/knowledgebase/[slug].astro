@@ -5,7 +5,7 @@ import Base from '../../layouts/Base.astro';
 import Icon from '../../components/Icon.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import { KB_CATEGORIES } from '../../content.config';
-import { CLIENT_AREA } from '../../config/site';
+import { LINKS } from '../../config/site';
 import { breadcrumbs, techArticle } from '../../lib/schema';
 
 export const getStaticPaths = (async () => {
@@ -61,7 +61,7 @@ const fmt = (x: Date) => x.toLocaleDateString('en-GB', { day: 'numeric', month: 
 
         <div class="reveal mt-14 flex max-w-3xl flex-col gap-4 rounded-[var(--radius-xl)] border border-border p-6 sm:flex-row sm:items-center sm:justify-between">
           <p><span class="font-semibold">Still stuck?</span> <span class="text-muted">A person on our team can help.</span></p>
-          <a href={`${CLIENT_AREA}/submitticket.php`} class="btn btn-primary btn-sm shrink-0">Open a ticket</a>
+          <a href={LINKS.ticket} class="btn btn-primary btn-sm shrink-0">Open a ticket</a>
         </div>
       </article>
 

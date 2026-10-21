@@ -1,7 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import Icon from '../components/Icon.astro';
-import { SITE, LINKS } from '../config/site';
+import { SITE, LINKS, PRELAUNCH } from '../config/site';
 import { PLAN_GROUPS, formatPrice, PRICES_ARE_PLACEHOLDERS, getPlanGroup } from '../data/plans';
 import { AUDIENCES, ECOSYSTEM } from '../data/brand';
 import ProductVisual from '../components/ProductVisual.astro';
@@ -175,12 +175,13 @@ const why = [
           <h3 class="display-md">Domains</h3>
           <p class="mt-3 text-muted">Find a name, register it, and connect it to everything else in one account.</p>
         </div>
-        <form action={LINKS.domainSearch.split('?')[0]} method="get" class="mt-8 flex gap-2" role="search">
-          <input type="hidden" name="a" value="add" /><input type="hidden" name="domain" value="register" />
+        <form action={PRELAUNCH ? '/domains/whois' : LINKS.domainSearch.split('?')[0]} method="get" class="mt-8 flex gap-2" role="search">
+          {!PRELAUNCH && <><input type="hidden" name="a" value="add" /><input type="hidden" name="domain" value="register" /></>}
           <label class="sr-only" for="home-domain">Domain name</label>
-          <input id="home-domain" name="query" class="field !bg-surface" placeholder="yourbrand.com" autocomplete="off" spellcheck="false" required />
-          <button class="btn btn-primary shrink-0" type="submit">Search</button>
+          <input id="home-domain" name={PRELAUNCH ? 'q' : 'query'} class="field !bg-surface" placeholder="yourbrand.com" autocomplete="off" spellcheck="false" required />
+          <button class="btn btn-primary shrink-0" type="submit">{PRELAUNCH ? 'Check' : 'Search'}</button>
         </form>
+        {PRELAUNCH && <p class="mt-2.5 text-[0.8125rem] text-muted">Checks whether a name is taken. Registration opens at launch.</p>}
       </div>
 
       <a href="/agencies" data-tilt="5" class="tile reveal flex flex-col justify-between p-8 md:col-span-3">

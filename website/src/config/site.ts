@@ -43,19 +43,33 @@ export const SSL_CHECK_API: string | null = null;
 /** Base URL of the WHMCS + Lagom client area (out of scope for this repo). */
 export const CLIENT_AREA = 'https://client.hosttiva.com';
 
+/**
+ * PRE-LAUNCH SWITCH. false = the WHMCS client area is not live yet: every order, quote, ticket and client-area
+ * link goes to /contact (subject prefilled), plan buttons read "Notify me at launch", domain forms check
+ * registration via the free WHOIS tool, and a launch notice shows site-wide.
+ * Flip to true once client.hosttiva.com works and WHMCS product ids are in plans.ts.
+ */
+export const CLIENT_AREA_LIVE = false;
+export const PRELAUNCH = !CLIENT_AREA_LIVE;
+
+const contact = (subject?: string) => `/contact${subject ? `?subject=${encodeURIComponent(subject)}` : ''}`;
+
 export const LINKS = {
-  clientArea: `${CLIENT_AREA}/clientarea.php`,
-  getStarted: `${CLIENT_AREA}/cart.php`,
-  /** Enquiry / quote requests go to the WHMCS contact form. */
+  clientArea: CLIENT_AREA_LIVE ? `${CLIENT_AREA}/clientarea.php` : contact(),
+  getStarted: CLIENT_AREA_LIVE ? `${CLIENT_AREA}/cart.php` : '/pricing',
+  ticket: CLIENT_AREA_LIVE ? `${CLIENT_AREA}/submitticket.php` : contact('Support question'),
+  /** Enquiry / quote requests: WHMCS contact form when live, otherwise the site's contact page. */
   enquiry: (subject?: string) =>
-    `${CLIENT_AREA}/contact.php${subject ? `?subject=${encodeURIComponent(subject)}` : ''}`,
-  /** WHMCS domain checker. The search form appends ?query=<domain>. */
+    CLIENT_AREA_LIVE ? `${CLIENT_AREA}/contact.php${subject ? `?subject=${encodeURIComponent(subject)}` : ''}` : contact(subject),
+  /** WHMCS domain checker (used only when live). The search form appends ?query=<domain>. */
   domainSearch: `${CLIENT_AREA}/cart.php?a=add&domain=register`,
   domainTransfer: `${CLIENT_AREA}/cart.php?a=add&domain=transfer`,
   /**
-   * Order link for a WHMCS product id. Until real pids exist, plans carry
-   * `pid: null` and fall back to the product group store page.
+   * Order link for a WHMCS product id. Live: exact product (pid) or the group store page.
+   * Pre-launch: launch-notice enquiry naming the plan.
    */
-  order: (pid: number | null, group = '') =>
-    pid ? `${CLIENT_AREA}/cart.php?a=add&pid=${pid}` : `${CLIENT_AREA}/store/${group}`,
+  order: (pid: number | null, group = '', label = '') =>
+    CLIENT_AREA_LIVE
+      ? pid ? `${CLIENT_AREA}/cart.php?a=add&pid=${pid}` : `${CLIENT_AREA}/store/${group}`
+      : contact(`Launch notice: ${label || group}`),
 } as const;

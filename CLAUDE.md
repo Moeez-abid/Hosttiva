@@ -28,6 +28,7 @@ Lucide icons only (`src/components/Icon.astro`) · SF Pro system stack + self-ho
 - Never publish SRS-conditional items (GPU, Windows, AI website builder, Envato names, affiliate %):
   set `status: 'coming-soon'` → enquiry CTA, no prices, noindex.
 - No fake checkout: plan buttons use `LINKS.order()` from site.ts. Never hard-code prices in pages.
+- `CLIENT_AREA_LIVE` in site.ts (false = pre-launch): all client-area links go to /contact; flip to true when WHMCS is live. Always use `LINKS.*`, never hard-code client.hosttiva.com.
 
 ## Working rules
 - Plan ≤10 bullets, then execute. No subagents, no broad repo exploration.

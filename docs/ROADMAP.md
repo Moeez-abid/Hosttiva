@@ -6,6 +6,7 @@ Placeholder pages for Phase 2+ already exist in `website/src/data/pages.ts` (noi
 ## Before launch (blockers)
 - [ ] Confirm placeholder marketplace prices/delivery/support in `marketplace.ts`, and the security@ mailbox
 - [ ] Replace placeholder prices in `website/src/data/plans.ts`, then set `PRICES_ARE_PLACEHOLDERS = false` (turns on Offer schema later)
+- [ ] Flip `CLIENT_AREA_LIVE` to true in site.ts when client.hosttiva.com works
 - [ ] Add real WHMCS product ids (`pid`) and store group slugs; confirm `CLIENT_AREA` URL in `site.ts`
 - [ ] Publish real storage, CPU, RAM, inode, bandwidth, email, backup and support limits per plan
 - [ ] Confirm contact email, Inventomo URL and social profiles in `site.ts`
