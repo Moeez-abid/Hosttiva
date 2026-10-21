@@ -114,13 +114,14 @@ export const FOOTER_COLUMNS: { title: string; links: NavLink[] }[] = [
   {
     title: 'Legal',
     links: [
-      { label: 'Privacy Policy', href: '/legal/privacy', soon: true },
-      { label: 'Terms of Service', href: '/legal/terms', soon: true },
-      { label: 'Acceptable Use Policy', href: '/legal/acceptable-use', soon: true },
-      { label: 'Refund Policy', href: '/legal/refund', soon: true },
-      { label: 'Service Level Agreement', href: '/legal/sla', soon: true },
-      { label: 'Backup Policy', href: '/legal/backup', soon: true },
-      { label: 'Abuse Reporting', href: '/legal/abuse', soon: true },
+      { label: 'Privacy Policy', href: '/legal/privacy' },
+      { label: 'Terms of Service', href: '/legal/terms' },
+      { label: 'Acceptable Use Policy', href: '/legal/acceptable-use' },
+      { label: 'Refund Policy', href: '/legal/refund' },
+      { label: 'Service Level Agreement', href: '/legal/sla' },
+      { label: 'Backup Policy', href: '/legal/backup' },
+      { label: 'Abuse Reporting', href: '/legal/abuse' },
+      { label: 'All policies', href: '/legal' },
     ],
   },
 ];

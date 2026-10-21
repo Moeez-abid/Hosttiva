@@ -3,6 +3,9 @@
 import { PLANNED_PAGES } from '../data/pages';
 import { PRODUCTS } from '../data/products';
 
+/** Whole sections kept out of the sitemap. Legal policies are drafts until reviewed; remove '/legal' once final. */
+export const NOINDEX_PREFIXES: string[] = ['/legal'];
+
 export const NOINDEX_PATHS: string[] = [
   ...PLANNED_PAGES.map((p) => `/${p.slug}`),
   ...PRODUCTS.filter((p) => p.status === 'coming-soon').map((p) => `/${p.slug}`),

@@ -1,0 +1,58 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Icon from '../../components/Icon.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import { breadcrumbs } from '../../lib/schema';
+
+export const getStaticPaths = (async () => {
+  const all = (await getCollection('legal')).sort((a, b) => a.data.order - b.data.order);
+  return all.map((policy) => ({ params: { slug: policy.id }, props: { policy, all } }));
+}) satisfies GetStaticPaths;
+
+const { policy, all } = Astro.props;
+const { Content, headings } = await render(policy);
+const d = policy.data;
+const draft = d.status === 'draft';
+const path = `/legal/${policy.id}`;
+const crumbs = [{ name: 'Home', path: '/' }, { name: 'Legal', path: '/legal' }, { name: d.title, path }];
+const fmt = (x: Date) => x.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+---
+<Base title={d.title} description={d.summary} schema={[breadcrumbs(crumbs)]} noindex={draft}>
+  <div class="container-x pb-24 pt-10 sm:pt-14">
+    <Breadcrumbs items={crumbs} />
+    <div class="mt-10 grid gap-12 lg:grid-cols-[minmax(0,1fr)_15rem]">
+      <article class="min-w-0">
+        <h1 class="display-md max-w-3xl" data-split="now">{d.title}</h1>
+        <p class="lead enter mt-4 max-w-2xl !text-[1.1875rem]" style="--d:300ms">{d.summary}</p>
+        {draft ? (
+          <div class="enter mt-8 flex max-w-3xl items-start gap-3 rounded-[var(--radius-lg)] border border-warn/40 bg-surface p-5" style="--d:420ms" role="note">
+            <Icon name="TriangleAlert" size={20} class="mt-0.5 shrink-0 text-warn" />
+            <div>
+              <p class="font-semibold">Draft — pending legal review. Not in effect.</p>
+              <p class="mt-1 text-[0.9375rem] text-muted">Text in <strong>[brackets]</strong> is a placeholder to be confirmed. This document will be finalised by a qualified legal professional before Hosttiva accepts customers.</p>
+            </div>
+          </div>
+        ) : d.effective && <p class="spec mt-4">Effective <time datetime={d.effective.toISOString()}>{fmt(d.effective)}</time></p>}
+        <div class="prose reveal mt-10 max-w-3xl"><Content /></div>
+      </article>
+      <aside class="hidden lg:block">
+        <nav aria-label="Policies" class="sticky top-24 text-[0.875rem]">
+          <p class="label mb-3">Policies</p>
+          <ul class="space-y-1 border-l border-border">
+            {all.map((p) => (
+              <li><a href={`/legal/${p.id}`} class:list={['-ml-px block border-l py-1 pl-3', p.id === policy.id ? 'border-link font-medium text-text' : 'border-transparent text-muted hover:text-text']} aria-current={p.id === policy.id ? 'page' : undefined}>{p.data.title}</a></li>
+            ))}
+          </ul>
+          {headings.filter((h) => h.depth === 2).length > 3 && (
+            <>
+              <p class="label mb-3 mt-8">On this page</p>
+              <ul class="space-y-1.5 text-[0.8125rem]">{headings.filter((h) => h.depth === 2).map((h) => <li><a href={`#${h.slug}`} class="text-muted hover:text-text">{h.text}</a></li>)}</ul>
+            </>
+          )}
+        </nav>
+      </aside>
+    </div>
+  </div>
+</Base>

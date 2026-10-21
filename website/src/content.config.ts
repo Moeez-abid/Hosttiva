@@ -70,4 +70,16 @@ const kb = defineCollection({
   }),
 });
 
-export const collections = { blog, tutorials, kb };
+// Legal policies (SRS §5). status 'draft' = shown with a not-in-effect banner and noindex; 'final' after legal review.
+const legal = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/legal' }),
+  schema: z.object({
+    title: z.string(),
+    summary: z.string().max(200),
+    status: z.enum(['draft', 'final']).default('draft'),
+    order: z.number(),
+    effective: z.coerce.date().optional(),
+  }),
+});
+
+export const collections = { blog, tutorials, kb, legal };

@@ -11,11 +11,4 @@ export const PLANNED_PAGES: PlannedPage[] = [
   { slug: 'performance', title: 'Performance', blurb: 'The web servers, caching and network technology behind Hosttiva plans.', phase: 3 },
   { slug: 'enterprise', title: 'Enterprise', blurb: 'Private cloud, architecture consulting, migration planning and managed services.', phase: 3 },
   { slug: 'careers', title: 'Careers', blurb: 'Open roles at Hosttiva and Inventomo.', phase: 2 },
-  { slug: 'legal/privacy', title: 'Privacy Policy', blurb: 'How Hosttiva collects, uses and protects personal data.', phase: 2 },
-  { slug: 'legal/terms', title: 'Terms of Service', blurb: 'The terms that apply to every Hosttiva service.', phase: 2 },
-  { slug: 'legal/acceptable-use', title: 'Acceptable Use Policy', blurb: 'What you can and cannot run on Hosttiva infrastructure.', phase: 2 },
-  { slug: 'legal/refund', title: 'Refund Policy', blurb: 'Refund and cancellation terms by service type.', phase: 2 },
-  { slug: 'legal/sla', title: 'Service Level Agreement', blurb: 'Uptime commitments and service credits.', phase: 2 },
-  { slug: 'legal/backup', title: 'Backup Policy', blurb: 'Backup frequency, retention and restore terms.', phase: 2 },
-  { slug: 'legal/abuse', title: 'Abuse Reporting', blurb: 'How to report abuse, spam or copyright issues.', phase: 2 },
 ];

@@ -16,7 +16,8 @@ Placeholder pages for Phase 2+ already exist in `website/src/data/pages.ts` (noi
 - [ ] Confirm which `enquiry` products are actually sold today; switch any that are not to `coming-soon`
 
 ## Phase 2: legal, content and marketplace
-- [ ] Legal pages, written for Hosttiva and reviewed by a Pakistan-based legal professional (do not copy competitors):
+- [x] All 14 legal policies drafted at /legal (noindex, 'Draft — not in effect' banner, [bracketed] placeholders)
+- [ ] Legal review by a Pakistan-based legal professional, fill placeholders, set `status: final` + `effective` date, remove '/legal' from NOINDEX_PREFIXES:
   - [ ] Privacy Policy · [ ] Cookie Policy · [ ] Terms of Service · [ ] Acceptable Use Policy
   - [ ] Refund and Cancellation Policy · [ ] Service Level Agreement · [ ] Backup and Restore Policy
   - [ ] Domain Registration Agreement · [ ] Email Usage Policy · [ ] Game Hosting Rules

@@ -32,7 +32,7 @@ const ITEMS: RoadmapItem[] = [
   { status: 'beta', title: 'SSL checker', detail: 'Uses public certificate logs today; a live check of the served certificate is coming.', href: '/domains/ssl-checker' },
   { status: 'in-development', title: 'Client area', detail: 'Ordering, billing, domains and support tickets in one portal.' },
   { status: 'in-development', title: 'Live SSL check service', detail: 'Reads the certificate your server presents, including chain and trust.' },
-  { status: 'in-development', title: 'Legal and policy pages', detail: 'Terms, privacy, refunds, SLA and backup policy, with legal review.' },
+  { status: 'in-development', title: 'Legal and policy pages', detail: 'All 14 policies drafted; now with legal review before they take effect.', href: '/legal' },
   { status: 'in-development', title: 'Status page', detail: 'Live status, maintenance and incident history per service at status.hosttiva.com.', href: '/status' },
   { status: 'released', date: '2026-10-21', title: 'Knowledge Base', detail: 'Help articles for domains, DNS, email, SSL, WordPress and VPS.', href: '/knowledgebase' },
   { status: 'in-development', title: 'One-click app deploys', detail: 'n8n, Flowise, Open WebUI, NocoDB, Mautic, Langflow, Typebot and more, with automatic HTTPS on your VPS.', href: '/marketplace#one-click' },
