@@ -1,0 +1,211 @@
+---
+// Plan finder: four questions → a product line + plan from plans.ts, with the reasons shown.
+// Progressive enhancement: without JS it's a plain form listing every question plus links to the comparisons.
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import { PLAN_GROUPS, PRICES_ARE_PLACEHOLDERS, formatPrice } from '../data/plans';
+import { LINKS, PRELAUNCH } from '../config/site';
+import { breadcrumbs } from '../lib/schema';
+
+const crumbs = [{ name: 'Home', path: '/' }, { name: 'Compare', path: '/compare' }, { name: 'Plan finder', path: '/plan-finder' }];
+
+const questions = [
+  { id: 'build', q: 'What are you putting online?', opts: [
+    ['site', 'A website', 'Company site, blog or portfolio', 'Globe'],
+    ['wordpress', 'A WordPress site', 'New or existing WordPress', 'PanelsTopLeft'],
+    ['store', 'An online store', 'Products, payments, shipping', 'ShoppingCart'],
+    ['app', 'An app, API or AI tool', 'Node.js, Python, SaaS, bots, n8n', 'Code'],
+    ['agency', 'Sites for my clients', 'Agency or reseller', 'Building2'],
+    ['game', 'A game server', 'Minecraft and other games', 'Gamepad2'],
+  ] },
+  { id: 'traffic', q: 'How busy will it be?', opts: [
+    ['starting', 'Just starting', 'New project or low traffic', 'Sprout'],
+    ['growing', 'Growing', 'Steady visitors, getting busier', 'TrendingUp'],
+    ['busy', 'Busy', 'High traffic or business-critical', 'Gauge'],
+  ] },
+  { id: 'skill', q: 'How hands-on do you want to be?', opts: [
+    ['managed', 'Handle it for me', 'Updates and upkeep done for me', 'LifeBuoy'],
+    ['some', 'Some', 'I can follow a guide', 'BookOpen'],
+    ['dev', 'Developer', 'Give me control and root access', 'Terminal'],
+  ] },
+  { id: 'email', q: 'Do you need email on your domain?', opts: [
+    ['yes', 'Yes', 'hello@yourcompany.com', 'Mail'],
+    ['no', 'No', 'Not needed, or I have it', 'MailX'],
+  ] },
+] as const;
+
+// Compact plan data for the client script (prices stay in plans.ts).
+const plans = Object.fromEntries(PLAN_GROUPS.flatMap((g) => g.plans.map((p) => [p.id, {
+  name: p.name, group: g.name, groupId: g.id, fit: p.fit ?? '', features: p.features.slice(0, 4),
+  promo: p.price ? formatPrice(p.price.annual.promo) : null, renewal: p.price ? formatPrice(p.price.annual.renewal) : null,
+  href: `/${g.productSlug}#plans-${g.id}`, order: p.price ? LINKS.order(p.pid, g.whmcsGroup, `${g.name} ${p.name}`) : LINKS.enquiry(`${g.name}: ${p.name}`),
+}])));
+---
+<Base title="Plan finder" description="Answer four questions about your project and get a recommended Hosttiva hosting plan, with the reasons and the first-term and renewal price." schema={[breadcrumbs(crumbs)]}>
+  <section class="grid-backdrop">
+    <div class="container-narrow pb-10 pt-10 text-center sm:pt-14">
+      <div class="text-left"><Breadcrumbs items={crumbs} /></div>
+      <h1 class="display-lg mt-10" data-split="now">Find your plan</h1>
+      <p class="lead enter mx-auto mt-5 max-w-xl" style="--d:320ms">Four questions. One recommendation, with the reasons and both prices.</p>
+    </div>
+  </section>
+
+  <section class="container-narrow pb-24">
+    <form id="finder" class="finder tile-surface enter p-6 sm:p-10" style="--d:440ms" novalidate>
+      <div class="finder-progress mb-8 hidden" aria-hidden="true"><span class="bar"></span></div>
+      {questions.map((qq, i) => (
+        <fieldset class="step" data-step={i}>
+          <legend class="title !text-[1.5rem]"><span class="step-num">{i + 1}/{questions.length}</span> {qq.q}</legend>
+          <div class:list={['mt-6 grid gap-3', qq.opts.length > 3 ? 'sm:grid-cols-2 lg:grid-cols-3' : qq.opts.length === 3 ? 'sm:grid-cols-3' : 'sm:grid-cols-2']}>
+            {qq.opts.map(([value, label, hint, icon]) => (
+              <label class="opt">
+                <input type="radio" name={qq.id} value={value} class="sr-only" required />
+                <span class="opt-ic"><Icon name={icon} size={20} /></span>
+                <span><b>{label}</b><small>{hint}</small></span>
+              </label>
+            ))}
+          </div>
+        </fieldset>
+      ))}
+
+      <div class="finder-nav mt-8 hidden items-center justify-between gap-3">
+        <button type="button" class="btn btn-quiet btn-sm" data-back>Back</button>
+        <span class="text-[0.8125rem] text-muted">Pick an answer to continue</span>
+      </div>
+      <noscript><p class="mt-6 text-muted">The plan finder needs JavaScript. You can <a class="link" href="/compare">compare hosting types</a> or <a class="link" href="/pricing">see all plans</a> instead.</p></noscript>
+
+      <div class="result hidden" aria-live="polite">
+        <p class="text-[0.875rem] font-semibold text-link">We recommend</p>
+        <h2 class="display-md mt-1" tabindex="-1"><span data-r="name"></span></h2>
+        <p class="mt-1 text-muted"><span data-r="group"></span> · <span data-r="fit"></span></p>
+        <div class="price mt-6 grid max-w-md grid-cols-2 gap-4 rounded-[var(--radius-lg)] border border-border p-5 tabular">
+          <div><p class="text-[0.75rem] text-muted">First year</p><p class="text-[1.75rem] font-semibold tracking-tight"><span data-r="promo"></span><span class="text-[0.875rem] font-normal text-muted">/mo</span></p></div>
+          <div><p class="text-[0.75rem] text-muted">Renews at</p><p class="text-[1.75rem] font-semibold tracking-tight"><span data-r="renewal"></span><span class="text-[0.875rem] font-normal text-muted">/mo</span></p></div>
+          {PRICES_ARE_PLACEHOLDERS && <p class="col-span-2 text-[0.75rem] text-muted"><span class="badge badge-warn">Draft prices</span> Billed annually; confirmed before launch.</p>}
+        </div>
+        <p class="custom mt-6 hidden text-muted">This plan is quoted for your workload.</p>
+        <h3 class="mt-8 text-[1rem] font-semibold">Why this plan</h3>
+        <ul class="why mt-3 space-y-2"></ul>
+        <ul class="feats mt-6 flex flex-wrap gap-1.5"></ul>
+        <div class="mt-8 flex flex-wrap items-center gap-3">
+          <a data-r="order" class="btn btn-primary">{PRELAUNCH ? 'Notify me at launch' : 'Choose this plan'}</a>
+          <a data-r="href" class="btn btn-secondary">See the plan details</a>
+          <button type="button" class="link-more ml-1" data-restart>Start again</button>
+        </div>
+      </div>
+    </form>
+    <p class="mt-6 text-center text-[0.875rem] text-muted">Prefer to compare yourself? <a href="/compare" class="link">See the comparisons</a> or <a href="/contact" class="link">ask a person</a>.</p>
+  </section>
+</Base>
+
+<style>
+  .opt { display: flex; gap: 12px; align-items: flex-start; padding: 14px 16px; border-radius: var(--radius-lg); border: 1px solid var(--border); background: var(--bg); cursor: pointer; text-align: left; transition: border-color var(--dur) var(--ease), background var(--dur) var(--ease), transform 150ms var(--ease); }
+  .opt:hover { border-color: var(--border-strong); }
+  .opt:active { transform: scale(0.99); }
+  .opt:has(input:checked) { border-color: var(--accent); background: var(--accent-soft); box-shadow: 0 0 0 1px var(--accent) inset; }
+  .opt:has(input:focus-visible) { outline: 3px solid color-mix(in srgb, var(--accent) 70%, transparent); outline-offset: 2px; }
+  .opt-ic { width: 38px; height: 38px; flex: none; border-radius: 10px; display: grid; place-items: center; border: 1px solid var(--border); background: var(--surface); color: var(--link); }
+  .opt b { display: block; font-weight: 600; }
+  .opt small { display: block; color: var(--text-muted); font-size: 0.8125rem; }
+  .step + .step { margin-top: 2.5rem; }
+  .step-num { font-size: 0.875rem; font-weight: 600; color: var(--link); margin-right: 0.35rem; }
+  /* Enhanced (stepper) mode */
+  .finder.js .step { display: none; margin: 0; }
+  .finder.js .step.active { display: block; animation: step-in 500ms var(--ease-out); }
+  .finder.js .finder-progress, .finder.js .finder-nav { display: flex; }
+  .finder-progress { height: 3px; border-radius: 2px; background: var(--border); overflow: hidden; }
+  .finder-progress .bar { display: block; height: 100%; width: 0; background: var(--link); transition: width 500ms var(--ease-out); }
+  .result:not(.hidden) { animation: step-in 600ms var(--ease-out); }
+  .why li { display: flex; gap: 8px; }
+  @keyframes step-in { from { opacity: 0; transform: translate3d(0, 12px, 0); filter: blur(6px); } }
+</style>
+
+<script define:vars={{ plans }}>
+  // Recommendation rules: honest defaults per need; the reasons are shown to the visitor.
+  function recommend(a) {
+    const t = { starting: 0, growing: 1, busy: 2 }[a.traffic];
+    const why = [];
+    let id;
+    if (a.build === 'game') {
+      id = ['game-2gb', 'game-4gb', 'game-8gb'][t];
+      why.push('Game servers run on a cluster separate from web hosting, with a game panel and backups.');
+      why.push(['2 GB suits a private server for a few friends.', '4 GB adds room for a small community with plugins or mods.', '8 GB with a higher CPU allocation handles a growing community.'][t]);
+    } else if (a.build === 'agency') {
+      id = ['agency-starter', 'agency-growth', 'agency-pro'][t];
+      why.push('Reseller hosting with WHM lets you create a package for each client under your own brand.');
+      if (t > 0) why.push('Growth and above add WHMCS integration and a white-label client portal.');
+    } else if (a.build === 'app') {
+      id = ['app-start', 'app-growth', 'app-scale'][t];
+      why.push('Apps, APIs and AI tools need long-running processes, which shared hosting doesn’t allow.');
+      why.push('Managed application plans run on a VPS with CloudPanel, SSL, a firewall and deployment help.');
+      if (a.skill === 'dev') why.push('As a developer you can also choose a plain VPS with root access where available.');
+    } else if (a.build === 'store' || a.build === 'wordpress') {
+      if (a.skill === 'dev' && a.build === 'wordpress') {
+        id = ['launch', 'business', 'professional'][t];
+        why.push('You’re comfortable maintaining WordPress yourself, so cPanel web hosting keeps costs down.');
+      } else {
+        id = a.build === 'store' ? ['wp-business', 'wp-care', 'wp-pro'][t] : ['wp-starter', 'wp-business', 'wp-pro'][t];
+        why.push(a.build === 'store' ? 'Stores built on WooCommerce get caching, staging and daily backups on managed WordPress.' : 'Managed WordPress installs, caches and backs up WordPress for you.');
+        if (t === 2) why.push('Busy sites move to a managed VPS with advanced caching and database optimisation.');
+        else if (a.build === 'store' && t === 1) why.push('WP Care adds managed updates, malware checks and performance monitoring.');
+      }
+    } else {
+      id = ['launch', 'business', 'professional', 'scale'][a.skill === 'managed' && t === 2 ? 3 : t];
+      why.push('cPanel web hosting covers websites with SSL, email and backups in one account.');
+      if (t === 1) why.push('Business adds daily backups and staging for a growing site.');
+      if (t === 2) why.push('Busy sites need higher resources; Scale gets custom resources and priority support.');
+    }
+    const p = plans[id];
+    const webBased = p.groupId === 'web';
+    if (a.email === 'yes') why.push(webBased ? 'Email on your domain is included with this plan.' : 'Add Business Email for addresses on your domain.');
+    if (a.skill === 'managed' && p.groupId !== 'wordpress' && p.groupId !== 'apps') why.push('Free migration is available on eligible plans, and our team can help you set up.');
+    return { p, why };
+  }
+
+  function initFinder() {
+    const form = document.getElementById('finder');
+    if (!form || form.dataset.bound) return;
+    form.dataset.bound = '1';
+    form.classList.add('js');
+    const steps = [...form.querySelectorAll('.step')];
+    const bar = form.querySelector('.finder-progress .bar');
+    const nav = form.querySelector('.finder-nav');
+    const result = form.querySelector('.result');
+    let i = 0;
+    const show = (n) => {
+      i = n;
+      steps.forEach((s, k) => s.classList.toggle('active', k === n));
+      bar.style.width = `${(n / steps.length) * 100}%`;
+      form.querySelector('[data-back]').style.visibility = n === 0 ? 'hidden' : 'visible';
+      requestAnimationFrame(() => steps[n]?.querySelector('input:checked, input')?.focus({ preventScroll: true }));
+    };
+    const finish = () => {
+      const a = Object.fromEntries(new FormData(form));
+      const { p, why } = recommend(a);
+      steps.forEach((s) => s.classList.remove('active'));
+      nav.style.display = 'none';
+      bar.style.width = '100%';
+      const set = (k, v) => form.querySelectorAll(`[data-r="${k}"]`).forEach((el) => { if (k === 'href' || k === 'order') el.setAttribute('href', v); else el.textContent = v; });
+      set('name', p.name); set('group', p.group); set('fit', p.fit || p.features[0]); set('href', p.href); set('order', p.order);
+      form.querySelector('.price').style.display = p.promo ? '' : 'none';
+      form.querySelector('.custom').classList.toggle('hidden', !!p.promo);
+      if (p.promo) { set('promo', p.promo); set('renewal', p.renewal); }
+      form.querySelector('.why').replaceChildren(...why.map((w) => { const li = document.createElement('li'); li.innerHTML = '<svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--link);flex:none;margin-top:3px"><path d="M20 6 9 17l-5-5"/></svg>'; const s = document.createElement('span'); s.textContent = w; li.append(s); return li; }));
+      form.querySelector('.feats').replaceChildren(...p.features.map((f) => { const li = document.createElement('li'); li.className = 'badge'; li.textContent = f; return li; }));
+      result.classList.remove('hidden');
+      result.querySelector('h2').focus?.();
+    };
+    form.addEventListener('change', (e) => {
+      if (!(e.target instanceof HTMLInputElement)) return;
+      setTimeout(() => (i < steps.length - 1 ? show(i + 1) : finish()), 220);
+    });
+    form.querySelector('[data-back]').addEventListener('click', () => show(Math.max(0, i - 1)));
+    form.querySelector('[data-restart]').addEventListener('click', () => {
+      form.reset(); result.classList.add('hidden'); nav.style.display = ''; show(0);
+    });
+    show(0);
+  }
+  initFinder();
+  document.addEventListener('astro:page-load', initFinder);
+</script>

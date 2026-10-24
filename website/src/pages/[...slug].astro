@@ -18,6 +18,7 @@ import WhoisTool from '../components/tools/WhoisTool.astro';
 import DomainGenerator from '../components/tools/DomainGenerator.astro';
 import SslTool from '../components/tools/SslTool.astro';
 import ProductVisual from '../components/ProductVisual.astro';
+import { COMPARISONS } from '../data/compare';
 import { breadcrumbs, service, faqPage } from '../lib/schema';
 
 export const getStaticPaths = (() => [
@@ -128,7 +129,11 @@ const clip = (s: string, n = 158) => (s.length <= n ? s : s.slice(0, s.lastIndex
           <div>
             <div class="mb-6 flex justify-end"><BillingToggle /></div>
             <PlanTable group={group} />
-            <p class="mt-5"><a href="/pricing" class="link-more">Compare every Hosttiva plan</a></p>
+            <p class="mt-5 flex flex-wrap gap-x-6 gap-y-2">
+              <a href="/pricing" class="link-more">Compare every Hosttiva plan</a>
+              {COMPARISONS.filter((c) => c.columns.some((col) => col.href === path)).map((c) => <a href={`/compare/${c.slug}`} class="link-more">{c.title}</a>)}
+              <a href="/plan-finder" class="link-more">Plan finder</a>
+            </p>
           </div>
         )}
 

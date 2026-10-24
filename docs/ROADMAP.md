@@ -50,6 +50,7 @@ See **docs/LAUNCH.md** for the ordered, step-by-step launch checklist.
 - [x] Knowledge Base (/knowledgebase): content collection, 6 categories, 12 starter articles, TechArticle schema, own sitemap
 - [x] KB expanded to 28 articles (billing, upgrades, transfers, subdomains, email troubleshooting, malware, SSL errors, PHP, 500s, speed, Docker, VPS backups, updates, private nameservers)
 - [x] Tutorials expanded to 6 (WordPress install, n8n on a VPS, Minecraft on a VPS)
+- [x] Comparison pages (/compare: shared vs VPS vs cloud, regular vs managed WordPress, web vs app hosting) + /plan-finder
 - [ ] Developer Center (API/CLI docs once the platform has them)
 - [ ] Hosttiva Academy (VideoObject schema) and Learning Lab paths
 - [x] /status page (monitored services, maintenance, incident history) + Uptime Kuma stack in infra/status-page

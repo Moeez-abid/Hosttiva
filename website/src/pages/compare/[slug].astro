@@ -1,0 +1,91 @@
+---
+import type { GetStaticPaths } from 'astro';
+import Base from '../../layouts/Base.astro';
+import Icon from '../../components/Icon.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import Faq from '../../components/Faq.astro';
+import { COMPARISONS, type Comparison, type Cell } from '../../data/compare';
+import { breadcrumbs, faqPage } from '../../lib/schema';
+
+export const getStaticPaths = (() => COMPARISONS.map((c) => ({ params: { slug: c.slug }, props: { c } }))) satisfies GetStaticPaths;
+const { c } = Astro.props as { c: Comparison };
+const path = `/compare/${c.slug}`;
+const crumbs = [{ name: 'Home', path: '/' }, { name: 'Compare', path: '/compare' }, { name: c.title, path }];
+const others = COMPARISONS.filter((o) => o.slug !== c.slug);
+---
+<Base title={c.title} description={c.description} schema={[breadcrumbs(crumbs), faqPage(c.faqs)]}>
+  <section class="grid-backdrop">
+    <div class="container-x pb-12 pt-10 sm:pt-14">
+      <Breadcrumbs items={crumbs} />
+      <h1 class="display-lg mt-8 max-w-4xl" data-split="now">{c.title}</h1>
+      <p class="lead enter mt-5 max-w-2xl" style="--d:320ms">{c.intro}</p>
+    </div>
+  </section>
+
+  <section class="container-x pb-20" aria-label="Comparison">
+    <div class="overflow-x-auto rounded-[var(--radius-xl)] border border-border">
+      <table class="w-full min-w-[44rem] border-collapse text-left">
+        <caption class="sr-only">{c.title}</caption>
+        <thead>
+          <tr class="align-top">
+            <th scope="col" class="w-[24%] bg-raised p-5 text-[0.875rem] font-semibold text-muted">Feature</th>
+            {c.columns.map((col) => (
+              <th scope="col" class="bg-raised p-5">
+                <a href={col.href} class="title !text-[1.1875rem] hover:text-link">{col.name}</a>
+                <p class="mt-1 text-[0.875rem] font-normal text-muted">{col.summary}</p>
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody data-stagger>
+          {c.rows.map((r) => (
+            <tr class="reveal border-t border-border align-top">
+              <th scope="row" class="p-5 text-[0.9375rem] font-medium">{r.label}</th>
+              {r.cells.map((cell: Cell) => (
+                <td class="p-5 text-[0.9375rem]">
+                  {cell === true ? <span class="inline-flex items-center gap-1.5 text-ok"><Icon name="CircleCheck" size={18} /><span class="sr-only">Included</span></span>
+                    : cell === false ? <span class="inline-flex items-center gap-1.5 text-muted"><Icon name="Minus" size={18} /><span class="sr-only">Not included</span></span>
+                    : <span>{cell}</span>}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    <p class="mt-3 text-[0.8125rem] text-muted">Plan-specific details follow the current plans on the <a href="/pricing" class="link">pricing page</a>.</p>
+  </section>
+
+  <section class="section-alt" aria-labelledby="verdict-h">
+    <div class="container-x py-20 sm:py-24">
+      <h2 id="verdict-h" class="display-md" data-split>The short answer</h2>
+      <ul class:list={['mt-10 grid gap-4', c.verdicts.length === 3 ? 'md:grid-cols-3' : 'md:grid-cols-2']} data-stagger>
+        {c.verdicts.map((v, i) => (
+          <li class="reveal">
+            <a href={c.columns[i]?.href ?? '/pricing'} data-tilt="4" class="tile-surface flex h-full flex-col p-7">
+              <span class="title !text-[1.3125rem]">{v.title}</span>
+              <span class="mt-2 flex-1 text-muted">{v.text}</span>
+              <span class="link-more mt-5 text-[0.9375rem]">See {c.columns[i]?.name ?? 'plans'}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+      <div class="reveal mt-10 flex flex-wrap items-center gap-x-6 gap-y-3">
+        <a href="/plan-finder" class="btn btn-primary">Still unsure? Find my plan</a>
+        <a href="/contact" class="link-more">Ask a person</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="container-x space-y-20 py-20 sm:py-24">
+    <Faq faqs={c.faqs} />
+    <section aria-labelledby="more-h">
+      <h2 id="more-h" class="display-md" data-split>More comparisons</h2>
+      <ul class="mt-8 grid gap-4 sm:grid-cols-2" data-stagger>
+        {others.map((o) => (
+          <li class="reveal"><a href={`/compare/${o.slug}`} data-tilt="4" class="tile flex h-full flex-col p-6"><span class="font-semibold">{o.title}</span><span class="mt-1 text-[0.9375rem] text-muted">{o.intro}</span></a></li>
+        ))}
+      </ul>
+    </section>
+  </div>
+</Base>

@@ -1,0 +1,33 @@
+---
+import Base from '../../layouts/Base.astro';
+import Icon from '../../components/Icon.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import { COMPARISONS } from '../../data/compare';
+import { breadcrumbs } from '../../lib/schema';
+
+const crumbs = [{ name: 'Home', path: '/' }, { name: 'Compare', path: '/compare' }];
+---
+<Base title="Compare hosting types" description="Side-by-side comparisons of shared, VPS, cloud, WordPress and application hosting, plus a plan finder that recommends a plan in four questions." schema={[breadcrumbs(crumbs)]}>
+  <section class="grid-backdrop">
+    <div class="container-x pb-14 pt-10 sm:pt-14">
+      <Breadcrumbs items={crumbs} />
+      <h1 class="display-lg mt-8 max-w-3xl" data-split="now">Which hosting do you need?</h1>
+      <p class="lead enter mt-5 max-w-2xl" style="--d:320ms">Plain comparisons of the main hosting types, or answer four questions and get a recommendation.</p>
+      <div class="enter mt-8" style="--d:440ms"><a href="/plan-finder" class="btn btn-primary">Find my plan</a></div>
+    </div>
+  </section>
+  <section class="container-x pb-24">
+    <ul class="grid gap-4 md:grid-cols-3" data-stagger>
+      {COMPARISONS.map((c) => (
+        <li class="reveal">
+          <a href={`/compare/${c.slug}`} data-tilt="5" class="tile flex h-full flex-col p-7">
+            <span class="flex items-center gap-1.5 text-link"><Icon name="Columns3" size={20} /><span class="text-[0.8125rem] font-semibold">{c.columns.length} options</span></span>
+            <span class="title mt-4 !text-[1.3125rem]">{c.title}</span>
+            <span class="mt-2 flex-1 text-[0.9375rem] text-muted">{c.intro}</span>
+            <span class="link-more mt-5 text-[0.9375rem]">Compare</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+</Base>

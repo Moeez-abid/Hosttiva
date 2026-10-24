@@ -1,5 +1,6 @@
 // Per-page Open Graph images (1200×630), rendered at build time by src/pages/og/[...slug].png.ts.
 import { PRODUCTS, CATEGORIES } from '../data/products';
+import { COMPARISONS } from '../data/compare';
 
 export interface OgEntry { slug: string; title: string; subtitle: string; section: string }
 
@@ -16,6 +17,9 @@ export const STATIC_OG: OgEntry[] = [
   { slug: 'tutorials', title: 'Step by step, start to finish', subtitle: 'Guides to launch, manage and grow online.', section: 'Tutorials' },
   { slug: 'status', title: 'Service status', subtitle: 'Live status, scheduled maintenance and incident history.', section: 'Status' },
   { slug: 'knowledgebase', title: 'How can we help?', subtitle: 'Help articles for every Hosttiva service.', section: 'Knowledge Base' },
+  { slug: 'compare', title: 'Which hosting do you need?', subtitle: 'Shared, VPS, cloud, WordPress and app hosting compared.', section: 'Compare' },
+  { slug: 'plan-finder', title: 'Find your plan', subtitle: 'Four questions, one recommendation with both prices.', section: 'Plan finder' },
+  ...COMPARISONS.map((c) => ({ slug: `compare/${c.slug}`, title: c.title, subtitle: c.intro, section: 'Compare' })),
   { slug: 'contact', title: 'Talk to a person', subtitle: 'Plan advice, migrations, Inventomo projects and support.', section: 'Contact' },
 ];
 
