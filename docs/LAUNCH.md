@@ -40,7 +40,8 @@ noindex everywhere, robots.txt blocks crawlers). The contact inbox is temporaril
 
 ## 5. WHMCS client area (unblocks ordering, quotes, domains, tickets)
 
-- [ ] Install WHMCS + Lagom at `client.hosttiva.com`; match Lagom colours to `website/src/styles/tokens.css`.
+- [ ] Install WHMCS + Lagom at `client.hosttiva.com`, then apply the branding kit in `whmcs-addons/` (README: Lagom
+      Style Manager values, CSS + hooks upload, email header/footer).
 - [ ] Connect payment gateway, domain registrar module, and email delivery (SMTP).
 - [ ] Create product groups matching `whmcsGroup` in `plans.ts` (`web-hosting`, `wordpress`, `applications`,
       `reseller`, `game-servers`) and the products inside them.

@@ -83,4 +83,5 @@ See **docs/LAUNCH.md** for the ordered, step-by-step launch checklist.
   - [ ] Agency directory
   - [ ] Affiliate program commission rates (once terms are final)
   - [ ] Envato brand names only with written permission
-- [ ] Match Lagom client-area theme to `website/src/styles/tokens.css`
+- [x] WHMCS/Lagom branding kit (`whmcs-addons/`): CSS generated from tokens, hooks (assets, footer, nav), email templates, Lagom values
+- [ ] Install the kit on the live WHMCS and test (php -l, light/dark, order flow, emails)

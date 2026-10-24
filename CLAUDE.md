@@ -8,7 +8,8 @@ Lucide icons only (`src/components/Icon.astro`) · SF Pro system stack + self-ho
 @astrojs/sitemap · Cloudflare Pages via GitHub Actions. Islands only if unavoidable (Svelte OR React, not both).
 
 ## Layout
-- `website/` Astro site · `docs/` SRS.md, ROADMAP.md · `whmcs-addons/`, `deploy-stacks/`, `infra/` stubs
+- `website/` Astro site · `docs/` SRS.md, ROADMAP.md, LAUNCH.md · `whmcs-addons/` client-area branding kit (CSS built
+  from tokens: `node whmcs-addons/scripts/build-css.mjs`) · `deploy-stacks/` one-click apps · `infra/` status page + SSL API
 - `website/src/config/site.ts` — site info + ALL client-area URLs (only place they live)
 - `website/src/config/nav.ts` — header/footer menus, built from data
 - `website/src/data/products.ts` — every product/solution page (`pages/[...slug].astro` generates them)
