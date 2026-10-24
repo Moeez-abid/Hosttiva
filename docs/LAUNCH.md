@@ -4,7 +4,8 @@ Everything that needs a person, an account or a server, in the order it unblocks
 ready for each step; the file to edit is named on every line. Check items off here as you go.
 
 Current state: the site is live at **https://hosttiva.pages.dev** in **pre-launch mode** (`CLIENT_AREA_LIVE = false`),
-so no button links to a client area that does not exist yet.
+so no button links to a client area that does not exist yet, and **hidden from search** (`DOMAIN_LIVE = false`:
+noindex everywhere, robots.txt blocks crawlers). The contact inbox is temporarily `rulesheaven1@gmail.com`.
 
 ## 1. Domain and DNS (unblocks the real address and SEO)
 
@@ -12,13 +13,14 @@ so no button links to a client area that does not exist yet.
 - [ ] Add the domain to Cloudflare and switch the registrar's nameservers to Cloudflare's.
 - [ ] Cloudflare → Workers & Pages → **hosttiva** → Custom domains → add `hosttiva.com` and `www.hosttiva.com`.
 - [ ] Check https://hosttiva.com loads; canonicals, sitemaps and share images already point there.
+- [ ] Set `DOMAIN_LIVE = true` in `website/src/config/site.ts` (re-enables indexing and the normal robots.txt).
 
 ## 2. Email (unblocks contact and security reports)
 
 - [ ] Create mailboxes: `hello@`, `security@`, `abuse@` (and `billing@` if wanted).
 - [ ] Add MX, SPF, DKIM and DMARC records (guide: `/knowledgebase/deliverability-records`).
-- [ ] If you use a different contact address, change `SITE.email` in `website/src/config/site.ts`.
-- [ ] Security mailbox is set in `website/src/data/trust.ts` (`SECURITY_EMAIL`); it also feeds `/.well-known/security.txt`.
+- [ ] Change `SITE.email` in `website/src/config/site.ts` from the interim Gmail to `hello@hosttiva.com`.
+- [ ] Change `SECURITY_EMAIL` in `website/src/data/trust.ts` to `security@hosttiva.com` (also feeds `/.well-known/security.txt`).
 
 ## 3. Prices and plans (unblocks honest pricing)
 

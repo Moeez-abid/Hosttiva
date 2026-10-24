@@ -14,7 +14,8 @@ export interface TrustTopic {
   points: string[];
 }
 
-export const SECURITY_EMAIL = `security@${new URL(SITE.url).hostname}`; // PLACEHOLDER mailbox
+// Interim: the site contact inbox until security@hosttiva.com exists. Switch to `security@hosttiva.com` then.
+export const SECURITY_EMAIL = SITE.email;
 
 export const TRUST_TOPICS: TrustTopic[] = [
   {

@@ -29,6 +29,7 @@ Lucide icons only (`src/components/Icon.astro`) · SF Pro system stack + self-ho
   set `status: 'coming-soon'` → enquiry CTA, no prices, noindex.
 - No fake checkout: plan buttons use `LINKS.order()` from site.ts. Never hard-code prices in pages.
 - `CLIENT_AREA_LIVE` in site.ts (false = pre-launch): all client-area links go to /contact; flip to true when WHMCS is live. Always use `LINKS.*`, never hard-code client.hosttiva.com.
+- `DOMAIN_LIVE` in site.ts (false = no domain yet): whole site noindex + robots Disallow; flip when hosttiva.com serves the site.
 
 ## Working rules
 - Plan ≤10 bullets, then execute. No subagents, no broad repo exploration.

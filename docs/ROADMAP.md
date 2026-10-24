@@ -48,7 +48,9 @@ See **docs/LAUNCH.md** for the ordered, step-by-step launch checklist.
 - [x] SSL checker via Certificate Transparency logs (crt.sh)
 - [ ] Deploy `infra/ssl-check-api` to a VPS and set `SSL_CHECK_API` in site.ts for live checks
 - [x] Knowledge Base (/knowledgebase): content collection, 6 categories, 12 starter articles, TechArticle schema, own sitemap
-- [ ] More KB articles per service; Developer Center (API/CLI docs once the platform has them)
+- [x] KB expanded to 28 articles (billing, upgrades, transfers, subdomains, email troubleshooting, malware, SSL errors, PHP, 500s, speed, Docker, VPS backups, updates, private nameservers)
+- [x] Tutorials expanded to 6 (WordPress install, n8n on a VPS, Minecraft on a VPS)
+- [ ] Developer Center (API/CLI docs once the platform has them)
 - [ ] Hosttiva Academy (VideoObject schema) and Learning Lab paths
 - [x] /status page (monitored services, maintenance, incident history) + Uptime Kuma stack in infra/status-page
 - [ ] Deploy infra/status-page to a separate VPS and set STATUS_URL in site.ts

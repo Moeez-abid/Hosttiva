@@ -11,8 +11,8 @@ export const SITE = {
     'Hosting, domains, business email, cloud and VPS, application deployment, AI automation and game servers, with human support from Hosttiva by Inventomo.',
   locale: 'en',
   ogImage: '/og-default.png',
-  // PLACEHOLDER contact details — confirm before launch.
-  email: 'hello@hosttiva.com',
+  // Interim contact inbox until hosttiva.com and its mailboxes exist (owner's choice, 2026-10-25).
+  email: 'rulesheaven1@gmail.com',
   inventomoUrl: 'https://inventomo.com',
   twitter: '',
   sameAs: [] as string[],
@@ -50,6 +50,12 @@ export const CLIENT_AREA = 'https://client.hosttiva.com';
  * Flip to true once client.hosttiva.com works and WHMCS product ids are in plans.ts.
  */
 export const CLIENT_AREA_LIVE = false;
+
+/**
+ * DOMAIN SWITCH. false = hosttiva.com is not registered yet: every page is noindex and robots.txt blocks
+ * crawlers, so nothing gets indexed at hosttiva.pages.dev. Flip to true once hosttiva.com serves the site.
+ */
+export const DOMAIN_LIVE = false;
 export const PRELAUNCH = !CLIENT_AREA_LIVE;
 
 const contact = (subject?: string) => `/contact${subject ? `?subject=${encodeURIComponent(subject)}` : ''}`;

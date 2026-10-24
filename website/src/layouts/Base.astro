@@ -6,7 +6,7 @@ import { ClientRouter } from 'astro:transitions';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import JsonLd from '../components/seo/JsonLd.astro';
-import { SITE, MONITORING, PRELAUNCH } from '../config/site';
+import { SITE, MONITORING, PRELAUNCH, DOMAIN_LIVE } from '../config/site';
 import { NOINDEX_PATHS } from '../config/noindex';
 import { organization, website } from '../lib/schema';
 import { ogFor } from '../lib/og';
@@ -24,7 +24,10 @@ interface Props {
 const { title, description, schema = [], ogType = 'website' } = Astro.props;
 // build.format 'file' makes pathname end in .html during the build; canonical URLs never do.
 const path = Astro.url.pathname.replace(/(\/index)?\.html$/, '').replace(/\/$/, '') || '/';
-const noindex = Astro.props.noindex ?? NOINDEX_PATHS.includes(path);
+// While the real domain isn't live, nothing is indexed (DOMAIN_LIVE in site.ts).
+const noindex = !DOMAIN_LIVE || (Astro.props.noindex ?? NOINDEX_PATHS.includes(path));
+// Search on the site keeps working while the whole site is noindex for crawlers.
+const searchable = !(Astro.props.noindex ?? NOINDEX_PATHS.includes(path));
 const canonical = new URL(path, SITE.url).toString();
 // Keep titles within ~65 characters so search results don't truncate: full brand, short brand, or none.
 const fullTitle = path === '/'
@@ -117,7 +120,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
       </div>
     )}
     <Header />
-    <main id="main" class="flex-1" data-pagefind-body={noindex ? undefined : true} transition:animate={pageTransition}>
+    <main id="main" class="flex-1" data-pagefind-body={searchable ? true : undefined} transition:animate={pageTransition}>
       <slot />
     </main>
     <Footer />
